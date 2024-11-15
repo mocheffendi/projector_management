@@ -134,24 +134,24 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
                             'not Occupied / @AV_Warehouse',
                             style: TextStyle(color: Colors.green),
                           ),
+                        DropdownButton<String>(
+                          value: projector['status'],
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              updateStatus(index, newValue);
+                            }
+                          },
+                          items: roomOptions.map((room) {
+                            return DropdownMenuItem<String>(
+                              value: room,
+                              child: Text(room),
+                            );
+                          }).toList(),
+                        ),
                       ],
                     ),
                   ),
                   // Dropdown Menu for Room Selection
-                  DropdownButton<String>(
-                    value: projector['status'],
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        updateStatus(index, newValue);
-                      }
-                    },
-                    items: roomOptions.map((room) {
-                      return DropdownMenuItem<String>(
-                        value: room,
-                        child: Text(room),
-                      );
-                    }).toList(),
-                  ),
                 ],
               ),
             ),
