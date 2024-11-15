@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const ProjectorApp());
 
@@ -7,8 +8,11 @@ class ProjectorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ProjectorHomePage(),
+    return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Roboto', // Set the default font family
+      ),
+      home: const ProjectorHomePage(),
     );
   }
 }
@@ -21,7 +25,7 @@ class ProjectorHomePage extends StatefulWidget {
 }
 
 class _ProjectorHomePageState extends State<ProjectorHomePage> {
-  final List<Map<String, dynamic>> projectors = [
+  List<Map<String, dynamic>> projectors = [
     {
       'model': 'EPSON EB-X51',
       'sn': 'X8A43202321',
@@ -96,25 +100,51 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
     'The Heritage'
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadStatuses();
+  }
+
+  Future<void> _loadStatuses() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      for (int i = 0; i < projectors.length; i++) {
+        String savedStatus =
+            prefs.getString('projector_status_$i') ?? 'not use';
+        projectors[i]['status'] = savedStatus;
+        projectors[i]['occupied'] = savedStatus != 'not use';
+      }
+    });
+  }
+
+  Future<void> _saveStatus(int index, String status) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('projector_status_$index', status);
+  }
+
   void updateStatus(int index, String newStatus) {
     setState(() {
       projectors[index]['status'] = newStatus;
       projectors[index]['occupied'] = newStatus != 'not use';
     });
+    _saveStatus(index, newStatus);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Projector Management | Novotel Samator'),
+        title: const Text(
+          'Projector Management | Novotel Samator',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(8.0),
         itemCount: projectors.length,
         itemBuilder: (context, index) {
           final projector = projectors[index];
-          // Set the card color based on the status
           Color cardColor = projector['status'] == 'not use'
               ? Colors.green.shade100
               : Colors.white;

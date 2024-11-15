@@ -123,3 +123,31 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+final List<String> roomOptions = [
+  'not use',
+  'Grand Ballroom',
+  'Ballroom A',
+  'Ballroom B',
+  'VIP Ballroom',
+  'Plataran',
+  'Grand Destination',
+  'Main Destination',
+  'West Destination',
+  'East Destination',
+  'Una Una GD',
+  'Una Una Exec Lounge',
+  'Atmosphere',
+  'Grand Argon',
+  'Argon I',
+  'Argon II',
+  'Oxygen',
+  'Hydrogen',
+  'Nitrogen',
+  'Helium',
+  'Crypton',
+  'Neon',
+  'Xenon',
+  'Food Exchange',
+  'The Heritage'
+];
