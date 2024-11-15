@@ -86,7 +86,7 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Projector Management'),
+        title: const Text('Projector Management | Novotel Samator'),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(8.0),
