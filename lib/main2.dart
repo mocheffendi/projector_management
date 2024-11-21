@@ -149,5 +149,6 @@ final List<String> roomOptions = [
   'Neon',
   'Xenon',
   'Food Exchange',
-  'The Heritage'
+  'The Heritage',
+  'FO Office'
 ];
