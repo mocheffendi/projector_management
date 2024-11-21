@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 
-// Your AVDevices Management Page
+// Your AVDevice Management Page
 
 class AVDevicePage extends StatefulWidget {
   const AVDevicePage({super.key});
@@ -17,32 +17,48 @@ class AVDevicePage extends StatefulWidget {
 
 class _AVDevicePageState extends State<AVDevicePage> {
   final List<String> roomOptions = [
-    'not use',
-    'Grand Ballroom',
-    'Ballroom A',
-    'Ballroom B',
-    'VIP Ballroom',
-    'Plataran',
-    'Grand Destination',
-    'Main Destination',
-    'West Destination',
-    'East Destination',
-    'Una Una GD',
-    'Una Una Exec Lounge',
-    'Atmosphere',
-    'Grand Argon',
     'Argon I',
     'Argon II',
-    'Oxygen',
-    'Hydrogen',
-    'Nitrogen',
-    'Helium',
+    'Atmosphere',
+    'Ballroom A',
+    'Ballroom B',
     'Crypton',
-    'Neon',
-    'Xenon',
+    'East Destination',
+    'FO Office',
     'Food Exchange',
+    'Grand Argon',
+    'Grand Ballroom',
+    'Grand Destination',
+    'Helium',
+    'Hydrogen',
+    'Main Destination',
+    'Neon',
+    'Nitrogen',
+    'not use',
+    'Oxygen',
+    'Pantry / Panel Heritage',
+    'Pantry / Panel Lantai3',
+    'Pantry / Panel Lantai5',
+    'Pantry / Panel Una²',
+    'Plataran',
+    'VIP Ballroom',
+    'Warehouse LT2',
+    'West Destination',
+    'Una Una Exec Lounge',
+    'Una Una GD',
     'The Heritage',
-    'FO Office'
+    'Xenon'
+  ];
+
+  // Define a list of statuses that represent "not occupied."
+  final List<String> notOccupiedStatuses = [
+    'not use',
+    'FO Office',
+    'Warehouse LT2',
+    'Pantry / Panel Una²',
+    'Pantry / Panel Lantai5',
+    'Pantry / Panel Lantai3',
+    'Pantry / Panel Heritage',
   ];
 
   Future<List<Map<String, dynamic>>> fetchAVDevices() async {
@@ -69,18 +85,18 @@ class _AVDevicePageState extends State<AVDevicePage> {
     }
   }
 
-  Future<void> updateStatus(String avdevicesId, String newStatus) async {
+  Future<void> updateStatus(String avdeviceId, String newStatus) async {
     final now = DateTime.now();
     await FirebaseFirestore.instance
         .collection('avdevices')
-        .doc(avdevicesId)
+        .doc(avdeviceId)
         .update({
       'status': newStatus,
       'lastUpdated': now, // Update timestamp
     });
   }
 
-  Future<void> updateAVDevices(String id, String model, String sn,
+  Future<void> updateAVDevice(String id, String model, String sn,
       String base64Image, String status) async {
     try {
       await FirebaseFirestore.instance.collection('avdevices').doc(id).update({
@@ -92,20 +108,20 @@ class _AVDevicePageState extends State<AVDevicePage> {
       });
       setState(() {});
     } catch (e) {
-      log("Error updating avdevices: $e");
+      log("Error updating avdevice: $e");
     }
   }
 
-  Future<void> deleteAVDevices(String id) async {
+  Future<void> deleteAVDevice(String id) async {
     try {
       await FirebaseFirestore.instance.collection('avdevices').doc(id).delete();
       setState(() {});
     } catch (e) {
-      log("Error deleting avdevices: $e");
+      log("Error deleting avdevice: $e");
     }
   }
 
-  Future<void> addAVDevices(String model, String sn, String base64Image) async {
+  Future<void> addAVDevice(String model, String sn, String base64Image) async {
     try {
       await FirebaseFirestore.instance.collection('avdevices').add({
         'model': model,
@@ -117,11 +133,11 @@ class _AVDevicePageState extends State<AVDevicePage> {
       });
       setState(() {});
     } catch (e) {
-      log("Error adding avdevices: $e");
+      log("Error adding avdevice: $e");
     }
   }
 
-  Future<void> _showAddAVDevicesDialog() async {
+  Future<void> _showAddAVDeviceDialog() async {
     final TextEditingController modelController = TextEditingController();
     final TextEditingController snController = TextEditingController();
     String? base64Image;
@@ -130,7 +146,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Add New AVDevices'),
+          title: const Text('Add New AVDevice'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -168,7 +184,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
                 if (modelController.text.isNotEmpty &&
                     snController.text.isNotEmpty &&
                     base64Image != null) {
-                  addAVDevices(
+                  addAVDevice(
                       modelController.text, snController.text, base64Image!);
                   Navigator.of(context).pop();
                 }
@@ -181,14 +197,13 @@ class _AVDevicePageState extends State<AVDevicePage> {
     );
   }
 
-  Future<void> _showDeleteConfirmationDialog(String avdevicesId) async {
+  Future<void> _showDeleteConfirmationDialog(String avdeviceId) async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete AVDevices'),
-          content:
-              const Text('Are you sure you want to delete this avdevices?'),
+          title: const Text('Delete AVDevice'),
+          content: const Text('Are you sure you want to delete this avdevice?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -198,7 +213,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                deleteAVDevices(avdevicesId); // Perform delete action
+                deleteAVDevice(avdeviceId); // Perform delete action
                 Navigator.of(context).pop(); // Close the dialog
               },
               style: ElevatedButton.styleFrom(
@@ -212,18 +227,18 @@ class _AVDevicePageState extends State<AVDevicePage> {
     );
   }
 
-  Future<void> _showEditAVDevicesDialog(Map<String, dynamic> avdevices) async {
+  Future<void> _showEditAVDeviceDialog(Map<String, dynamic> avdevice) async {
     final TextEditingController modelController =
-        TextEditingController(text: avdevices['model']);
+        TextEditingController(text: avdevice['model']);
     final TextEditingController snController =
-        TextEditingController(text: avdevices['sn']);
-    String? base64Image = avdevices['image'];
+        TextEditingController(text: avdevice['sn']);
+    String? base64Image = avdevice['image'];
 
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit AVDevices'),
+          title: const Text('Edit AVDevice'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -261,8 +276,8 @@ class _AVDevicePageState extends State<AVDevicePage> {
                 if (modelController.text.isNotEmpty &&
                     snController.text.isNotEmpty &&
                     base64Image != null) {
-                  updateAVDevices(avdevices['id'], modelController.text,
-                      snController.text, base64Image!, avdevices['status']);
+                  updateAVDevice(avdevice['id'], modelController.text,
+                      snController.text, base64Image!, avdevice['status']);
                   Navigator.of(context).pop();
                 }
               },
@@ -274,14 +289,23 @@ class _AVDevicePageState extends State<AVDevicePage> {
     );
   }
 
-  // Helper method to build avdevices card
-  Widget _buildAVDevicesCard(Map<String, dynamic> avdevices) {
-    final lastUpdated = avdevices['lastUpdated']?.toDate();
+  // Helper method to build avdevice card
+  Widget _buildAVDeviceCard(Map<String, dynamic> avdevice) {
+    final lastUpdated = avdevice['lastUpdated']?.toDate();
     final formattedDate = lastUpdated != null
         ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
         : 'Unknown';
-    Color cardColor =
-        avdevices['status'] == 'not use' ? Colors.green.shade100 : Colors.white;
+    Color cardColor = [
+      'not use',
+      'FO Office',
+      'Warehouse LT2',
+      'Pantry / Panel Una²',
+      'Pantry / Panel Lantai5',
+      'Pantry / Panel Lantai3',
+      'Pantry / Panel Heritage'
+    ].contains(avdevice['status'])
+        ? Colors.green.shade100
+        : Colors.white;
 
     return Card(
       color: cardColor,
@@ -291,7 +315,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
         child: Row(
           children: [
             Image.memory(
-              base64Decode(avdevices['image'] ?? ''),
+              base64Decode(avdevice['image'] ?? ''),
               width: 150,
               height: 100,
               fit: BoxFit.fitWidth,
@@ -302,30 +326,30 @@ class _AVDevicePageState extends State<AVDevicePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${avdevices['model']}',
+                    '${avdevice['model']}',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  Text('SN: ${avdevices['sn']}'),
-                  if (avdevices['status'] != 'not use')
-                    Text(
-                      'Occupied @${avdevices['status']}',
-                      style: const TextStyle(color: Colors.red),
-                    )
-                  else
-                    const Text(
-                      'Not Occupied / @AV_Warehouse',
-                      style: TextStyle(color: Colors.green),
+                  Text('SN: ${avdevice['sn']}'),
+                  Text(
+                    notOccupiedStatuses.contains(avdevice['status'])
+                        ? 'Not Occupied / @AV_Warehouse'
+                        : 'Occupied @${avdevice['status']}',
+                    style: TextStyle(
+                      color: notOccupiedStatuses.contains(avdevice['status'])
+                          ? Colors.green
+                          : Colors.red,
                     ),
+                  ),
                   Text(
                     'Last Updated: $formattedDate',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   DropdownButton<String>(
-                    value: avdevices['status'],
+                    value: avdevice['status'],
                     onChanged: (newValue) {
                       if (newValue != null) {
-                        updateStatus(avdevices['id'], newValue);
+                        updateStatus(avdevice['id'], newValue);
                       }
                     },
                     items: roomOptions.map((room) {
@@ -341,9 +365,9 @@ class _AVDevicePageState extends State<AVDevicePage> {
             PopupMenuButton<String>(
               onSelected: (value) {
                 if (value == 'Edit') {
-                  _showEditAVDevicesDialog(avdevices);
+                  _showEditAVDeviceDialog(avdevice);
                 } else if (value == 'Delete') {
-                  _showDeleteConfirmationDialog(avdevices['id']);
+                  _showDeleteConfirmationDialog(avdevice['id']);
                 }
               },
               itemBuilder: (context) => [
@@ -379,11 +403,15 @@ class _AVDevicePageState extends State<AVDevicePage> {
               };
             }).toList();
 
+            // Categorize avdevices
             final occupiedAVDevices = avdevices
-                .where((avdevices) => avdevices['status'] != 'not use')
+                .where((avdevice) =>
+                    !notOccupiedStatuses.contains(avdevice['status']))
                 .toList();
+
             final notOccupiedAVDevices = avdevices
-                .where((avdevices) => avdevices['status'] == 'not use')
+                .where((avdevice) =>
+                    notOccupiedStatuses.contains(avdevice['status']))
                 .toList();
 
             return ListView(
@@ -400,8 +428,8 @@ class _AVDevicePageState extends State<AVDevicePage> {
                       ),
                     ),
                   ),
-                  ...occupiedAVDevices.map((avdevices) {
-                    return _buildAVDevicesCard(avdevices);
+                  ...occupiedAVDevices.map((avdevice) {
+                    return _buildAVDeviceCard(avdevice);
                   }).toList(),
                 ],
                 if (notOccupiedAVDevices.isNotEmpty) ...[
@@ -416,8 +444,8 @@ class _AVDevicePageState extends State<AVDevicePage> {
                       ),
                     ),
                   ),
-                  ...notOccupiedAVDevices.map((avdevices) {
-                    return _buildAVDevicesCard(avdevices);
+                  ...notOccupiedAVDevices.map((avdevice) {
+                    return _buildAVDeviceCard(avdevice);
                   }).toList(),
                 ],
               ],
@@ -426,7 +454,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _showAddAVDevicesDialog,
+        onPressed: _showAddAVDeviceDialog,
         child: const Icon(Icons.add),
       ),
     );

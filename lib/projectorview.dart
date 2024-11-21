@@ -8,41 +8,57 @@ import 'package:intl/intl.dart';
 
 // Your Projector Management Page
 
-class ProjectorHomePage extends StatefulWidget {
-  const ProjectorHomePage({super.key});
+class ProjectorPage extends StatefulWidget {
+  const ProjectorPage({super.key});
 
   @override
-  State<ProjectorHomePage> createState() => _ProjectorHomePageState();
+  State<ProjectorPage> createState() => _ProjectorPageState();
 }
 
-class _ProjectorHomePageState extends State<ProjectorHomePage> {
+class _ProjectorPageState extends State<ProjectorPage> {
   final List<String> roomOptions = [
-    'not use',
-    'Grand Ballroom',
-    'Ballroom A',
-    'Ballroom B',
-    'VIP Ballroom',
-    'Plataran',
-    'Grand Destination',
-    'Main Destination',
-    'West Destination',
-    'East Destination',
-    'Una Una GD',
-    'Una Una Exec Lounge',
-    'Atmosphere',
-    'Grand Argon',
     'Argon I',
     'Argon II',
-    'Oxygen',
-    'Hydrogen',
-    'Nitrogen',
-    'Helium',
+    'Atmosphere',
+    'Ballroom A',
+    'Ballroom B',
     'Crypton',
-    'Neon',
-    'Xenon',
+    'East Destination',
+    'FO Office',
     'Food Exchange',
+    'Grand Argon',
+    'Grand Ballroom',
+    'Grand Destination',
+    'Helium',
+    'Hydrogen',
+    'Main Destination',
+    'Neon',
+    'Nitrogen',
+    'not use',
+    'Oxygen',
+    'Pantry / Panel Heritage',
+    'Pantry / Panel Lantai3',
+    'Pantry / Panel Lantai5',
+    'Pantry / Panel Una²',
+    'Plataran',
+    'VIP Ballroom',
+    'Warehouse LT2',
+    'West Destination',
+    'Una Una Exec Lounge',
+    'Una Una GD',
     'The Heritage',
-    'FO Office'
+    'Xenon'
+  ];
+
+  // Define a list of statuses that represent "not occupied."
+  final List<String> notOccupiedStatuses = [
+    'not use',
+    'FO Office',
+    'Warehouse LT2',
+    'Pantry / Panel Una²',
+    'Pantry / Panel Lantai5',
+    'Pantry / Panel Lantai3',
+    'Pantry / Panel Heritage',
   ];
 
   Future<List<Map<String, dynamic>>> fetchProjectors() async {
@@ -283,8 +299,17 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
     final formattedDate = lastUpdated != null
         ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
         : 'Unknown';
-    Color cardColor =
-        projector['status'] == 'not use' ? Colors.green.shade100 : Colors.white;
+    Color cardColor = [
+      'not use',
+      'FO Office',
+      'Warehouse LT2',
+      'Pantry / Panel Una²',
+      'Pantry / Panel Lantai5',
+      'Pantry / Panel Lantai3',
+      'Pantry / Panel Heritage'
+    ].contains(projector['status'])
+        ? Colors.green.shade100
+        : Colors.white;
 
     return Card(
       color: cardColor,
@@ -310,16 +335,16 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text('SN: ${projector['sn']}'),
-                  if (projector['status'] != 'not use')
-                    Text(
-                      'Occupied @${projector['status']}',
-                      style: const TextStyle(color: Colors.red),
-                    )
-                  else
-                    const Text(
-                      'Not Occupied / @AV_Warehouse',
-                      style: TextStyle(color: Colors.green),
+                  Text(
+                    notOccupiedStatuses.contains(projector['status'])
+                        ? 'Not Occupied @${projector['status']}'
+                        : 'Occupied @${projector['status']}',
+                    style: TextStyle(
+                      color: notOccupiedStatuses.contains(projector['status'])
+                          ? Colors.green
+                          : Colors.red,
                     ),
+                  ),
                   Text(
                     'Last Updated: $formattedDate',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -382,11 +407,15 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
               };
             }).toList();
 
+            // Categorize projectors
             final occupiedProjectors = projectors
-                .where((projector) => projector['status'] != 'not use')
+                .where((projector) =>
+                    !notOccupiedStatuses.contains(projector['status']))
                 .toList();
+
             final notOccupiedProjectors = projectors
-                .where((projector) => projector['status'] == 'not use')
+                .where((projector) =>
+                    notOccupiedStatuses.contains(projector['status']))
                 .toList();
 
             return ListView(

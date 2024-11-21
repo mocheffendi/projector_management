@@ -17,32 +17,48 @@ class SoundPage extends StatefulWidget {
 
 class _SoundPageState extends State<SoundPage> {
   final List<String> roomOptions = [
-    'not use',
-    'Grand Ballroom',
-    'Ballroom A',
-    'Ballroom B',
-    'VIP Ballroom',
-    'Plataran',
-    'Grand Destination',
-    'Main Destination',
-    'West Destination',
-    'East Destination',
-    'Una Una GD',
-    'Una Una Exec Lounge',
-    'Atmosphere',
-    'Grand Argon',
     'Argon I',
     'Argon II',
-    'Oxygen',
-    'Hydrogen',
-    'Nitrogen',
-    'Helium',
+    'Atmosphere',
+    'Ballroom A',
+    'Ballroom B',
     'Crypton',
-    'Neon',
-    'Xenon',
+    'East Destination',
+    'FO Office',
     'Food Exchange',
+    'Grand Argon',
+    'Grand Ballroom',
+    'Grand Destination',
+    'Helium',
+    'Hydrogen',
+    'Main Destination',
+    'Neon',
+    'Nitrogen',
+    'not use',
+    'Oxygen',
+    'Pantry / Panel Heritage',
+    'Pantry / Panel Lantai3',
+    'Pantry / Panel Lantai5',
+    'Pantry / Panel Una²',
+    'Plataran',
+    'VIP Ballroom',
+    'Warehouse LT2',
+    'West Destination',
+    'Una Una Exec Lounge',
+    'Una Una GD',
     'The Heritage',
-    'FO Office'
+    'Xenon'
+  ];
+
+  // Define a list of statuses that represent "not occupied."
+  final List<String> notOccupiedStatuses = [
+    'not use',
+    'FO Office',
+    'Warehouse LT2',
+    'Pantry / Panel Una²',
+    'Pantry / Panel Lantai5',
+    'Pantry / Panel Lantai3',
+    'Pantry / Panel Heritage',
   ];
 
   Future<List<Map<String, dynamic>>> fetchSounds() async {
@@ -276,8 +292,17 @@ class _SoundPageState extends State<SoundPage> {
     final formattedDate = lastUpdated != null
         ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
         : 'Unknown';
-    Color cardColor =
-        sound['status'] == 'not use' ? Colors.green.shade100 : Colors.white;
+    Color cardColor = [
+      'not use',
+      'FO Office',
+      'Warehouse LT2',
+      'Pantry / Panel Una²',
+      'Pantry / Panel Lantai5',
+      'Pantry / Panel Lantai3',
+      'Pantry / Panel Heritage'
+    ].contains(sound['status'])
+        ? Colors.green.shade100
+        : Colors.white;
 
     return Card(
       color: cardColor,
@@ -303,16 +328,16 @@ class _SoundPageState extends State<SoundPage> {
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text('SN: ${sound['sn']}'),
-                  if (sound['status'] != 'not use')
-                    Text(
-                      'Occupied @${sound['status']}',
-                      style: const TextStyle(color: Colors.red),
-                    )
-                  else
-                    const Text(
-                      'Not Occupied / @AV_Warehouse',
-                      style: TextStyle(color: Colors.green),
+                  Text(
+                    notOccupiedStatuses.contains(sound['status'])
+                        ? 'Not Occupied / @AV_Warehouse'
+                        : 'Occupied @${sound['status']}',
+                    style: TextStyle(
+                      color: notOccupiedStatuses.contains(sound['status'])
+                          ? Colors.green
+                          : Colors.red,
                     ),
+                  ),
                   Text(
                     'Last Updated: $formattedDate',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -375,10 +400,15 @@ class _SoundPageState extends State<SoundPage> {
               };
             }).toList();
 
-            final occupiedSounds =
-                sounds.where((sound) => sound['status'] != 'not use').toList();
-            final notOccupiedSounds =
-                sounds.where((sound) => sound['status'] == 'not use').toList();
+            // Categorize sounds
+            final occupiedSounds = sounds
+                .where(
+                    (sound) => !notOccupiedStatuses.contains(sound['status']))
+                .toList();
+
+            final notOccupiedSounds = sounds
+                .where((sound) => notOccupiedStatuses.contains(sound['status']))
+                .toList();
 
             return ListView(
               children: [
