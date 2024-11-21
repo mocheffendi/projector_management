@@ -1,12 +1,12 @@
-import 'dart:convert';
-import 'dart:developer'; // To handle image encoding as base64
+import 'dart:convert'; // To handle image encoding as base64
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 
-// Placeholder Screen Page
+// Your Screen Management Page
 
 class ScreenPage extends StatefulWidget {
   const ScreenPage({super.key});
@@ -41,10 +41,11 @@ class _ScreenPageState extends State<ScreenPage> {
     'Neon',
     'Xenon',
     'Food Exchange',
-    'The Heritage'
+    'The Heritage',
+    'FO Office'
   ];
 
-  Future<List<Map<String, dynamic>>> fetchscreens() async {
+  Future<List<Map<String, dynamic>>> fetchScreens() async {
     try {
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance.collection('screens').get();
@@ -68,18 +69,18 @@ class _ScreenPageState extends State<ScreenPage> {
     }
   }
 
-  Future<void> updateStatus(String projectorId, String newStatus) async {
+  Future<void> updateStatus(String screenId, String newStatus) async {
     final now = DateTime.now();
     await FirebaseFirestore.instance
         .collection('screens')
-        .doc(projectorId)
+        .doc(screenId)
         .update({
       'status': newStatus,
       'lastUpdated': now, // Update timestamp
     });
   }
 
-  Future<void> updateProjector(String id, String model, String sn,
+  Future<void> updateScreen(String id, String model, String sn,
       String base64Image, String status) async {
     try {
       await FirebaseFirestore.instance.collection('screens').doc(id).update({
@@ -91,20 +92,20 @@ class _ScreenPageState extends State<ScreenPage> {
       });
       setState(() {});
     } catch (e) {
-      log("Error updating projector: $e");
+      log("Error updating screen: $e");
     }
   }
 
-  Future<void> deleteProjector(String id) async {
+  Future<void> deleteScreen(String id) async {
     try {
       await FirebaseFirestore.instance.collection('screens').doc(id).delete();
       setState(() {});
     } catch (e) {
-      log("Error deleting projector: $e");
+      log("Error deleting screen: $e");
     }
   }
 
-  Future<void> addProjector(String model, String sn, String base64Image) async {
+  Future<void> addScreen(String model, String sn, String base64Image) async {
     try {
       await FirebaseFirestore.instance.collection('screens').add({
         'model': model,
@@ -116,11 +117,11 @@ class _ScreenPageState extends State<ScreenPage> {
       });
       setState(() {});
     } catch (e) {
-      log("Error adding projector: $e");
+      log("Error adding screen: $e");
     }
   }
 
-  Future<void> _showAddProjectorDialog() async {
+  Future<void> _showAddScreenDialog() async {
     final TextEditingController modelController = TextEditingController();
     final TextEditingController snController = TextEditingController();
     String? base64Image;
@@ -129,7 +130,7 @@ class _ScreenPageState extends State<ScreenPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Add New Projector'),
+          title: const Text('Add New Screen'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -167,7 +168,7 @@ class _ScreenPageState extends State<ScreenPage> {
                 if (modelController.text.isNotEmpty &&
                     snController.text.isNotEmpty &&
                     base64Image != null) {
-                  addProjector(
+                  addScreen(
                       modelController.text, snController.text, base64Image!);
                   Navigator.of(context).pop();
                 }
@@ -180,14 +181,13 @@ class _ScreenPageState extends State<ScreenPage> {
     );
   }
 
-  Future<void> _showDeleteConfirmationDialog(String projectorId) async {
+  Future<void> _showDeleteConfirmationDialog(String screenId) async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Projector'),
-          content:
-              const Text('Are you sure you want to delete this projector?'),
+          title: const Text('Delete Screen'),
+          content: const Text('Are you sure you want to delete this screen?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -197,7 +197,7 @@ class _ScreenPageState extends State<ScreenPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                deleteProjector(projectorId); // Perform delete action
+                deleteScreen(screenId); // Perform delete action
                 Navigator.of(context).pop(); // Close the dialog
               },
               style: ElevatedButton.styleFrom(
@@ -211,18 +211,18 @@ class _ScreenPageState extends State<ScreenPage> {
     );
   }
 
-  Future<void> _showEditProjectorDialog(Map<String, dynamic> projector) async {
+  Future<void> _showEditScreenDialog(Map<String, dynamic> screen) async {
     final TextEditingController modelController =
-        TextEditingController(text: projector['model']);
+        TextEditingController(text: screen['model']);
     final TextEditingController snController =
-        TextEditingController(text: projector['sn']);
-    String? base64Image = projector['image'];
+        TextEditingController(text: screen['sn']);
+    String? base64Image = screen['image'];
 
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Projector'),
+          title: const Text('Edit Screen'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -260,8 +260,8 @@ class _ScreenPageState extends State<ScreenPage> {
                 if (modelController.text.isNotEmpty &&
                     snController.text.isNotEmpty &&
                     base64Image != null) {
-                  updateProjector(projector['id'], modelController.text,
-                      snController.text, base64Image!, projector['status']);
+                  updateScreen(screen['id'], modelController.text,
+                      snController.text, base64Image!, screen['status']);
                   Navigator.of(context).pop();
                 }
               },
@@ -273,23 +273,92 @@ class _ScreenPageState extends State<ScreenPage> {
     );
   }
 
+  // Helper method to build screen card
+  Widget _buildScreenCard(Map<String, dynamic> screen) {
+    final lastUpdated = screen['lastUpdated']?.toDate();
+    final formattedDate = lastUpdated != null
+        ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
+        : 'Unknown';
+    Color cardColor =
+        screen['status'] == 'not use' ? Colors.green.shade100 : Colors.white;
+
+    return Card(
+      color: cardColor,
+      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Image.memory(
+              base64Decode(screen['image'] ?? ''),
+              width: 150,
+              height: 100,
+              fit: BoxFit.fitWidth,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${screen['model']}',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Text('SN: ${screen['sn']}'),
+                  if (screen['status'] != 'not use')
+                    Text(
+                      'Occupied @${screen['status']}',
+                      style: const TextStyle(color: Colors.red),
+                    )
+                  else
+                    const Text(
+                      'Not Occupied / @AV_Warehouse',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  Text(
+                    'Last Updated: $formattedDate',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  DropdownButton<String>(
+                    value: screen['status'],
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        updateStatus(screen['id'], newValue);
+                      }
+                    },
+                    items: roomOptions.map((room) {
+                      return DropdownMenuItem<String>(
+                        value: room,
+                        child: Text(room),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'Edit') {
+                  _showEditScreenDialog(screen);
+                } else if (value == 'Delete') {
+                  _showDeleteConfirmationDialog(screen['id']);
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                const PopupMenuItem(value: 'Delete', child: Text('Delete')),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text(
-      //     'Projector Management | Novotel Samator',
-      //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       icon: const Icon(Icons.refresh),
-      //       onPressed: () {
-      //         setState(() {}); // Optional: Trigger a rebuild manually
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('screens').snapshots(),
         builder: (context, snapshot) {
@@ -300,6 +369,7 @@ class _ScreenPageState extends State<ScreenPage> {
           } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('No screens found.'));
           } else {
+            // Extract and categorize screens
             final screens = snapshot.data!.docs.map((doc) {
               final data = doc.data() as Map<String, dynamic>;
               return {
@@ -308,100 +378,54 @@ class _ScreenPageState extends State<ScreenPage> {
               };
             }).toList();
 
-            return ListView.builder(
-              itemCount: screens.length,
-              itemBuilder: (context, index) {
-                final projector = screens[index];
-                final lastUpdated = projector['lastUpdated']?.toDate();
-                final formattedDate = lastUpdated != null
-                    ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
-                    : 'Unknown';
-                Color cardColor = projector['status'] == 'not use'
-                    ? Colors.green.shade100
-                    : Colors.white;
+            final occupiedScreens = screens
+                .where((screen) => screen['status'] != 'not use')
+                .toList();
+            final notOccupiedScreens = screens
+                .where((screen) => screen['status'] == 'not use')
+                .toList();
 
-                return Card(
-                  color: cardColor,
-                  margin: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image.memory(
-                          base64Decode(projector['image'] ?? ''),
-                          width: 150,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${projector['model']}',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              Text('SN: ${projector['sn']}'),
-                              if (projector['status'] != 'not use')
-                                Text(
-                                  'Occupied @${projector['status']}',
-                                  style: const TextStyle(color: Colors.red),
-                                )
-                              else
-                                const Text(
-                                  'Not Occupied / @AV_Warehouse',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              Text(
-                                'Last Updated: $formattedDate',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.grey),
-                              ),
-                              DropdownButton<String>(
-                                value: projector['status'],
-                                onChanged: (newValue) {
-                                  if (newValue != null) {
-                                    updateStatus(projector['id'], newValue);
-                                  }
-                                },
-                                items: roomOptions.map((room) {
-                                  return DropdownMenuItem<String>(
-                                    value: room,
-                                    child: Text(room),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'Edit') {
-                              _showEditProjectorDialog(projector);
-                            } else if (value == 'Delete') {
-                              _showDeleteConfirmationDialog(projector['id']);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                                value: 'Edit', child: Text('Edit')),
-                            const PopupMenuItem(
-                                value: 'Delete', child: Text('Delete')),
-                          ],
-                        ),
-                      ],
+            return ListView(
+              children: [
+                if (occupiedScreens.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Occupied',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
-                );
-              },
+                  ...occupiedScreens.map((screen) {
+                    return _buildScreenCard(screen);
+                  }).toList(),
+                ],
+                if (notOccupiedScreens.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Not Occupied',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                  ...notOccupiedScreens.map((screen) {
+                    return _buildScreenCard(screen);
+                  }).toList(),
+                ],
+              ],
             );
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _showAddProjectorDialog,
+        onPressed: _showAddScreenDialog,
         child: const Icon(Icons.add),
       ),
     );

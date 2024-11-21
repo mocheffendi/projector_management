@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 
-// Placeholder AVDevice Page
+// Your AVDevices Management Page
 
 class AVDevicePage extends StatefulWidget {
   const AVDevicePage({super.key});
@@ -41,10 +41,11 @@ class _AVDevicePageState extends State<AVDevicePage> {
     'Neon',
     'Xenon',
     'Food Exchange',
-    'The Heritage'
+    'The Heritage',
+    'FO Office'
   ];
 
-  Future<List<Map<String, dynamic>>> fetchavdevices() async {
+  Future<List<Map<String, dynamic>>> fetchAVDevices() async {
     try {
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance.collection('avdevices').get();
@@ -68,18 +69,18 @@ class _AVDevicePageState extends State<AVDevicePage> {
     }
   }
 
-  Future<void> updateStatus(String projectorId, String newStatus) async {
+  Future<void> updateStatus(String avdevicesId, String newStatus) async {
     final now = DateTime.now();
     await FirebaseFirestore.instance
         .collection('avdevices')
-        .doc(projectorId)
+        .doc(avdevicesId)
         .update({
       'status': newStatus,
       'lastUpdated': now, // Update timestamp
     });
   }
 
-  Future<void> updateProjector(String id, String model, String sn,
+  Future<void> updateAVDevices(String id, String model, String sn,
       String base64Image, String status) async {
     try {
       await FirebaseFirestore.instance.collection('avdevices').doc(id).update({
@@ -91,20 +92,20 @@ class _AVDevicePageState extends State<AVDevicePage> {
       });
       setState(() {});
     } catch (e) {
-      log("Error updating projector: $e");
+      log("Error updating avdevices: $e");
     }
   }
 
-  Future<void> deleteProjector(String id) async {
+  Future<void> deleteAVDevices(String id) async {
     try {
       await FirebaseFirestore.instance.collection('avdevices').doc(id).delete();
       setState(() {});
     } catch (e) {
-      log("Error deleting projector: $e");
+      log("Error deleting avdevices: $e");
     }
   }
 
-  Future<void> addProjector(String model, String sn, String base64Image) async {
+  Future<void> addAVDevices(String model, String sn, String base64Image) async {
     try {
       await FirebaseFirestore.instance.collection('avdevices').add({
         'model': model,
@@ -116,11 +117,11 @@ class _AVDevicePageState extends State<AVDevicePage> {
       });
       setState(() {});
     } catch (e) {
-      log("Error adding projector: $e");
+      log("Error adding avdevices: $e");
     }
   }
 
-  Future<void> _showAddProjectorDialog() async {
+  Future<void> _showAddAVDevicesDialog() async {
     final TextEditingController modelController = TextEditingController();
     final TextEditingController snController = TextEditingController();
     String? base64Image;
@@ -129,7 +130,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Add New Projector'),
+          title: const Text('Add New AVDevices'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -167,7 +168,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
                 if (modelController.text.isNotEmpty &&
                     snController.text.isNotEmpty &&
                     base64Image != null) {
-                  addProjector(
+                  addAVDevices(
                       modelController.text, snController.text, base64Image!);
                   Navigator.of(context).pop();
                 }
@@ -180,14 +181,14 @@ class _AVDevicePageState extends State<AVDevicePage> {
     );
   }
 
-  Future<void> _showDeleteConfirmationDialog(String projectorId) async {
+  Future<void> _showDeleteConfirmationDialog(String avdevicesId) async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Projector'),
+          title: const Text('Delete AVDevices'),
           content:
-              const Text('Are you sure you want to delete this projector?'),
+              const Text('Are you sure you want to delete this avdevices?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -197,7 +198,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                deleteProjector(projectorId); // Perform delete action
+                deleteAVDevices(avdevicesId); // Perform delete action
                 Navigator.of(context).pop(); // Close the dialog
               },
               style: ElevatedButton.styleFrom(
@@ -211,18 +212,18 @@ class _AVDevicePageState extends State<AVDevicePage> {
     );
   }
 
-  Future<void> _showEditProjectorDialog(Map<String, dynamic> projector) async {
+  Future<void> _showEditAVDevicesDialog(Map<String, dynamic> avdevices) async {
     final TextEditingController modelController =
-        TextEditingController(text: projector['model']);
+        TextEditingController(text: avdevices['model']);
     final TextEditingController snController =
-        TextEditingController(text: projector['sn']);
-    String? base64Image = projector['image'];
+        TextEditingController(text: avdevices['sn']);
+    String? base64Image = avdevices['image'];
 
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Projector'),
+          title: const Text('Edit AVDevices'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -260,8 +261,8 @@ class _AVDevicePageState extends State<AVDevicePage> {
                 if (modelController.text.isNotEmpty &&
                     snController.text.isNotEmpty &&
                     base64Image != null) {
-                  updateProjector(projector['id'], modelController.text,
-                      snController.text, base64Image!, projector['status']);
+                  updateAVDevices(avdevices['id'], modelController.text,
+                      snController.text, base64Image!, avdevices['status']);
                   Navigator.of(context).pop();
                 }
               },
@@ -273,23 +274,92 @@ class _AVDevicePageState extends State<AVDevicePage> {
     );
   }
 
+  // Helper method to build avdevices card
+  Widget _buildAVDevicesCard(Map<String, dynamic> avdevices) {
+    final lastUpdated = avdevices['lastUpdated']?.toDate();
+    final formattedDate = lastUpdated != null
+        ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
+        : 'Unknown';
+    Color cardColor =
+        avdevices['status'] == 'not use' ? Colors.green.shade100 : Colors.white;
+
+    return Card(
+      color: cardColor,
+      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Image.memory(
+              base64Decode(avdevices['image'] ?? ''),
+              width: 150,
+              height: 100,
+              fit: BoxFit.fitWidth,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${avdevices['model']}',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Text('SN: ${avdevices['sn']}'),
+                  if (avdevices['status'] != 'not use')
+                    Text(
+                      'Occupied @${avdevices['status']}',
+                      style: const TextStyle(color: Colors.red),
+                    )
+                  else
+                    const Text(
+                      'Not Occupied / @AV_Warehouse',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  Text(
+                    'Last Updated: $formattedDate',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  DropdownButton<String>(
+                    value: avdevices['status'],
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        updateStatus(avdevices['id'], newValue);
+                      }
+                    },
+                    items: roomOptions.map((room) {
+                      return DropdownMenuItem<String>(
+                        value: room,
+                        child: Text(room),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'Edit') {
+                  _showEditAVDevicesDialog(avdevices);
+                } else if (value == 'Delete') {
+                  _showDeleteConfirmationDialog(avdevices['id']);
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                const PopupMenuItem(value: 'Delete', child: Text('Delete')),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text(
-      //     'Projector Management | Novotel Samator',
-      //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       icon: const Icon(Icons.refresh),
-      //       onPressed: () {
-      //         setState(() {}); // Optional: Trigger a rebuild manually
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('avdevices').snapshots(),
         builder: (context, snapshot) {
@@ -300,6 +370,7 @@ class _AVDevicePageState extends State<AVDevicePage> {
           } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('No avdevices found.'));
           } else {
+            // Extract and categorize avdevices
             final avdevices = snapshot.data!.docs.map((doc) {
               final data = doc.data() as Map<String, dynamic>;
               return {
@@ -308,100 +379,54 @@ class _AVDevicePageState extends State<AVDevicePage> {
               };
             }).toList();
 
-            return ListView.builder(
-              itemCount: avdevices.length,
-              itemBuilder: (context, index) {
-                final projector = avdevices[index];
-                final lastUpdated = projector['lastUpdated']?.toDate();
-                final formattedDate = lastUpdated != null
-                    ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
-                    : 'Unknown';
-                Color cardColor = projector['status'] == 'not use'
-                    ? Colors.green.shade100
-                    : Colors.white;
+            final occupiedAVDevices = avdevices
+                .where((avdevices) => avdevices['status'] != 'not use')
+                .toList();
+            final notOccupiedAVDevices = avdevices
+                .where((avdevices) => avdevices['status'] == 'not use')
+                .toList();
 
-                return Card(
-                  color: cardColor,
-                  margin: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image.memory(
-                          base64Decode(projector['image'] ?? ''),
-                          width: 150,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${projector['model']}',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              Text('SN: ${projector['sn']}'),
-                              if (projector['status'] != 'not use')
-                                Text(
-                                  'Occupied @${projector['status']}',
-                                  style: const TextStyle(color: Colors.red),
-                                )
-                              else
-                                const Text(
-                                  'Not Occupied / @AV_Warehouse',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              Text(
-                                'Last Updated: $formattedDate',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.grey),
-                              ),
-                              DropdownButton<String>(
-                                value: projector['status'],
-                                onChanged: (newValue) {
-                                  if (newValue != null) {
-                                    updateStatus(projector['id'], newValue);
-                                  }
-                                },
-                                items: roomOptions.map((room) {
-                                  return DropdownMenuItem<String>(
-                                    value: room,
-                                    child: Text(room),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'Edit') {
-                              _showEditProjectorDialog(projector);
-                            } else if (value == 'Delete') {
-                              _showDeleteConfirmationDialog(projector['id']);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                                value: 'Edit', child: Text('Edit')),
-                            const PopupMenuItem(
-                                value: 'Delete', child: Text('Delete')),
-                          ],
-                        ),
-                      ],
+            return ListView(
+              children: [
+                if (occupiedAVDevices.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Occupied',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
-                );
-              },
+                  ...occupiedAVDevices.map((avdevices) {
+                    return _buildAVDevicesCard(avdevices);
+                  }).toList(),
+                ],
+                if (notOccupiedAVDevices.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Not Occupied',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                  ...notOccupiedAVDevices.map((avdevices) {
+                    return _buildAVDevicesCard(avdevices);
+                  }).toList(),
+                ],
+              ],
             );
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _showAddProjectorDialog,
+        onPressed: _showAddAVDevicesDialog,
         child: const Icon(Icons.add),
       ),
     );

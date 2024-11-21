@@ -277,23 +277,92 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
     );
   }
 
+  // Helper method to build projector card
+  Widget _buildProjectorCard(Map<String, dynamic> projector) {
+    final lastUpdated = projector['lastUpdated']?.toDate();
+    final formattedDate = lastUpdated != null
+        ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
+        : 'Unknown';
+    Color cardColor =
+        projector['status'] == 'not use' ? Colors.green.shade100 : Colors.white;
+
+    return Card(
+      color: cardColor,
+      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Image.memory(
+              base64Decode(projector['image'] ?? ''),
+              width: 150,
+              height: 100,
+              fit: BoxFit.fitWidth,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${projector['model']}',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Text('SN: ${projector['sn']}'),
+                  if (projector['status'] != 'not use')
+                    Text(
+                      'Occupied @${projector['status']}',
+                      style: const TextStyle(color: Colors.red),
+                    )
+                  else
+                    const Text(
+                      'Not Occupied / @AV_Warehouse',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  Text(
+                    'Last Updated: $formattedDate',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  DropdownButton<String>(
+                    value: projector['status'],
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        updateStatus(projector['id'], newValue);
+                      }
+                    },
+                    items: roomOptions.map((room) {
+                      return DropdownMenuItem<String>(
+                        value: room,
+                        child: Text(room),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'Edit') {
+                  _showEditProjectorDialog(projector);
+                } else if (value == 'Delete') {
+                  _showDeleteConfirmationDialog(projector['id']);
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                const PopupMenuItem(value: 'Delete', child: Text('Delete')),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text(
-      //     'Projector Management | Novotel Samator',
-      //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       icon: const Icon(Icons.refresh),
-      //       onPressed: () {
-      //         setState(() {}); // Optional: Trigger a rebuild manually
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('projectors').snapshots(),
         builder: (context, snapshot) {
@@ -304,6 +373,7 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
           } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('No projectors found.'));
           } else {
+            // Extract and categorize projectors
             final projectors = snapshot.data!.docs.map((doc) {
               final data = doc.data() as Map<String, dynamic>;
               return {
@@ -312,94 +382,48 @@ class _ProjectorHomePageState extends State<ProjectorHomePage> {
               };
             }).toList();
 
-            return ListView.builder(
-              itemCount: projectors.length,
-              itemBuilder: (context, index) {
-                final projector = projectors[index];
-                final lastUpdated = projector['lastUpdated']?.toDate();
-                final formattedDate = lastUpdated != null
-                    ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
-                    : 'Unknown';
-                Color cardColor = projector['status'] == 'not use'
-                    ? Colors.green.shade100
-                    : Colors.white;
+            final occupiedProjectors = projectors
+                .where((projector) => projector['status'] != 'not use')
+                .toList();
+            final notOccupiedProjectors = projectors
+                .where((projector) => projector['status'] == 'not use')
+                .toList();
 
-                return Card(
-                  color: cardColor,
-                  margin: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image.memory(
-                          base64Decode(projector['image'] ?? ''),
-                          width: 150,
-                          height: 100,
-                          fit: BoxFit.fitWidth,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${projector['model']}',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              Text('SN: ${projector['sn']}'),
-                              if (projector['status'] != 'not use')
-                                Text(
-                                  'Occupied @${projector['status']}',
-                                  style: const TextStyle(color: Colors.red),
-                                )
-                              else
-                                const Text(
-                                  'Not Occupied / @AV_Warehouse',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              Text(
-                                'Last Updated: $formattedDate',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.grey),
-                              ),
-                              DropdownButton<String>(
-                                value: projector['status'],
-                                onChanged: (newValue) {
-                                  if (newValue != null) {
-                                    updateStatus(projector['id'], newValue);
-                                  }
-                                },
-                                items: roomOptions.map((room) {
-                                  return DropdownMenuItem<String>(
-                                    value: room,
-                                    child: Text(room),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'Edit') {
-                              _showEditProjectorDialog(projector);
-                            } else if (value == 'Delete') {
-                              _showDeleteConfirmationDialog(projector['id']);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                                value: 'Edit', child: Text('Edit')),
-                            const PopupMenuItem(
-                                value: 'Delete', child: Text('Delete')),
-                          ],
-                        ),
-                      ],
+            return ListView(
+              children: [
+                if (occupiedProjectors.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Occupied',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
-                );
-              },
+                  ...occupiedProjectors.map((projector) {
+                    return _buildProjectorCard(projector);
+                  }).toList(),
+                ],
+                if (notOccupiedProjectors.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Not Occupied',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                  ...notOccupiedProjectors.map((projector) {
+                    return _buildProjectorCard(projector);
+                  }).toList(),
+                ],
+              ],
             );
           }
         },
