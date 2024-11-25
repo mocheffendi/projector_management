@@ -40,7 +40,19 @@ dependencies:
   firebase_storage: ^12.3.6
   # image_picker: ^1.1.2
   file_picker: ^8.1.4
+  # file_picker: ^5.2.10
+  screenshot: ^3.0.0
+  share_plus: ^10.1.2
+  image: ^4.3.0
+  flutter_widget_from_html: ^0.15.3
+  # share_screenshot_widget: ^0.0.5
   intl:
+  flutter_to_pdf: ^0.2.2
+  scroll_screenshot: ^0.0.4
+  widget_screenshot: ^0.0.9
+  pdf: ^3.11.1
+  path_provider:
+  printing: ^5.13.4
 
 dev_dependencies:
   flutter_test:

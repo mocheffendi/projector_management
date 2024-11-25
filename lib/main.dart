@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:projector_management/settingpage.dart';
 // import 'package:file_picker/file_picker.dart';
 // import 'package:intl/intl.dart';
 import 'projectorview.dart';
@@ -51,6 +52,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
     const ScreenPage(),
     const SoundPage(),
     const AVDevicePage(),
+    const SettingsPage()
   ];
 
   // Define titles for each tab
@@ -59,6 +61,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
     'Screen Management | Novotel Samator',
     'Sound Management | Novotel Samator',
     'AV Device Management | Novotel Samator',
+    'Settings | Novotel Samator',
   ];
 
   @override
@@ -95,6 +98,10 @@ class _MainAppScreenState extends State<MainAppScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.devices_other),
             label: 'AV Device',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
       ),
