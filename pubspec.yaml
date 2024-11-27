@@ -53,6 +53,9 @@ dependencies:
   pdf: ^3.11.1
   path_provider:
   printing: ^5.13.4
+  pdfx: ^2.8.0
+  internet_file: ^1.2.0
+  universal_platform: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:

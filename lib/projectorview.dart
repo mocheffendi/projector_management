@@ -14,6 +14,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:internet_file/internet_file.dart';
+import 'package:pdfx/pdfx.dart' as pdfx;
+import 'package:projector_management/googledrivepdf.dart';
+import 'package:projector_management/googledrivepdfviewer.dart';
+// import 'package:pdf_viewer_pinch/pdf_viewer_pinch.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -331,16 +337,19 @@ class _ProjectorPageState extends State<ProjectorPage> {
 
     final bytes = await pdf.save();
 
-    Printing.sharePdf(
-      bytes: bytes,
-      filename: 'Projector_Report.pdf',
-    );
+    // Printing.sharePdf(
+    //   bytes: bytes,
+    //   filename: 'Projector_Report.pdf',
+    // );
 
-    _sharePdf(bytes, context);
+    // _sharePdf(bytes, context);
+
+    // Open the PDF in a dialog using pdfx
+    // _showPdfViewerDialog(context, bytes);
 
     // Create a blob and use HTML AnchorElement to download the PDF
-    // final blob = html.Blob([bytes], 'application/pdf');
-    // final url = html.Url.createObjectUrlFromBlob(blob);
+    final blob = html.Blob([bytes], 'application/pdf');
+    final url = html.Url.createObjectUrlFromBlob(blob);
     // // Check if the browser supports the Web Share API
     // html.window.navigator.share({
     //   'url': url,
@@ -350,17 +359,23 @@ class _ProjectorPageState extends State<ProjectorPage> {
     //   print("Share failed: $error");
     // });
 
-    // final anchor = html.AnchorElement(href: url)
-    //   ..target = '_blank'
-    //   ..download = "projectors_report.pdf"
-    //   ..click();
+    final anchor = html.AnchorElement(href: url)
+      ..target = '_blank'
+      ..download = "projectors_report.pdf"
+      ..click();
 
-    // html.Url.revokeObjectUrl(url);
+    html.Url.revokeObjectUrl(url);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("PDF Download successfully!")),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("PDF Download successfully!")),
+      );
+    }
 
+    if (mounted) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => GoogleDrivePdf(pdfBytes: bytes)));
+    }
     // Convert PDF to PNG
     // final pngImages = await _convertPdfToPng(bytes);
     // sharePdfForWeb(bytes, "example.pdf");
@@ -369,6 +384,32 @@ class _ProjectorPageState extends State<ProjectorPage> {
     // The argument type 'List<Uint8List>' can't be assigned to the parameter type 'Uint8List'.
     // Wait for the user to trigger share
     // await _sharePdf(Uint8List.fromList(bytes));
+  }
+
+  void _showPdfViewerDialog(BuildContext context, Uint8List pdfBytes) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SizedBox(
+            height: 800,
+            width: 500,
+            child: pdfx.PdfViewPinch(
+              // pdfx package
+              controller: pdfx.PdfControllerPinch(
+                document: pdfx.PdfDocument.openData(pdfBytes), // pdfx package
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void sharePdfForWeb(Uint8List pdfBytes) {
@@ -423,8 +464,8 @@ class _ProjectorPageState extends State<ProjectorPage> {
       ..width = '100%'
       ..height = '100%';
     html.document.body?.append(iframe);
-    // ui.platformViewRegistry
-    // .registerViewFactory('pdf-viewer', (int viewId) => iframe);
+    //  ui.PlatformDispatcher
+    //  .registerViewFactory('pdf-viewer', (int viewId) => iframe);
   }
 
   void ShowCapturedWidget(BuildContext context, List<Uint8List> images) {
