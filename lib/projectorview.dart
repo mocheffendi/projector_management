@@ -164,10 +164,10 @@ class _ProjectorPageState extends State<ProjectorPage> {
                   color: PdfColors.red,
                 ),
               ),
-              pw.SizedBox(height: 10),
+              pw.SizedBox(height: 5),
               ...occupiedProjectors.map((projector) {
                 return pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 10),
+                  margin: const pw.EdgeInsets.only(bottom: 5),
                   child: _buildProjectorCardpw(projector),
                 );
               }).toList(),
@@ -192,10 +192,10 @@ class _ProjectorPageState extends State<ProjectorPage> {
                   color: PdfColors.green,
                 ),
               ),
-              pw.SizedBox(height: 10),
+              pw.SizedBox(height: 5),
               ...notOccupiedProjectors.map((projector) {
                 return pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 10),
+                  margin: const pw.EdgeInsets.only(bottom: 5),
                   child: _buildProjectorCardpw(projector),
                 );
               }).toList(),
@@ -266,7 +266,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
     if (occupiedProjectors.isNotEmpty) {
       pdf.addPage(
         pw.Page(
-          pageFormat: const PdfPageFormat(596, 1200, marginAll: 5),
+          pageFormat: const PdfPageFormat(450, 1250, marginAll: 8),
           build: (pw.Context context) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
@@ -278,14 +278,14 @@ class _ProjectorPageState extends State<ProjectorPage> {
                   color: PdfColors.red,
                 ),
               ),
-              pw.SizedBox(height: 10),
+              pw.SizedBox(height: 5),
               ...occupiedProjectors.map((projector) {
                 return pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 10),
+                  margin: const pw.EdgeInsets.only(bottom: 5),
                   child: _buildProjectorCardpw(projector),
                 );
               }).toList(),
-              pw.SizedBox(height: 20),
+              pw.SizedBox(height: 5),
               pw.Text(
                 'Not Occupied Projectors',
                 style: pw.TextStyle(
@@ -294,10 +294,10 @@ class _ProjectorPageState extends State<ProjectorPage> {
                   color: PdfColors.green,
                 ),
               ),
-              pw.SizedBox(height: 10),
+              pw.SizedBox(height: 5),
               ...notOccupiedProjectors.map((projector) {
                 return pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 10),
+                  margin: const pw.EdgeInsets.only(bottom: 5),
                   child: _buildProjectorCardpw(projector),
                 );
               }).toList(),
@@ -1198,18 +1198,20 @@ class _ProjectorPageState extends State<ProjectorPage> {
     Color cardColor = [
       'not use',
       'FO Office',
-      'Warehouse LT2',
+      'Store LT2',
       'Pantry / Panel Una²',
       'Pantry / Panel Lantai5',
       'Pantry / Panel Lantai3',
-      'Pantry / Panel Heritage'
+      'Pantry / Panel Heritage',
+      'Office Eng'
     ].contains(projector['status'])
         ? Colors.green.shade100
-        : Colors.white;
+        : Colors.grey.shade300;
 
-    return Card(
+    return Card.filled(
+      elevation: 8.0,
       color: cardColor,
-      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -1307,19 +1309,21 @@ class _ProjectorPageState extends State<ProjectorPage> {
     final cardColor = [
       'not use',
       'FO Office',
-      'Warehouse LT2',
+      'Store LT2',
       'Pantry / Panel Una²',
       'Pantry / Panel Lantai5',
       'Pantry / Panel Lantai3',
-      'Pantry / Panel Heritage'
+      'Pantry / Panel Heritage',
+      'Office Eng'
     ].contains(projector['status'])
         ? PdfColors.green100
-        : PdfColors.white;
+        : PdfColors.grey300;
 
     return pw.Container(
-      color: cardColor,
-      margin: const pw.EdgeInsets.symmetric(vertical: 6.0),
-      padding: const pw.EdgeInsets.all(8.0),
+      decoration: pw.BoxDecoration(
+          color: cardColor, borderRadius: pw.BorderRadius.circular(15)),
+      margin: const pw.EdgeInsets.symmetric(vertical: 5.0),
+      padding: const pw.EdgeInsets.all(5.0),
       child: pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
@@ -1336,7 +1340,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
                   decoration: const pw.BoxDecoration(color: PdfColors.grey300),
                   child: pw.Center(child: pw.Text("No Image")),
                 ),
-          pw.SizedBox(width: 10),
+          pw.SizedBox(width: 5),
           pw.Expanded(
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -1450,43 +1454,46 @@ class _ProjectorPageState extends State<ProjectorPage> {
                     notOccupiedStatuses.contains(projector['status']))
                 .toList();
 
-            return ListView(
-              controller: _scrollController,
-              // physics: const NeverScrollableScrollPhysics(),
-              children: [
-                if (occupiedProjectors.isNotEmpty) ...[
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Occupied',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                controller: _scrollController,
+                // physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  if (occupiedProjectors.isNotEmpty) ...[
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Occupied',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
                       ),
                     ),
-                  ),
-                  ...occupiedProjectors.map((projector) {
-                    return _buildProjectorCard(projector);
-                  }).toList(),
-                ],
-                if (notOccupiedProjectors.isNotEmpty) ...[
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Not Occupied',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                    ...occupiedProjectors.map((projector) {
+                      return _buildProjectorCard(projector);
+                    }).toList(),
+                  ],
+                  if (notOccupiedProjectors.isNotEmpty) ...[
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Not Occupied',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
                       ),
                     ),
-                  ),
-                  ...notOccupiedProjectors.map((projector) {
-                    return _buildProjectorCard(projector);
-                  }).toList(),
+                    ...notOccupiedProjectors.map((projector) {
+                      return _buildProjectorCard(projector);
+                    }).toList(),
+                  ],
                 ],
-              ],
+              ),
             );
           }
         },
