@@ -32,7 +32,7 @@ import 'package:widget_screenshot/widget_screenshot.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'dart:html' as html;
+// import 'dart:html' as html;
 import 'package:printing/printing.dart';
 
 import 'pdfpreview.dart';
@@ -208,14 +208,14 @@ class _ProjectorPageState extends State<ProjectorPage> {
     final bytes = await pdf.save();
 
     // Create a blob and use HTML AnchorElement to download the PDF
-    final blob = html.Blob([bytes], 'application/pdf');
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.AnchorElement(href: url)
-      ..target = '_blank'
-      ..download = "projectors_report.pdf"
-      ..click();
+    // final blob = html.Blob([bytes], 'application/pdf');
+    // final url = html.Url.createObjectUrlFromBlob(blob);
+    // final anchor = html.AnchorElement(href: url)
+    //   ..target = '_blank'
+    //   ..download = "projectors_report.pdf"
+    //   ..click();
 
-    html.Url.revokeObjectUrl(url);
+    // html.Url.revokeObjectUrl(url);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("PDF downloaded successfully!")),
@@ -348,8 +348,8 @@ class _ProjectorPageState extends State<ProjectorPage> {
     // _showPdfViewerDialog(context, bytes);
 
     // Create a blob and use HTML AnchorElement to download the PDF
-    final blob = html.Blob([bytes], 'application/pdf');
-    final url = html.Url.createObjectUrlFromBlob(blob);
+    // final blob = html.Blob([bytes], 'application/pdf');
+    // final url = html.Url.createObjectUrlFromBlob(blob);
     // // Check if the browser supports the Web Share API
     // html.window.navigator.share({
     //   'url': url,
@@ -359,22 +359,22 @@ class _ProjectorPageState extends State<ProjectorPage> {
     //   print("Share failed: $error");
     // });
 
-    final anchor = html.AnchorElement(href: url)
-      ..target = '_blank'
-      ..download = "projectors_report.pdf"
-      ..click();
+    // final anchor = html.AnchorElement(href: url)
+    //   ..target = '_blank'
+    //   ..download = "projectors_report.pdf"
+    //   ..click();
 
-    html.Url.revokeObjectUrl(url);
+    // html.Url.revokeObjectUrl(url);
+
+    if (mounted) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => GoogleDrivePdf(pdfBytes: bytes)));
+    }
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("PDF Download successfully!")),
       );
-    }
-
-    if (mounted) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => GoogleDrivePdf(pdfBytes: bytes)));
     }
     // Convert PDF to PNG
     // final pngImages = await _convertPdfToPng(bytes);
@@ -412,61 +412,61 @@ class _ProjectorPageState extends State<ProjectorPage> {
     );
   }
 
-  void sharePdfForWeb(Uint8List pdfBytes) {
-    final blob = html.Blob([pdfBytes], 'application/pdf');
-    final url = html.Url.createObjectUrlFromBlob(blob);
+  // void sharePdfForWeb(Uint8List pdfBytes) {
+  //   final blob = html.Blob([pdfBytes], 'application/pdf');
+  //   final url = html.Url.createObjectUrlFromBlob(blob);
 
-    // Check if the browser supports the Web Share API
-    html.window.navigator.share({
-      'url': url,
-      'title': 'Shared PDF',
-      'text': 'Please find the attached PDF document.',
-    }).catchError((error) {
-      print("Share failed: $error");
-    });
-  }
+  //   // Check if the browser supports the Web Share API
+  //   html.window.navigator.share({
+  //     'url': url,
+  //     'title': 'Shared PDF',
+  //     'text': 'Please find the attached PDF document.',
+  //   }).catchError((error) {
+  //     print("Share failed: $error");
+  //   });
+  // }
 
-  void showPdfInDialog(BuildContext context, Uint8List pdfBytes) {
-    // Create a Blob URL
-    final blob = html.Blob([pdfBytes], 'application/pdf');
-    final url = html.Url.createObjectUrlFromBlob(blob);
+  // void showPdfInDialog(BuildContext context, Uint8List pdfBytes) {
+  //   // Create a Blob URL
+  //   final blob = html.Blob([pdfBytes], 'application/pdf');
+  //   final url = html.Url.createObjectUrlFromBlob(blob);
 
-    // Show the Dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.zero,
-          content: const SizedBox(
-            width: 600,
-            height: 800,
-            child: HtmlElementView(
-              viewType: 'pdf-viewer',
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                html.Url.revokeObjectUrl(url); // Cleanup the URL when done
-                Navigator.of(context).pop();
-              },
-              child: const Text("Close"),
-            ),
-          ],
-        );
-      },
-    );
+  //   // Show the Dialog
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         contentPadding: EdgeInsets.zero,
+  //         content: const SizedBox(
+  //           width: 600,
+  //           height: 800,
+  //           child: HtmlElementView(
+  //             viewType: 'pdf-viewer',
+  //           ),
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               html.Url.revokeObjectUrl(url); // Cleanup the URL when done
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text("Close"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
 
-    // Register the `iframe` as a custom HTML element
-    final iframe = html.IFrameElement()
-      ..src = url
-      ..style.border = 'none'
-      ..width = '100%'
-      ..height = '100%';
-    html.document.body?.append(iframe);
-    //  ui.PlatformDispatcher
-    //  .registerViewFactory('pdf-viewer', (int viewId) => iframe);
-  }
+  //   // Register the `iframe` as a custom HTML element
+  //   final iframe = html.IFrameElement()
+  //     ..src = url
+  //     ..style.border = 'none'
+  //     ..width = '100%'
+  //     ..height = '100%';
+  //   html.document.body?.append(iframe);
+  //   //  ui.PlatformDispatcher
+  //   //  .registerViewFactory('pdf-viewer', (int viewId) => iframe);
+  // }
 
   void ShowCapturedWidget(BuildContext context, List<Uint8List> images) {
     showDialog(
