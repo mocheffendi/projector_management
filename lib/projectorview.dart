@@ -14,20 +14,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:internet_file/internet_file.dart';
+// import 'package:internet_file/internet_file.dart';
 import 'package:pdfx/pdfx.dart' as pdfx;
 import 'package:projector_management/googledrivepdf.dart';
-import 'package:projector_management/googledrivepdfviewer.dart';
+// import 'package:projector_management/googledrivepdfviewer.dart';
 // import 'package:pdf_viewer_pinch/pdf_viewer_pinch.dart';
-import 'package:universal_platform/universal_platform.dart';
+// import 'package:universal_platform/universal_platform.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:image/image.dart' as img;
 
-import 'package:scroll_screenshot/scroll_screenshot.dart';
+// import 'package:scroll_screenshot/scroll_screenshot.dart';
 
-import 'package:widget_screenshot/widget_screenshot.dart';
+// import 'package:widget_screenshot/widget_screenshot.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -35,7 +35,7 @@ import 'package:pdf/widgets.dart' as pw;
 // import 'dart:html' as html;
 import 'package:printing/printing.dart';
 
-import 'pdfpreview.dart';
+// import 'pdfpreview.dart';
 // import 'image_previews.dart';
 
 // Your Projector Management Page
@@ -337,6 +337,9 @@ class _ProjectorPageState extends State<ProjectorPage> {
 
     final bytes = await pdf.save();
 
+    await Printing.sharePdf(
+        bytes: await pdf.save(), filename: 'projector_report.pdf');
+
     // Printing.sharePdf(
     //   bytes: bytes,
     //   filename: 'Projector_Report.pdf',
@@ -366,10 +369,10 @@ class _ProjectorPageState extends State<ProjectorPage> {
 
     // html.Url.revokeObjectUrl(url);
 
-    if (mounted) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => GoogleDrivePdf(pdfBytes: bytes)));
-    }
+    // if (mounted) {
+    //   Navigator.of(context).push(MaterialPageRoute(
+    //       builder: (context) => GoogleDrivePdf(pdfBytes: bytes)));
+    // }
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
