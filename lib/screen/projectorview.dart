@@ -1,5 +1,6 @@
 import 'dart:convert'; // To handle image encoding as base64
 import 'dart:developer';
+import 'dart:typed_data';
 // import 'dart:ui' as ui;
 // import 'dart:io';
 // import 'dart:typed_data';
@@ -517,12 +518,14 @@ class _ProjectorPageState extends State<ProjectorPage> {
           ),
           Positioned(
             bottom: 80,
-            right: 25,
+            right: 23,
             child: FloatingActionButton(
               mini: true,
               onPressed: () async {
                 final image = await generatePdfandShareSupportWeb();
-                showImageDialog(context, image);
+                if (mounted) {
+                  showImageDialog(context, image);
+                }
               },
               child: const Icon(Icons.screen_share),
             ),
@@ -531,4 +534,12 @@ class _ProjectorPageState extends State<ProjectorPage> {
       ),
     );
   }
+}
+
+void _showSharedToast(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Document shared successfully'),
+    ),
+  );
 }

@@ -28408,7 +28408,8 @@ ase:function ase(a){this.a=a},
 asf:function asf(a){this.a=a},
 asg:function asg(a){this.a=a},
 asi:function asi(a){this.a=a},
-asj:function asj(a){this.a=a},
+asj:function asj(a,b){this.a=a
+this.b=b},
 DL:function DL(a){this.a=a},
 HV:function HV(a,b){var _=this
 _.d=a
@@ -98278,7 +98279,7 @@ return new B.zd(d,8,A.fS,new B.c_(A.cB,B.kr(B.a([g,A.lq,B.Ak(B.fd(B.a([s,r,q,p,B
 N(a){var s=null,r=$.aU,q=(r==null?$.aU=$.cn():r).cF("[DEFAULT]")
 B.by(q,$.ce(),!0)
 r=B.dt(new B.bV(q))
-return B.DG(s,B.ajR(new B.ash(this),B.dB(r,r.ge0().di("projectors")).xm(),t.l7),s,B.oo(A.da,B.a([B.CQ(16,B.MO(A.iS,!1,new B.asi(this)),s,s,s,16,s,s),B.CQ(80,B.MO(A.nf,!0,new B.asj(a)),s,s,s,25,s,s)],t.D),A.aT,A.aPq,s))}}
+return B.DG(s,B.ajR(new B.ash(this),B.dB(r,r.ge0().di("projectors")).xm(),t.l7),s,B.oo(A.da,B.a([B.CQ(16,B.MO(A.iS,!1,new B.asi(this)),s,s,s,16,s,s),B.CQ(80,B.MO(A.nf,!0,new B.asj(this,a)),s,s,s,23,s,s)],t.D),A.aT,A.aPq,s))}}
 B.as_.prototype={
 $0(){var s=this.a,r=this.b,q=t.N
 s.d=B.ea(r.h(0,"roomOptions"),!0,q)
@@ -98424,13 +98425,12 @@ B.asi.prototype={
 $0(){this.a.zj()},
 $S:0}
 B.asj.prototype={
-$0(){var s=0,r=B.A(t.H),q=this,p,o
+$0(){var s=0,r=B.A(t.H),q=this,p
 var $async$$0=B.B(function(a,b){if(a===1)return B.x(b,r)
-while(true)switch(s){case 0:p=B
-o=q.a
-s=2
+while(true)switch(s){case 0:s=2
 return B.C(B.ym(),$async$$0)
-case 2:p.b0A(o,b)
+case 2:p=b
+if(q.a.c!=null)B.b0A(q.b,p)
 return B.y(null,r)}})
 return B.z($async$$0,r)},
 $S:7}
