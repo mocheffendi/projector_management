@@ -1,7 +1,7 @@
 import 'dart:convert'; // To handle image encoding as base64
 import 'dart:developer';
-import 'dart:ui' as ui;
-import 'dart:typed_data';
+// import 'dart:ui' as ui;
+// import 'dart:io';
 // import 'dart:typed_data';
 
 // import 'package:flutter/foundation.dart';
@@ -11,13 +11,34 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:pdfrx/pdfrx.dart';
+// import 'package:internet_file/internet_file.dart';
+// import 'package:pdfx/pdfx.dart' as pdfx;
+// import 'package:projector_management/googledrivepdf.dart';
+// import 'package:projector_management/pdftoimage.dart';
+// import 'package:projector_management/googledrivepdfviewer.dart';
+// import 'package:pdf_viewer_pinch/pdf_viewer_pinch.dart';
+// import 'package:universal_platform/universal_platform.dart';
+// import 'package:screenshot/screenshot.dart';
+// import 'package:share_plus/share_plus.dart';
 
 // import 'package:image/image.dart' as img;
 
+// import 'package:scroll_screenshot/scroll_screenshot.dart';
+
+// import 'package:widget_screenshot/widget_screenshot.dart';
+
+// import 'package:path_provider/path_provider.dart';
+// import 'package:pdf/pdf.dart';
+// import 'package:pdf/widgets.dart' as pw;
+import 'package:projector_management/utility/generatepdf.dart';
+import 'package:projector_management/widget/showdialogimage.dart';
+// import 'dart:html' as html;
+// import 'package:printing/printing.dart' as print;
+// import 'package:pdfrx/pdfrx.dart' as pdfrx;
+// import 'pdfpreview.dart';
 // import 'image_previews.dart';
 
 // Your Projector Management Page
@@ -30,10 +51,11 @@ class ProjectorPage extends StatefulWidget {
 }
 
 class _ProjectorPageState extends State<ProjectorPage> {
-  final GlobalKey _globalKey = GlobalKey();
-  final ScrollController _scrollController = ScrollController();
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
-  // Define a list of statuses for projectors
   List<String> roomOptions = [];
   List<String> notOccupiedStatuses = [];
 
@@ -61,128 +83,6 @@ class _ProjectorPageState extends State<ProjectorPage> {
       log('Error fetching settings: $e');
     }
   }
-
-  FullPageScreenshot(
-      ScreenshotController screenshotController, BuildContext context) {
-    screenshotController
-        .capture(delay: const Duration(milliseconds: 100), pixelRatio: 2.0)
-        .then((Uint8List? capturedImage) async {
-      if (capturedImage != null) {
-        // Display the captured image
-        if (mounted) {
-          ShowCapturedWidget(context, capturedImage);
-        }
-        // Share the image
-        final tempFile = XFile.fromData(
-          capturedImage,
-          mimeType: 'image/png',
-          name: 'screenshot.png',
-        );
-
-        await Share.shareXFiles([tempFile]);
-      }
-    }).catchError((e) {
-      debugPrint('Error capturing screenshot: $e');
-    });
-  }
-
-  void captureAndShareScreenshot(
-      ScreenshotController screenshotController, BuildContext context) {
-    screenshotController
-        .capture(delay: const Duration(milliseconds: 10))
-        .then((Uint8List? capturedImage) async {
-      if (capturedImage != null) {
-        // Display the captured image
-        ShowCapturedWidget(context, capturedImage);
-
-        // Share the image
-        final tempFile = XFile.fromData(
-          capturedImage,
-          mimeType: 'image/png',
-          name: 'screenshot.png',
-        );
-
-        await Share.shareXFiles([tempFile]);
-      }
-    }).catchError((e) {
-      debugPrint('Error capturing screenshot: $e');
-    });
-  }
-
-  void ShowCapturedWidget(BuildContext context, Uint8List capturedImage) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Captured Screenshot"),
-        content: Image.memory(capturedImage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Close"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Future<dynamic> ShowCapturedWidget(
-  //     BuildContext context, Uint8List capturedImage) {
-  //   return showDialog(
-  //     useSafeArea: false,
-  //     context: context,
-  //     builder: (context) => Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text("Captured widget screenshot"),
-  //       ),
-  //       body: Center(child: Image.memory(capturedImage)),
-  //     ),
-  //   );
-  // }
-
-  // final List<String> roomOptions = [
-  //   'Argon I',
-  //   'Argon II',
-  //   'Atmosphere',
-  //   'Ballroom A',
-  //   'Ballroom B',
-  //   'Crypton',
-  //   'East Destination',
-  //   'FO Office',
-  //   'Food Exchange',
-  //   'Grand Argon',
-  //   'Grand Ballroom',
-  //   'Grand Destination',
-  //   'Helium',
-  //   'Hydrogen',
-  //   'Main Destination',
-  //   'Neon',
-  //   'Nitrogen',
-  //   'not use',
-  //   'Oxygen',
-  //   'Pantry / Panel Heritage',
-  //   'Pantry / Panel Lantai3',
-  //   'Pantry / Panel Lantai5',
-  //   'Pantry / Panel Una²',
-  //   'Plataran',
-  //   'VIP Ballroom',
-  //   'Warehouse LT2',
-  //   'West Destination',
-  //   'Una Una Exec Lounge',
-  //   'Una Una GD',
-  //   'The Heritage',
-  //   'Xenon'
-  // ];
-
-  // // Define a list of statuses that represent "not occupied."
-  // final List<String> notOccupiedStatuses = [
-  //   'not use',
-  //   'FO Office',
-  //   'Warehouse LT2',
-  //   'Pantry / Panel Una²',
-  //   'Pantry / Panel Lantai5',
-  //   'Pantry / Panel Lantai3',
-  //   'Pantry / Panel Heritage',
-  // ];
 
   Future<List<Map<String, dynamic>>> fetchProjectors() async {
     try {
@@ -425,18 +325,20 @@ class _ProjectorPageState extends State<ProjectorPage> {
     Color cardColor = [
       'not use',
       'FO Office',
-      'Warehouse LT2',
+      'Store LT2',
       'Pantry / Panel Una²',
       'Pantry / Panel Lantai5',
       'Pantry / Panel Lantai3',
-      'Pantry / Panel Heritage'
+      'Pantry / Panel Heritage',
+      'Office Eng'
     ].contains(projector['status'])
         ? Colors.green.shade100
-        : Colors.white;
+        : Colors.grey.shade300;
 
-    return Card(
+    return Card.filled(
+      elevation: 8.0,
       color: cardColor,
-      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -527,42 +429,51 @@ class _ProjectorPageState extends State<ProjectorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Projectors")),
-      body: RepaintBoundary(
-        key: _globalKey,
-        child: StreamBuilder<QuerySnapshot>(
-          stream:
-              FirebaseFirestore.instance.collection('projectors').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return const Center(child: Text('No projectors found.'));
-            } else {
-              // Extract and categorize projectors
-              final projectors = snapshot.data!.docs.map((doc) {
-                final data = doc.data() as Map<String, dynamic>;
-                return {
-                  'id': doc.id,
-                  ...data,
-                };
-              }).toList();
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () async {
+              final image = await generatePdfandShareSupportWeb();
+              showImageDialog(context, image);
+            },
+          ),
+        ],
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('projectors').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No projectors found.'));
+          } else {
+            // Extract and categorize projectors
+            final projectors = snapshot.data!.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              return {
+                'id': doc.id,
+                ...data,
+              };
+            }).toList();
 
-              // Categorize projectors
-              final occupiedProjectors = projectors
-                  .where((projector) =>
-                      !notOccupiedStatuses.contains(projector['status']))
-                  .toList();
+            // Categorize projectors
+            final occupiedProjectors = projectors
+                .where((projector) =>
+                    !notOccupiedStatuses.contains(projector['status']))
+                .toList();
 
-              final notOccupiedProjectors = projectors
-                  .where((projector) =>
-                      notOccupiedStatuses.contains(projector['status']))
-                  .toList();
+            final notOccupiedProjectors = projectors
+                .where((projector) =>
+                    notOccupiedStatuses.contains(projector['status']))
+                .toList();
 
-              return ListView(
-                controller: _scrollController,
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                // physics: const NeverScrollableScrollPhysics(),
                 children: [
                   if (occupiedProjectors.isNotEmpty) ...[
                     const Padding(
@@ -597,58 +508,17 @@ class _ProjectorPageState extends State<ProjectorPage> {
                     }).toList(),
                   ],
                 ],
-              );
-            }
-          },
-        ),
+              ),
+            );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _captureFullPageScreenshot,
-        child: const Icon(Icons.camera_alt),
+        onPressed: () {
+          _showAddProjectorDialog();
+        },
+        child: const Icon(Icons.add),
       ),
-    );
-  }
-
-  // Method to capture the screenshot of the entire scaffold
-  Future<void> _captureFullPageScreenshot() async {
-    try {
-      // Capture the entire widget using RepaintBoundary
-      RenderRepaintBoundary boundary = _globalKey.currentContext!
-          .findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(
-          pixelRatio: 3.0); // Adjust pixel ratio for resolution
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-      // Process or save the captured image
-      // print('Captured screenshot, size: ${pngBytes.lengthInBytes} bytes');
-
-      // You can show the image or save it here.
-      // For example, use an image display widget or save the file.
-      _showCapturedWidget(pngBytes);
-    } catch (e) {
-      // print('Error capturing screenshot: $e');
-    }
-  }
-
-  // Show the captured screenshot as a new widget
-  void _showCapturedWidget(Uint8List imageBytes) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Image.memory(imageBytes),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

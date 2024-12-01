@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:projector_management/settingpage.dart';
+import 'package:projector_management/screen/settingpage.dart';
 // import 'package:file_picker/file_picker.dart';
 // import 'package:intl/intl.dart';
-import 'projectorview.dart';
-import 'screenview.dart';
-import 'soundview.dart';
-import 'avdeviceview.dart';
+import 'screen/projectorview.dart';
+import 'screen/screenview.dart';
+import 'screen/soundview.dart';
+import 'screen/avdeviceview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
