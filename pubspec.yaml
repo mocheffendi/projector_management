@@ -49,6 +49,7 @@ dependencies:
   pdfx: ^2.8.0
   pdfrx: ^1.0.92
   tuple: ^2.0.2
+  pdf_render: ^1.4.12
 
 dev_dependencies:
   flutter_test:

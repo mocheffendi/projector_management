@@ -35,6 +35,7 @@ import 'package:intl/intl.dart';
 // import 'package:pdf/pdf.dart';
 // import 'package:pdf/widgets.dart' as pw;
 import 'package:projector_management/utility/generatepdf.dart';
+import 'package:projector_management/utility/pdftoimage.dart';
 import 'package:projector_management/widget/showdialogpdfimage.dart';
 // import 'dart:html' as html;
 // import 'package:printing/printing.dart' as print;
@@ -518,16 +519,15 @@ class _ProjectorPageState extends State<ProjectorPage> {
           ),
           Positioned(
             bottom: 65,
-            right: 8,
+            right: 0,
             child: FloatingActionButton(
               // shape: Border.lerp(a, b, t),
               mini: true,
               onPressed: () async {
-                Map<Uint8List, Uint8List> pdfimage =
-                    await generatePdfandShareSupportWeb();
+                final pdfBytes = await generatePdfandShareSupportWeb();
                 if (mounted) {
                   // ignore: use_build_context_synchronously
-                  showImageDialog(context, pdfimage.values.last);
+                  showImageDialog(context, pdfBytes);
                 }
               },
               child: const Icon(Icons.screen_share_rounded),
@@ -535,17 +535,24 @@ class _ProjectorPageState extends State<ProjectorPage> {
           ),
           Positioned(
             bottom: 115,
-            right: 8,
+            right: 0,
             child: FloatingActionButton(
               // shape: Border.lerp(a, b, t),
               mini: true,
               onPressed: () async {
-                Map<Uint8List, Uint8List> pdfimage =
-                    await generatePdfandShareSupportWeb();
+                final pdfBytes = await generatePdfandShareSupportWeb();
+                // debugPrint('PDF bytes length: ${pdfBytes.length}');
+
+                Uint8List pdfBytesCopy = Uint8List.fromList(pdfBytes);
+
+                final pngBytes = await convertPdfToPng(pdfBytes);
+                // debugPrint(
+                //     'PDF bytes length after convert to Image: ${pdfBytesCopy.length}');
+                // debugPrint('PNG bytes length: ${pngBytes.length}');
+
                 if (mounted) {
                   // ignore: use_build_context_synchronously
-                  showPdfDialog(
-                      context, pdfimage.values.first, pdfimage.values.last);
+                  showPdfDialog(context, pdfBytesCopy, pngBytes);
                 }
               },
               child: const Icon(Icons.screen_share_rounded),

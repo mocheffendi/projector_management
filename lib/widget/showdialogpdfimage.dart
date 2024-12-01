@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:projector_management/utility/shareimage.dart';
 import 'package:projector_management/utility/sharepdf.dart';
@@ -54,7 +55,11 @@ void showPdfDialog(
               TextButton(
                 child: const Text('Share'),
                 onPressed: () {
-                  sharepdf(pdfBytes);
+                  if (kIsWeb) {
+                    sharepdfweb(pdfBytes);
+                  } else {
+                    sharepdf(pdfBytes);
+                  }
                 },
               ),
               TextButton(

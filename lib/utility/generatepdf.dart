@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -11,7 +12,7 @@ import 'package:projector_management/utility/pdftoimage.dart';
 List<String> roomOptions = [];
 List<String> notOccupiedStatuses = [];
 
-Future<Map<Uint8List, Uint8List>> generatePdfandShareSupportWeb() async {
+Future<Uint8List> generatePdfandShareSupportWeb() async {
   final pdf = pw.Document();
 
   // Fetch data from Firestore
@@ -96,9 +97,18 @@ Future<Map<Uint8List, Uint8List>> generatePdfandShareSupportWeb() async {
   }
 
   final pdfBytes = await pdf.save();
-  final pngBytes = await convertPdfToPng(pdfBytes);
 
-  return {pdfBytes: pngBytes};
+  // Verify if pdfBytes is correctly populated
+  if (pdfBytes.isEmpty) {
+    debugPrint('PDF bytes are empty.');
+  } else {
+    debugPrint('PDF bytes length: ${pdfBytes.length}');
+  }
+
+  // debugPrint('PDF bytes length: ${pdfBytes.length}');
+  // debugPrint('PNG bytes length: ${pngBytes.length}');
+
+  return pdfBytes;
 }
 
 Future<Uint8List> generatePdfandShare() async {
