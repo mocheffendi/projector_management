@@ -517,24 +517,24 @@ class _ProjectorPageState extends State<ProjectorPage> {
               child: const Icon(Icons.add_box),
             ),
           ),
+          // Positioned(
+          //   bottom: 65,
+          //   right: 0,
+          //   child: FloatingActionButton(
+          //     // shape: Border.lerp(a, b, t),
+          //     mini: true,
+          //     onPressed: () async {
+          //       final pdfBytes = await generatePdfandShareSupportWeb();
+          //       if (mounted) {
+          //         // ignore: use_build_context_synchronously
+          //         showImageDialog(context, pdfBytes);
+          //       }
+          //     },
+          //     child: const Icon(Icons.screen_share_rounded),
+          //   ),
+          // ),
           Positioned(
             bottom: 65,
-            right: 0,
-            child: FloatingActionButton(
-              // shape: Border.lerp(a, b, t),
-              mini: true,
-              onPressed: () async {
-                final pdfBytes = await generatePdfandShareSupportWeb();
-                if (mounted) {
-                  // ignore: use_build_context_synchronously
-                  showImageDialog(context, pdfBytes);
-                }
-              },
-              child: const Icon(Icons.screen_share_rounded),
-            ),
-          ),
-          Positioned(
-            bottom: 115,
             right: 0,
             child: FloatingActionButton(
               // shape: Border.lerp(a, b, t),

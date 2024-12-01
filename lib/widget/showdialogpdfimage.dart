@@ -52,20 +52,26 @@ void showPdfDialog(
                 onPressed: () {},
                 icon: const Icon(Icons.screen_share_rounded),
               ),
+              // TextButton(
+              //   child: const Text('Share Pdf'),
+              //   onPressed: () {
+              //     if (kIsWeb) {
+              //       sharepdfweb(pdfBytes);
+              //     } else {
+              //       sharepdf(pdfBytes);
+              //     }
+              //   },
+              // ),
               TextButton(
                 child: const Text('Share Pdf'),
                 onPressed: () {
-                  if (kIsWeb) {
-                    sharepdfweb(pdfBytes);
-                  } else {
-                    sharepdf(pdfBytes);
-                  }
+                  sharepdf(pdfBytes);
                 },
               ),
               TextButton(
-                child: const Text('Share Pdf using ShareX'),
+                child: const Text('Share Image'),
                 onPressed: () {
-                  sharepdf(pdfBytes);
+                  shareimage(pngBytes);
                 },
               ),
               TextButton(

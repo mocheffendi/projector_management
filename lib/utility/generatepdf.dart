@@ -99,11 +99,11 @@ Future<Uint8List> generatePdfandShareSupportWeb() async {
   final pdfBytes = await pdf.save();
 
   // Verify if pdfBytes is correctly populated
-  if (pdfBytes.isEmpty) {
-    debugPrint('PDF bytes are empty.');
-  } else {
-    debugPrint('PDF bytes length: ${pdfBytes.length}');
-  }
+  // if (pdfBytes.isEmpty) {
+  //   debugPrint('PDF bytes are empty.');
+  // } else {
+  //   debugPrint('PDF bytes length: ${pdfBytes.length}');
+  // }
 
   // debugPrint('PDF bytes length: ${pdfBytes.length}');
   // debugPrint('PNG bytes length: ${pngBytes.length}');
