@@ -509,8 +509,8 @@ class _ProjectorPageState extends State<ProjectorPage> {
               ],
             ),
             Positioned(
-              top: 0,
-              right: 0,
+              top: -5,
+              right: -10,
               child: PopupMenuButton<String>(
                 onSelected: (value) {
                   if (value == 'Edit') {
