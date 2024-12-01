@@ -55,7 +55,7 @@ Future<Uint8List> generatePdfandShareSupportWeb() async {
   if (occupiedProjectors.isNotEmpty) {
     pdf.addPage(
       pw.Page(
-        pageFormat: const PdfPageFormat(450, 1000, marginAll: 8.0),
+        pageFormat: const PdfPageFormat(450, 1100, marginAll: 8.0),
         build: (pw.Context context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
