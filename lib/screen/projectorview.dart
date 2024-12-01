@@ -1,5 +1,6 @@
 import 'dart:convert'; // To handle image encoding as base64
 import 'dart:developer';
+// import 'dart:ffi';
 import 'dart:typed_data';
 // import 'dart:ui' as ui;
 // import 'dart:io';
@@ -685,18 +686,14 @@ class _ProjectorPageState extends State<ProjectorPage> {
             bottom: 65,
             right: 0,
             child: FloatingActionButton(
-              // shape: Border.lerp(a, b, t),
+              shape: const CircleBorder(),
               mini: true,
               onPressed: () async {
                 final pdfBytes = await generatePdfandShareSupportWeb();
-                // debugPrint('PDF bytes length: ${pdfBytes.length}');
 
                 Uint8List pdfBytesCopy = Uint8List.fromList(pdfBytes);
 
                 final pngBytes = await convertPdfToPng(pdfBytes);
-                // debugPrint(
-                //     'PDF bytes length after convert to Image: ${pdfBytesCopy.length}');
-                // debugPrint('PNG bytes length: ${pngBytes.length}');
 
                 if (mounted) {
                   // ignore: use_build_context_synchronously
