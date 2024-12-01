@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:projector_management/utility/shareimage.dart';
 import 'package:projector_management/utility/sharepdf.dart';
+import 'package:projector_management/widget/iconbutonlabel.dart';
 
 void showImageDialog(BuildContext context, Uint8List pngBytes) {
   showDialog(
@@ -48,10 +49,10 @@ void showPdfDialog(
         actions: <Widget>[
           Row(
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.screen_share_rounded),
-              ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: const Icon(Icons.screen_share_rounded),
+              // ),
               // TextButton(
               //   child: const Text('Share Pdf'),
               //   onPressed: () {
@@ -62,18 +63,33 @@ void showPdfDialog(
               //     }
               //   },
               // ),
-              TextButton(
-                child: const Text('Share Pdf'),
-                onPressed: () {
-                  sharepdf(pdfBytes);
-                },
+              IconButtonWithLabel(
+                  icon: Icons.screen_share_rounded,
+                  label: 'Share Pdf',
+                  onPressed: () {
+                    sharepdf(pdfBytes);
+                  }),
+              const SizedBox(
+                width: 10,
               ),
-              TextButton(
-                child: const Text('Share Image'),
-                onPressed: () {
-                  shareimage(pngBytes);
-                },
-              ),
+              IconButtonWithLabel(
+                  icon: Icons.screen_share_rounded,
+                  label: 'Share Image',
+                  onPressed: () {
+                    shareimage(pngBytes);
+                  }),
+              // TextButton(
+              //   child: const Text('Share Pdf'),
+              //   onPressed: () {
+              //     sharepdf(pdfBytes);
+              //   },
+              // ),
+              // TextButton(
+              //   child: const Text('Share Image'),
+              //   onPressed: () {
+              //     shareimage(pngBytes);
+              //   },
+              // ),
               TextButton(
                 child: const Text('Close'),
                 onPressed: () {

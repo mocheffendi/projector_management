@@ -506,7 +506,9 @@ class _ProjectorPageState extends State<ProjectorPage> {
                       Container(
                         padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                         decoration: BoxDecoration(
-                          border: Border.all(),
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: DropdownButton<String>(
