@@ -64,7 +64,7 @@ void showPdfDialog(
               //   },
               // ),
               IconButtonWithLabel(
-                  icon: Icons.screen_share_rounded,
+                  icon: Icons.picture_as_pdf_rounded,
                   label: 'Share Pdf',
                   onPressed: () {
                     sharepdf(pdfBytes);
@@ -73,7 +73,7 @@ void showPdfDialog(
                 width: 10,
               ),
               IconButtonWithLabel(
-                  icon: Icons.screen_share_rounded,
+                  icon: Icons.image_rounded,
                   label: 'Share Image',
                   onPressed: () {
                     shareimage(pngBytes);
@@ -90,6 +90,9 @@ void showPdfDialog(
               //     shareimage(pngBytes);
               //   },
               // ),
+              const SizedBox(
+                width: 30,
+              ),
               TextButton(
                 child: const Text('Close'),
                 onPressed: () {
