@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:projector_management/utility/pdftoimage.dart';
+// import 'package:projector_management/utility/pdftoimage.dart';
 
 List<String> roomOptions = [];
 List<String> notOccupiedStatuses = [];

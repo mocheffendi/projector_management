@@ -489,20 +489,45 @@ class _ProjectorPageState extends State<ProjectorPage> {
                         style:
                             const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
-                      DropdownMenu<String>(
-                        initialSelection: projector['status'],
-                        onSelected: (newValue) {
-                          if (newValue != null) {
-                            updateStatus(projector['id'], newValue);
-                          }
-                        },
-                        dropdownMenuEntries: roomOptions.map((room) {
-                          return DropdownMenuEntry<String>(
-                            value: room,
-                            label: room,
-                          );
-                        }).toList(),
-                      ),
+                      // DropdownMenu<String>(
+                      //   initialSelection: projector['status'],
+                      //   onSelected: (newValue) {
+                      //     if (newValue != null) {
+                      //       updateStatus(projector['id'], newValue);
+                      //     }
+                      //   },
+                      //   dropdownMenuEntries: roomOptions.map((room) {
+                      //     return DropdownMenuEntry<String>(
+                      //       value: room,
+                      //       label: room,
+                      //     );
+                      //   }).toList(),
+                      // ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: DropdownButton<String>(
+                          underline: Container(
+                            height: 2,
+                            color: Colors.transparent,
+                          ),
+                          value: projector['status'],
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              updateStatus(projector['id'], newValue);
+                            }
+                          },
+                          items: roomOptions.map((room) {
+                            return DropdownMenuItem<String>(
+                              value: room,
+                              child: Text(room),
+                            );
+                          }).toList(),
+                        ),
+                      )
                     ],
                   ),
                 ),
