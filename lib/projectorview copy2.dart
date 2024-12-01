@@ -16,7 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
-import 'package:image/image.dart' as img;
+// import 'package:image/image.dart' as img;
 
 // import 'image_previews.dart';
 
@@ -622,13 +622,13 @@ class _ProjectorPageState extends State<ProjectorPage> {
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
       // Process or save the captured image
-      print('Captured screenshot, size: ${pngBytes.lengthInBytes} bytes');
+      // print('Captured screenshot, size: ${pngBytes.lengthInBytes} bytes');
 
       // You can show the image or save it here.
       // For example, use an image display widget or save the file.
       _showCapturedWidget(pngBytes);
     } catch (e) {
-      print('Error capturing screenshot: $e');
+      // print('Error capturing screenshot: $e');
     }
   }
 
