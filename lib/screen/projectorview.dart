@@ -377,6 +377,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   Container(
+                    width: 220,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                     decoration: BoxDecoration(
