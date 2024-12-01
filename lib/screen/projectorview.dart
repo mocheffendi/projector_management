@@ -429,17 +429,6 @@ class _ProjectorPageState extends State<ProjectorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () async {
-              final image = await generatePdfandShareSupportWeb();
-              showImageDialog(context, image);
-            },
-          ),
-        ],
-      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('projectors').snapshots(),
         builder: (context, snapshot) {
@@ -513,11 +502,32 @@ class _ProjectorPageState extends State<ProjectorPage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddProjectorDialog();
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Stack(
+        fit: StackFit.expand,
+        children: [
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: () {
+                _showAddProjectorDialog();
+              },
+              child: const Icon(Icons.add),
+            ),
+          ),
+          Positioned(
+            bottom: 80,
+            right: 25,
+            child: FloatingActionButton(
+              mini: true,
+              onPressed: () async {
+                final image = await generatePdfandShareSupportWeb();
+                showImageDialog(context, image);
+              },
+              child: const Icon(Icons.screen_share),
+            ),
+          ),
+        ],
       ),
     );
   }
