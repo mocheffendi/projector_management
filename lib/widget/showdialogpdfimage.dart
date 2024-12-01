@@ -122,7 +122,7 @@ void showPdfDialog(
               //   },
               // ),
               const SizedBox(
-                width: 30,
+                width: 8,
               ),
               TextButton(
                 child: const Text('Close'),
