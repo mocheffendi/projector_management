@@ -1,7 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:projector_management/utility/pdftoimage.dart';
+import 'package:projector_management/utility/shareimage.dart';
+import 'package:projector_management/utility/sharepdf.dart';
 
 void showImageDialog(BuildContext context, Uint8List pngBytes) {
   showDialog(
@@ -12,10 +13,48 @@ void showImageDialog(BuildContext context, Uint8List pngBytes) {
         actions: <Widget>[
           Row(
             children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.screen_share_rounded),
+              ),
               TextButton(
                 child: const Text('Share'),
                 onPressed: () {
                   shareimage(pngBytes);
+                },
+              ),
+              TextButton(
+                child: const Text('Close'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void showPdfDialog(
+    BuildContext context, Uint8List pdfBytes, Uint8List pngBytes) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Image.memory(pngBytes),
+        actions: <Widget>[
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.screen_share_rounded),
+              ),
+              TextButton(
+                child: const Text('Share'),
+                onPressed: () {
+                  sharepdf(pdfBytes);
                 },
               ),
               TextButton(

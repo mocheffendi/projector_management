@@ -35,7 +35,7 @@ import 'package:intl/intl.dart';
 // import 'package:pdf/pdf.dart';
 // import 'package:pdf/widgets.dart' as pw;
 import 'package:projector_management/utility/generatepdf.dart';
-import 'package:projector_management/widget/showdialogimage.dart';
+import 'package:projector_management/widget/showdialogpdfimage.dart';
 // import 'dart:html' as html;
 // import 'package:printing/printing.dart' as print;
 // import 'package:pdfrx/pdfrx.dart' as pdfrx;
@@ -523,10 +523,29 @@ class _ProjectorPageState extends State<ProjectorPage> {
               // shape: Border.lerp(a, b, t),
               mini: true,
               onPressed: () async {
-                final image = await generatePdfandShareSupportWeb();
+                Map<Uint8List, Uint8List> pdfimage =
+                    await generatePdfandShareSupportWeb();
                 if (mounted) {
                   // ignore: use_build_context_synchronously
-                  showImageDialog(context, image);
+                  showImageDialog(context, pdfimage.values.last);
+                }
+              },
+              child: const Icon(Icons.screen_share_rounded),
+            ),
+          ),
+          Positioned(
+            bottom: 115,
+            right: 8,
+            child: FloatingActionButton(
+              // shape: Border.lerp(a, b, t),
+              mini: true,
+              onPressed: () async {
+                Map<Uint8List, Uint8List> pdfimage =
+                    await generatePdfandShareSupportWeb();
+                if (mounted) {
+                  // ignore: use_build_context_synchronously
+                  showPdfDialog(
+                      context, pdfimage.values.first, pdfimage.values.last);
                 }
               },
               child: const Icon(Icons.screen_share_rounded),

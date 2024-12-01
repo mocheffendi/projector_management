@@ -11,7 +11,97 @@ import 'package:projector_management/utility/pdftoimage.dart';
 List<String> roomOptions = [];
 List<String> notOccupiedStatuses = [];
 
-Future<Uint8List> generatePdfandShareSupportWeb() async {
+Future<Map<Uint8List, Uint8List>> generatePdfandShareSupportWeb() async {
+  final pdf = pw.Document();
+
+  // Fetch data from Firestore
+  final querySnapshot =
+      await FirebaseFirestore.instance.collection('projectors').get();
+  final projectors = querySnapshot.docs.map((doc) {
+    final data = doc.data();
+    return {
+      'id': doc.id,
+      ...data,
+    };
+  }).toList();
+
+  try {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('settings')
+        .doc('config')
+        .get();
+
+    if (snapshot.exists) {
+      var data = snapshot.data() as Map<String, dynamic>;
+      // setState(() {
+      roomOptions = List<String>.from(data['roomOptions']);
+      notOccupiedStatuses = List<String>.from(data['notOccupiedStatuses']);
+      // });
+    }
+  } catch (e) {
+    log('Error fetching settings: $e');
+  }
+
+  // Example statuses
+  final occupiedProjectors = projectors
+      .where((projector) => !notOccupiedStatuses.contains(projector['status']))
+      .toList();
+  final notOccupiedProjectors = projectors
+      .where((projector) => notOccupiedStatuses.contains(projector['status']))
+      .toList();
+
+  // Add data to PDF
+  if (occupiedProjectors.isNotEmpty) {
+    pdf.addPage(
+      pw.Page(
+        pageFormat: const PdfPageFormat(450, 1000, marginAll: 8.0),
+        build: (pw.Context context) => pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Text(
+              'Occupied Projectors',
+              style: pw.TextStyle(
+                fontSize: 18,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.red,
+              ),
+            ),
+            pw.SizedBox(height: 5),
+            ...occupiedProjectors.map((projector) {
+              return pw.Container(
+                margin: const pw.EdgeInsets.only(bottom: 5),
+                child: _buildProjectorCardpw(projector),
+              );
+            }).toList(),
+            pw.SizedBox(height: 5),
+            pw.Text(
+              'Not Occupied Projectors',
+              style: pw.TextStyle(
+                fontSize: 18,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.green,
+              ),
+            ),
+            pw.SizedBox(height: 5),
+            ...notOccupiedProjectors.map((projector) {
+              return pw.Container(
+                margin: const pw.EdgeInsets.only(bottom: 5),
+                child: _buildProjectorCardpw(projector),
+              );
+            }).toList(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  final pdfBytes = await pdf.save();
+  final pngBytes = await convertPdfToPng(pdfBytes);
+
+  return {pdfBytes: pngBytes};
+}
+
+Future<Uint8List> generatePdfandShare() async {
   final pdf = pw.Document();
 
   // Fetch data from Firestore
@@ -96,9 +186,8 @@ Future<Uint8List> generatePdfandShareSupportWeb() async {
   }
 
   final bytes = await pdf.save();
-  final image = await convertPdfToPng(bytes);
 
-  return image;
+  return bytes;
 }
 
 pw.Widget _buildProjectorCardpw(Map<String, dynamic> projector) {

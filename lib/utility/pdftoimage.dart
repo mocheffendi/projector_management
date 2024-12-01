@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 // import 'package:pdf/pdf.dart';
 import 'package:pdfx/pdfx.dart';
-import 'package:share_plus/share_plus.dart';
 
 Future<Uint8List> convertPdfToPng(Uint8List pdfData) async {
   final pdfDocument = await PdfDocument.openData(pdfData);
@@ -19,14 +18,4 @@ Future<Uint8List> convertPdfToPng(Uint8List pdfData) async {
     quality: 100,
   );
   return pageImage!.bytes;
-}
-
-Future shareimage(Uint8List image) async {
-  final tempFile = XFile.fromData(
-    image,
-    mimeType: 'image/png',
-    name: 'screenshot.png',
-  );
-
-  await Share.shareXFiles([tempFile]);
 }
