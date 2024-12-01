@@ -376,19 +376,31 @@ class _ProjectorPageState extends State<ProjectorPage> {
                     'Last Updated: $formattedDate',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
-                  DropdownButton<String>(
-                    value: projector['status'],
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        updateStatus(projector['id'], newValue);
-                      }
-                    },
-                    items: roomOptions.map((room) {
-                      return DropdownMenuItem<String>(
-                        value: room,
-                        child: Text(room),
-                      );
-                    }).toList(),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: DropdownButton<String>(
+                      underline: Container(
+                        height: 2,
+                        color: Colors.transparent,
+                      ),
+                      value: projector['status'],
+                      onChanged: (newValue) {
+                        if (newValue != null) {
+                          updateStatus(projector['id'], newValue);
+                        }
+                      },
+                      items: roomOptions.map((room) {
+                        return DropdownMenuItem<String>(
+                          value: room,
+                          child: Text(room),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ),
