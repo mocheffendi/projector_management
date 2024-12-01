@@ -507,27 +507,29 @@ class _ProjectorPageState extends State<ProjectorPage> {
         fit: StackFit.expand,
         children: [
           Positioned(
-            bottom: 16,
-            right: 16,
+            bottom: 0,
+            right: 0,
             child: FloatingActionButton(
               onPressed: () {
                 _showAddProjectorDialog();
               },
-              child: const Icon(Icons.add),
+              child: const Icon(Icons.add_box),
             ),
           ),
           Positioned(
-            bottom: 80,
-            right: 23,
+            bottom: 65,
+            right: 8,
             child: FloatingActionButton(
+              // shape: Border.lerp(a, b, t),
               mini: true,
               onPressed: () async {
                 final image = await generatePdfandShareSupportWeb();
                 if (mounted) {
+                  // ignore: use_build_context_synchronously
                   showImageDialog(context, image);
                 }
               },
-              child: const Icon(Icons.screen_share),
+              child: const Icon(Icons.screen_share_rounded),
             ),
           ),
         ],

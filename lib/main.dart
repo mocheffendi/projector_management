@@ -84,11 +84,11 @@ class _MainAppScreenState extends State<MainAppScreen> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.video_label),
+            icon: Icon(Icons.location_searching_rounded),
             label: 'Projector',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.screen_share),
+            icon: Icon(Icons.video_label),
             label: 'Screen',
           ),
           BottomNavigationBarItem(
