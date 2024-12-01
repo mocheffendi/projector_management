@@ -319,6 +319,115 @@ class _ProjectorPageState extends State<ProjectorPage> {
   }
 
   // Helper method to build projector card
+  // Widget _buildProjectorCard(Map<String, dynamic> projector) {
+  //   final lastUpdated = projector['lastUpdated']?.toDate();
+  //   final formattedDate = lastUpdated != null
+  //       ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
+  //       : 'Unknown';
+  //   Color cardColor = [
+  //     'not use',
+  //     'FO Office',
+  //     'Store LT2',
+  //     'Pantry / Panel Una²',
+  //     'Pantry / Panel Lantai5',
+  //     'Pantry / Panel Lantai3',
+  //     'Pantry / Panel Heritage',
+  //     'Office Eng'
+  //   ].contains(projector['status'])
+  //       ? Colors.green.shade100
+  //       : Colors.grey.shade300;
+
+  //   return Card.filled(
+  //     elevation: 8.0,
+  //     color: cardColor,
+  //     margin: const EdgeInsets.symmetric(vertical: 8.0),
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(8.0),
+  //       child: Row(
+  //         children: [
+  //           Image.memory(
+  //             base64Decode(projector['image'] ?? ''),
+  //             width: 150,
+  //             height: 100,
+  //             fit: BoxFit.fitWidth,
+  //           ),
+  //           const SizedBox(width: 10),
+  //           Expanded(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   '${projector['model']}',
+  //                   style: const TextStyle(
+  //                       fontSize: 16, fontWeight: FontWeight.bold),
+  //                 ),
+  //                 Text('SN: ${projector['sn']}'),
+  //                 Text(
+  //                   notOccupiedStatuses.contains(projector['status'])
+  //                       ? 'Not Occupied @${projector['status']}'
+  //                       : 'Occupied @${projector['status']}',
+  //                   style: TextStyle(
+  //                     color: notOccupiedStatuses.contains(projector['status'])
+  //                         ? Colors.green
+  //                         : Colors.red,
+  //                   ),
+  //                 ),
+  //                 Text(
+  //                   'Last Updated: $formattedDate',
+  //                   style: const TextStyle(fontSize: 12, color: Colors.grey),
+  //                 ),
+  //                 DropdownMenu<String>(
+  //                   initialSelection: projector['status'],
+  //                   onSelected: (newValue) {
+  //                     if (newValue != null) {
+  //                       updateStatus(projector['id'], newValue);
+  //                     }
+  //                   },
+  //                   dropdownMenuEntries: roomOptions.map((room) {
+  //                     return DropdownMenuEntry<String>(
+  //                       value: room,
+  //                       label: room,
+  //                     );
+  //                   }).toList(),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           PopupMenuButton<String>(
+  //             onSelected: (value) {
+  //               if (value == 'Edit') {
+  //                 _showEditProjectorDialog(projector);
+  //               } else if (value == 'Delete') {
+  //                 _showDeleteConfirmationDialog(projector['id']);
+  //               }
+  //             },
+  //             itemBuilder: (context) => [
+  //               const PopupMenuItem(
+  //                   value: 'Edit',
+  //                   child: Row(
+  //                     children: [
+  //                       Icon(Icons.edit_note),
+  //                       SizedBox(width: 8),
+  //                       Text('Edit'),
+  //                     ],
+  //                   )),
+  //               const PopupMenuItem(
+  //                   value: 'Delete',
+  //                   child: Row(
+  //                     children: [
+  //                       Icon(Icons.delete),
+  //                       SizedBox(width: 8),
+  //                       Text('Delete'),
+  //                     ],
+  //                   )),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget _buildProjectorCard(Map<String, dynamic> projector) {
     final lastUpdated = projector['lastUpdated']?.toDate();
     final formattedDate = lastUpdated != null
@@ -343,66 +452,75 @@ class _ProjectorPageState extends State<ProjectorPage> {
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
+        child: Stack(
           children: [
-            Image.memory(
-              base64Decode(projector['image'] ?? ''),
-              width: 150,
-              height: 100,
-              fit: BoxFit.fitWidth,
+            Row(
+              children: [
+                Image.memory(
+                  base64Decode(projector['image'] ?? ''),
+                  width: 150,
+                  height: 100,
+                  fit: BoxFit.fitWidth,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${projector['model']}',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text('SN: ${projector['sn']}'),
+                      Text(
+                        notOccupiedStatuses.contains(projector['status'])
+                            ? 'Not Occupied @${projector['status']}'
+                            : 'Occupied @${projector['status']}',
+                        style: TextStyle(
+                          color:
+                              notOccupiedStatuses.contains(projector['status'])
+                                  ? Colors.green
+                                  : Colors.red,
+                        ),
+                      ),
+                      Text(
+                        'Last Updated: $formattedDate',
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                      DropdownMenu<String>(
+                        initialSelection: projector['status'],
+                        onSelected: (newValue) {
+                          if (newValue != null) {
+                            updateStatus(projector['id'], newValue);
+                          }
+                        },
+                        dropdownMenuEntries: roomOptions.map((room) {
+                          return DropdownMenuEntry<String>(
+                            value: room,
+                            label: room,
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${projector['model']}',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Text('SN: ${projector['sn']}'),
-                  Text(
-                    notOccupiedStatuses.contains(projector['status'])
-                        ? 'Not Occupied @${projector['status']}'
-                        : 'Occupied @${projector['status']}',
-                    style: TextStyle(
-                      color: notOccupiedStatuses.contains(projector['status'])
-                          ? Colors.green
-                          : Colors.red,
-                    ),
-                  ),
-                  Text(
-                    'Last Updated: $formattedDate',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                  DropdownMenu<String>(
-                    initialSelection: projector['status'],
-                    onSelected: (newValue) {
-                      if (newValue != null) {
-                        updateStatus(projector['id'], newValue);
-                      }
-                    },
-                    dropdownMenuEntries: roomOptions.map((room) {
-                      return DropdownMenuEntry<String>(
-                        value: room,
-                        label: room,
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),
-            PopupMenuButton<String>(
-              onSelected: (value) {
-                if (value == 'Edit') {
-                  _showEditProjectorDialog(projector);
-                } else if (value == 'Delete') {
-                  _showDeleteConfirmationDialog(projector['id']);
-                }
-              },
-              itemBuilder: (context) => [
-                const PopupMenuItem(
+            Positioned(
+              top: 0,
+              right: 0,
+              child: PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'Edit') {
+                    _showEditProjectorDialog(projector);
+                  } else if (value == 'Delete') {
+                    _showDeleteConfirmationDialog(projector['id']);
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
                     value: 'Edit',
                     child: Row(
                       children: [
@@ -410,8 +528,9 @@ class _ProjectorPageState extends State<ProjectorPage> {
                         SizedBox(width: 8),
                         Text('Edit'),
                       ],
-                    )),
-                const PopupMenuItem(
+                    ),
+                  ),
+                  const PopupMenuItem(
                     value: 'Delete',
                     child: Row(
                       children: [
@@ -419,8 +538,10 @@ class _ProjectorPageState extends State<ProjectorPage> {
                         SizedBox(width: 8),
                         Text('Delete'),
                       ],
-                    )),
-              ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
