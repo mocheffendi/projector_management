@@ -53,13 +53,19 @@ void showPdfDialog(
                 icon: const Icon(Icons.screen_share_rounded),
               ),
               TextButton(
-                child: const Text('Share'),
+                child: const Text('Share Pdf'),
                 onPressed: () {
                   if (kIsWeb) {
                     sharepdfweb(pdfBytes);
                   } else {
                     sharepdf(pdfBytes);
                   }
+                },
+              ),
+              TextButton(
+                child: const Text('Share Pdf using ShareX'),
+                onPressed: () {
+                  sharepdf(pdfBytes);
                 },
               ),
               TextButton(
