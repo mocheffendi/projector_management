@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 // import 'package:internet_file/internet_file.dart';
 import 'package:pdfx/pdfx.dart' as pdfx;
 import 'package:projector_management/googledrivepdf.dart';
+import 'package:projector_management/syncfusionpdf.dart';
 // import 'package:projector_management/googledrivepdfviewer.dart';
 // import 'package:pdf_viewer_pinch/pdf_viewer_pinch.dart';
 // import 'package:universal_platform/universal_platform.dart';
@@ -337,8 +338,14 @@ class _ProjectorPageState extends State<ProjectorPage> {
 
     final bytes = await pdf.save();
 
-    await Printing.sharePdf(
-        bytes: await pdf.save(), filename: 'projector_report.pdf');
+    // await Printing.sharePdf(bytes: bytes, filename: 'projector_report.pdf');
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PdfPreviewScreen(pdfBytes: bytes),
+      ),
+    );
 
     // Printing.sharePdf(
     //   bytes: bytes,
