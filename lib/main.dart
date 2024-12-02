@@ -38,13 +38,13 @@ class ProjectorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.amber, // navigation bar color
-      statusBarColor: Colors.white, // status bar color
-      statusBarIconBrightness: Brightness.dark, // status bar icon color
-      systemNavigationBarIconBrightness:
-          Brightness.dark, // color of navigation controls
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Colors.amber, // navigation bar color
+    //   statusBarColor: Colors.white, // status bar color
+    //   statusBarIconBrightness: Brightness.dark, // status bar icon color
+    //   systemNavigationBarIconBrightness:
+    //       Brightness.dark, // color of navigation controls
+    // ));
     return const MaterialApp(
       home: MainAppScreen(),
     );
@@ -100,7 +100,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
           // Status bar color
-          statusBarColor: Colors.red,
+          statusBarColor: Colors.teal,
 
           // Status bar brightness (optional)
           statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
