@@ -60,7 +60,7 @@ class MainAppScreen extends StatefulWidget {
 
 class _MainAppScreenState extends State<MainAppScreen> {
   // Define the same color for both AppBar and Status Bar
-  static const Color appBarColor = Colors.teal;
+  static const Color appBarColor = Colors.blue;
 
   int _currentIndex = 0;
 
@@ -85,13 +85,13 @@ class _MainAppScreenState extends State<MainAppScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.amber, // navigation bar color
-      statusBarColor: Colors.white, // status bar color
-      statusBarIconBrightness: Brightness.dark, // status bar icon color
-      systemNavigationBarIconBrightness:
-          Brightness.dark, // color of navigation controls
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Colors.amber, // navigation bar color
+    //   statusBarColor: Colors.white, // status bar color
+    //   statusBarIconBrightness: Brightness.dark, // status bar icon color
+    //   systemNavigationBarIconBrightness:
+    //       Brightness.dark, // color of navigation controls
+    // ));
   }
 
   @override
@@ -100,7 +100,8 @@ class _MainAppScreenState extends State<MainAppScreen> {
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
           // Status bar color
-          statusBarColor: Colors.teal,
+          statusBarColor: appBarColor,
+          systemNavigationBarColor: appBarColor,
 
           // Status bar brightness (optional)
           statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
