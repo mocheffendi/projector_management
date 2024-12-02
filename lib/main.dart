@@ -1,7 +1,9 @@
 // import 'dart:convert'; // To handle image encoding as base64
+
 import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:projector_management/screen/settingpage.dart';
 // import 'package:file_picker/file_picker.dart';
 // import 'package:intl/intl.dart';
@@ -44,6 +46,9 @@ class MainAppScreen extends StatefulWidget {
 }
 
 class _MainAppScreenState extends State<MainAppScreen> {
+  // Define the same color for both AppBar and Status Bar
+  static const Color appBarColor = Colors.blue;
+
   int _currentIndex = 0;
 
   // Define the screens for each tab
@@ -65,9 +70,21 @@ class _MainAppScreenState extends State<MainAppScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: appBarColor,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: appBarColor, // AppBar color
         title: Text(
           _titles[_currentIndex],
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
