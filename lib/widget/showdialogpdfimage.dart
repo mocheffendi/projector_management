@@ -46,89 +46,123 @@ void showPdfDialog(
       return AlertDialog(
         content: Image.memory(pngBytes),
         actions: <Widget>[
-          Row(
+          Column(
             children: [
-              // IconButton(
-              //   onPressed: () {},
-              //   icon: const Icon(Icons.screen_share_rounded),
-              // ),
-              // TextButton(
-              //   child: const Text('Share Pdf'),
-              //   onPressed: () {
-              //     if (kIsWeb) {
-              //       sharepdfweb(pdfBytes);
-              //     } else {
-              //       sharepdf(pdfBytes);
-              //     }
-              //   },
-              // ),
-              ElevatedButton(
-                onPressed: () {
-                  sharepdf(pdfBytes);
-                },
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                ),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(Icons.picture_as_pdf_rounded, size: 24),
-                    Text("Share Pdf"),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // IconButton(
+                  //   onPressed: () {},
+                  //   icon: const Icon(Icons.screen_share_rounded),
+                  // ),
+                  // TextButton(
+                  //   child: const Text('Share Pdf'),
+                  //   onPressed: () {
+                  //     if (kIsWeb) {
+                  //       sharepdfweb(pdfBytes);
+                  //     } else {
+                  //       sharepdf(pdfBytes);
+                  //     }
+                  //   },
+                  // ),
+                  ElevatedButton(
+                    onPressed: () {
+                      sharepdf(pdfBytes);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      side:
+                          const BorderSide(color: Colors.transparent, width: 1),
+                      // minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(Icons.picture_as_pdf_rounded, size: 24),
+                        Text("Share Pdf"),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      shareimage(pngBytes);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      side:
+                          const BorderSide(color: Colors.transparent, width: 1),
+                      // minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(Icons.image_rounded, size: 24),
+                        Text("Share Img"),
+                      ],
+                    ),
+                  ),
+                  // IconButtonWithLabel(
+                  //     icon: Icons.picture_as_pdf_rounded,
+                  //     label: 'Share Pdf',
+                  //     onPressed: () {
+                  //       sharepdf(pdfBytes);
+                  //     }),
+                  // const SizedBox(
+                  //   width: 10,
+                  // ),
+                  // IconButtonWithLabel(
+                  //     icon: Icons.image_rounded,
+                  //     label: 'Share Image',
+                  //     onPressed: () {
+                  //       shareimage(pngBytes);
+                  //     }),
+                  // TextButton(
+                  //   child: const Text('Share Pdf'),
+                  //   onPressed: () {
+                  //     sharepdf(pdfBytes);
+                  //   },
+                  // ),
+                  // TextButton(
+                  //   child: const Text('Share Image'),
+                  //   onPressed: () {
+                  //     shareimage(pngBytes);
+                  //   },
+                  // ),
+                  // const SizedBox(
+                  //   width: 8,
+                  // ),
+                  // TextButton(
+                  //   child: const Text('Close'),
+                  //   onPressed: () {
+                  //     Navigator.of(context).pop();
+                  //   },
+                  // ),
+                ],
               ),
-              ElevatedButton(
-                onPressed: () {
-                  shareimage(pngBytes);
-                },
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                ),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(Icons.image_rounded, size: 24),
-                    Text("Share Img"),
-                  ],
-                ),
-              ),
-              // IconButtonWithLabel(
-              //     icon: Icons.picture_as_pdf_rounded,
-              //     label: 'Share Pdf',
-              //     onPressed: () {
-              //       sharepdf(pdfBytes);
-              //     }),
               const SizedBox(
-                width: 10,
+                height: 10,
               ),
-              // IconButtonWithLabel(
-              //     icon: Icons.image_rounded,
-              //     label: 'Share Image',
-              //     onPressed: () {
-              //       shareimage(pngBytes);
-              //     }),
-              // TextButton(
-              //   child: const Text('Share Pdf'),
-              //   onPressed: () {
-              //     sharepdf(pdfBytes);
-              //   },
-              // ),
-              // TextButton(
-              //   child: const Text('Share Image'),
-              //   onPressed: () {
-              //     shareimage(pngBytes);
-              //   },
-              // ),
-              const SizedBox(
-                width: 8,
-              ),
-              TextButton(
-                child: const Text('Close'),
+              ElevatedButton.icon(
+                icon: const Icon(
+                  Icons.home,
+                  // color: Colors.amber,
+                  size: 30.0,
+                ),
+                label: const Text('Close'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(color: Colors.blueAccent, width: 2),
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
               ),
             ],
           ),

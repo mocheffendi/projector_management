@@ -15,6 +15,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:projector_management/screen/transaction.dart';
 // import 'package:pdfrx/pdfrx.dart';
 // import 'package:internet_file/internet_file.dart';
 // import 'package:pdfx/pdfx.dart' as pdfx;
@@ -667,17 +668,22 @@ class _ProjectorPageState extends State<ProjectorPage> {
             ),
           ),
           // Positioned(
-          //   bottom: 65,
+          //   bottom: 115,
           //   right: 0,
           //   child: FloatingActionButton(
           //     // shape: Border.lerp(a, b, t),
           //     mini: true,
-          //     onPressed: () async {
-          //       final pdfBytes = await generatePdfandShareSupportWeb();
-          //       if (mounted) {
-          //         // ignore: use_build_context_synchronously
-          //         showImageDialog(context, pdfBytes);
-          //       }
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) => const TransactionStatusPage()),
+          //       );
+          //       // final pdfBytes = await generatePdfandShareSupportWeb();
+          //       // if (mounted) {
+          //       //   // ignore: use_build_context_synchronously
+          //       //   showImageDialog(context, pdfBytes);
+          //       // }
           //     },
           //     child: const Icon(Icons.screen_share_rounded),
           //   ),
