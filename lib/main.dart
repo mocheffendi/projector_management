@@ -25,9 +25,15 @@ void main() async {
     storageBucket: 'myflutter-49607.firebasestorage.app',
   ));
 
+  const Color appBarColor = Colors.blue;
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.blue, // navigation bar color
-    statusBarColor: Colors.pink, // status bar color
+    systemNavigationBarColor: appBarColor, // navigation bar color
+    systemNavigationBarDividerColor: appBarColor,
+    statusBarColor: appBarColor, // status bar color
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.dark,
+    statusBarIconBrightness: Brightness.dark,
   ));
 
   runApp(const ProjectorApp());
@@ -98,15 +104,15 @@ class _MainAppScreenState extends State<MainAppScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          // Status bar color
-          statusBarColor: appBarColor,
-          systemNavigationBarColor: appBarColor,
+        // systemOverlayStyle: const SystemUiOverlayStyle(
+        //   // Status bar color
+        //   statusBarColor: appBarColor,
+        //   systemNavigationBarColor: appBarColor,
 
-          // Status bar brightness (optional)
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
-        ),
+        //   // Status bar brightness (optional)
+        //   statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+        //   statusBarBrightness: Brightness.light, // For iOS (dark icons)
+        // ),
         backgroundColor: appBarColor, // AppBar color
         title: Text(
           _titles[_currentIndex],
