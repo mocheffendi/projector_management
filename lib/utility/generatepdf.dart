@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
+// import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -13,7 +17,48 @@ List<String> roomOptions = [];
 List<String> notOccupiedStatuses = [];
 List<String> serviceOptions = [];
 
+// Future<Uint8List> convertIconToImage(Icon icon, {double size = 100}) async {
+//   final boundaryKey = GlobalKey();
+//   final completer = Completer<Uint8List>();
+
+//   // Create a widget to render the icon
+//   final widget = MaterialApp(
+//     home: Scaffold(
+//       backgroundColor: Colors.transparent,
+//       body: Center(
+//         child: RepaintBoundary(
+//           key: boundaryKey,
+//           child: SizedBox(
+//             width: size,
+//             height: size,
+//             child: icon,
+//           ),
+//         ),
+//       ),
+//     ),
+//   );
+
+//   // Render the widget into an image
+//   WidgetsBinding.instance.addPostFrameCallback((_) async {
+//     final boundary = boundaryKey.currentContext?.findRenderObject()
+//         as RenderRepaintBoundary?;
+//     if (boundary != null) {
+//       final ui.Image image = await boundary.toImage(pixelRatio: 2.0);
+//       final ByteData? byteData =
+//           await image.toByteData(format: ui.ImageByteFormat.png);
+//       if (byteData != null) {
+//         completer.complete(byteData.buffer.asUint8List());
+//       }
+//     }
+//   });
+
+//   return completer.future;
+// }
+
 Future<Uint8List> generatePdfandShareSupportWeb() async {
+  // final iconBytes = await convertIconToImage(Icon(Icons.date_range));
+  // final iconImage = pw.MemoryImage(iconBytes);
+
   final pdf = pw.Document();
 
   // Fetch data from Firestore
@@ -123,171 +168,30 @@ Future<Uint8List> generatePdfandShareSupportWeb() async {
 
   final pdfBytes = await pdf.save();
 
-  // Verify if pdfBytes is correctly populated
-  // if (pdfBytes.isEmpty) {
-  //   debugPrint('PDF bytes are empty.');
-  // } else {
-  //   debugPrint('PDF bytes length: ${pdfBytes.length}');
-  // }
-
-  // debugPrint('PDF bytes length: ${pdfBytes.length}');
-  // debugPrint('PNG bytes length: ${pngBytes.length}');
-
   return pdfBytes;
 }
-
-// Future<Uint8List> generatePdfandShare() async {
-//   final pdf = pw.Document();
-
-//   // Fetch data from Firestore
-//   final querySnapshot =
-//       await FirebaseFirestore.instance.collection('projectors').get();
-//   final projectors = querySnapshot.docs.map((doc) {
-//     final data = doc.data();
-//     return {
-//       'id': doc.id,
-//       ...data,
-//     };
-//   }).toList();
-
-//   try {
-//     DocumentSnapshot snapshot = await FirebaseFirestore.instance
-//         .collection('settings')
-//         .doc('config')
-//         .get();
-
-//     if (snapshot.exists) {
-//       var data = snapshot.data() as Map<String, dynamic>;
-//       // setState(() {
-//       roomOptions = List<String>.from(data['roomOptions']);
-//       notOccupiedStatuses = List<String>.from(data['notOccupiedStatuses']);
-//       serviceOptions = List<String>.from(data['serviceOptions']);
-//       // });
-//     }
-//   } catch (e) {
-//     log('Error fetching settings: $e');
-//   }
-
-//   // Example statuses
-//   // Categorize projectors
-//   final occupiedProjectors = projectors
-//       .where((projector) =>
-//           !notOccupiedStatuses.contains(projector['status']) &&
-//           !serviceOptions.contains(projector['status']))
-//       .toList();
-
-//   final notOccupiedProjectors = projectors
-//       .where((projector) => notOccupiedStatuses.contains(projector['status']))
-//       .toList();
-
-//   final serviceProjectors = projectors
-//       .where((projector) => serviceOptions.contains(projector['status']))
-//       .toList();
-
-//   // Add data to PDF
-//   if (occupiedProjectors.isNotEmpty) {
-//     pdf.addPage(
-//       pw.Page(
-//         pageFormat: const PdfPageFormat(400, 1100, marginAll: 8.0),
-//         build: (pw.Context context) => pw.Column(
-//           crossAxisAlignment: pw.CrossAxisAlignment.start,
-//           children: [
-//             pw.Text(
-//               'Occupied Projectors',
-//               style: pw.TextStyle(
-//                 fontSize: 18,
-//                 fontWeight: pw.FontWeight.bold,
-//                 color: PdfColors.red,
-//               ),
-//             ),
-//             pw.SizedBox(height: 5),
-//             ...occupiedProjectors.map((projector) {
-//               return pw.Container(
-//                 margin: const pw.EdgeInsets.only(bottom: 5),
-//                 child: _buildProjectorCardpw(projector),
-//               );
-//             }).toList(),
-//             pw.SizedBox(height: 5),
-//             pw.Text(
-//               'Not Occupied Projectors',
-//               style: pw.TextStyle(
-//                 fontSize: 18,
-//                 fontWeight: pw.FontWeight.bold,
-//                 color: PdfColors.green,
-//               ),
-//             ),
-//             pw.SizedBox(height: 5),
-//             ...notOccupiedProjectors.map((projector) {
-//               return pw.Container(
-//                 margin: const pw.EdgeInsets.only(bottom: 5),
-//                 child: _buildProjectorCardpw(projector),
-//               );
-//             }).toList(),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   final bytes = await pdf.save();
-
-//   return bytes;
-// }
 
 pw.Widget _buildProjectorCardpw(Map<String, dynamic> projector) {
   final lastUpdated = projector['lastUpdated']?.toDate();
   final formattedDate = lastUpdated != null
-      ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
+      ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
       : 'Unknown';
 
-  // Determine card color based on status
-  // final cardColor = [
-  //   'not use',
-  //   'FO Office',
-  //   'Store LT2',
-  //   'Pantry / Panel Una²',
-  //   'Pantry / Panel Lantai5',
-  //   'Pantry / Panel Lantai3',
-  //   'Pantry / Panel Heritage',
-  //   'Office Eng'
-  // ].contains(projector['status'])
-  //     ? PdfColors.green100
-  //     : PdfColors.grey300;
-
   PdfColor cardColor = PdfColors.grey100;
-
-  List<String> greenStatuses = [
-    'not use',
-    'FO Office',
-    'Store LT2',
-    'Pantry / Panel Una²',
-    'Pantry / Panel Lantai5',
-    'Pantry / Panel Lantai3',
-    'Pantry / Panel Heritage',
-    'Office Eng'
-  ];
-  List<String> yellowStatuses = [];
-  List<String> blueStatuses = [
-    'DRM for Service',
-  ];
-  if (greenStatuses.contains(projector['status'])) {
-    cardColor = PdfColors.green100;
-  } else if (yellowStatuses.contains(projector['status'])) {
-    cardColor = PdfColors.yellow100;
-  } else if (blueStatuses.contains(projector['status'])) {
-    cardColor = PdfColors.blue100;
-  }
 
   // Example projector status
   final String projectorStatus = projector['status'];
   final String statusLabel;
   final PdfColor statusColor;
+
   if (notOccupiedStatuses.contains(projectorStatus)) {
     statusLabel = 'Not Occupied @$projectorStatus';
     statusColor = PdfColors.green;
+    cardColor = PdfColors.green100;
   } else if (serviceOptions.contains(projectorStatus)) {
     statusLabel = 'Service @$projectorStatus';
     statusColor = PdfColors.blue;
+    cardColor = PdfColors.blue100;
   } else {
     statusLabel = 'Occupied @$projectorStatus';
     statusColor = PdfColors.red;
@@ -327,26 +231,20 @@ pw.Widget _buildProjectorCardpw(Map<String, dynamic> projector) {
                 ),
               ),
               pw.Text('SN: ${projector['sn']}'),
-              // pw.Text(
-              //   notOccupiedStatuses.contains(projector['status'])
-              //       ? 'Not Occupied @${projector['status']}'
-              //       : 'Occupied @${projector['status']}',
-              //   style: pw.TextStyle(
-              //     color: notOccupiedStatuses.contains(projector['status'])
-              //         ? PdfColors.green
-              //         : PdfColors.red,
-              //   ),
-              // ),
               pw.Text(
                 statusLabel,
                 style: pw.TextStyle(
                   color: statusColor,
                 ),
               ),
-              pw.Text(
-                'Last Updated: $formattedDate',
-                style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey),
-              ),
+              pw.Row(children: [
+                // pw.Image(iconImage, width: 100, height: 100),
+                pw.Text(
+                  'Last Updated: $formattedDate',
+                  style:
+                      const pw.TextStyle(fontSize: 12, color: PdfColors.grey),
+                ),
+              ]),
               // Dropdowns and popup menus are not supported in PDF widgets.
               // Replace with static information or remove them.
               pw.Text('Status: ${projector['status']}'),

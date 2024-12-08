@@ -21,14 +21,6 @@ class ProjectorPage extends StatefulWidget {
 class _ProjectorPageState extends State<ProjectorPage> {
   final ScrollController _scrollController = ScrollController();
 
-  void _scrollToSection(double offset) {
-    _scrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-  }
-
   List<String> roomOptions = [];
   List<String> notOccupiedStatuses = [];
   List<String> serviceOptions = [];
@@ -300,45 +292,26 @@ class _ProjectorPageState extends State<ProjectorPage> {
   Widget _buildProjectorCard(Map<String, dynamic> projector) {
     final lastUpdated = projector['lastUpdated']?.toDate();
     final formattedDate = lastUpdated != null
-        ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
+        ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
         : 'Unknown';
     Color cardColor = Colors.grey.shade300; // Default color
-
-    List<String> greenStatuses = [
-      'not use',
-      'FO Office',
-      'Store LT2',
-      'Pantry / Panel Una²',
-      'Pantry / Panel Lantai5',
-      'Pantry / Panel Lantai3',
-      'Pantry / Panel Heritage',
-      'Office Eng'
-    ];
-    List<String> yellowStatuses = [];
-    List<String> blueStatuses = [
-      'DRM for Service',
-    ];
-    if (greenStatuses.contains(projector['status'])) {
-      cardColor = Colors.green.shade100;
-    } else if (yellowStatuses.contains(projector['status'])) {
-      cardColor = Colors.yellow.shade100;
-    } else if (blueStatuses.contains(projector['status'])) {
-      cardColor = Colors.blue.shade100;
-    }
 
     // Example projector status
     final String projectorStatus = projector['status'];
     final String statusLabel;
     final Color statusColor;
+
     if (notOccupiedStatuses.contains(projectorStatus)) {
       statusLabel = 'Not Occupied @$projectorStatus';
       statusColor = Colors.green;
+      cardColor = Colors.green.shade100;
     } else if (serviceOptions.contains(projectorStatus)) {
-      statusLabel = 'Service @$projectorStatus';
+      statusLabel = 'On Service @$projectorStatus';
       statusColor = Colors.blue;
+      cardColor = Colors.blue.shade100;
     } else {
       statusLabel = 'Occupied @$projectorStatus';
-      statusColor = Colors.red;
+      statusColor = Colors.redAccent.shade700;
     }
 
     return Card.filled(
@@ -374,10 +347,15 @@ class _ProjectorPageState extends State<ProjectorPage> {
                           color: statusColor,
                         ),
                       ),
-                      Text(
-                        'Last Updated: $formattedDate',
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey),
+                      Row(
+                        children: [
+                          const Icon(Icons.date_range_rounded),
+                          Text(
+                            'Last Updated: $formattedDate',
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.black),
+                          ),
+                        ],
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
@@ -592,6 +570,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
                     );
                   },
                 );
+
                 final pdfBytes = await generatePdfandShareSupportWeb();
                 Uint8List pdfBytesCopy = Uint8List.fromList(pdfBytes);
                 final pngBytes = await convertPdfToPng(pdfBytes);
