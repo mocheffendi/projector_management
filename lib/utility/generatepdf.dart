@@ -17,48 +17,7 @@ List<String> roomOptions = [];
 List<String> notOccupiedStatuses = [];
 List<String> serviceOptions = [];
 
-// Future<Uint8List> convertIconToImage(Icon icon, {double size = 100}) async {
-//   final boundaryKey = GlobalKey();
-//   final completer = Completer<Uint8List>();
-
-//   // Create a widget to render the icon
-//   final widget = MaterialApp(
-//     home: Scaffold(
-//       backgroundColor: Colors.transparent,
-//       body: Center(
-//         child: RepaintBoundary(
-//           key: boundaryKey,
-//           child: SizedBox(
-//             width: size,
-//             height: size,
-//             child: icon,
-//           ),
-//         ),
-//       ),
-//     ),
-//   );
-
-//   // Render the widget into an image
-//   WidgetsBinding.instance.addPostFrameCallback((_) async {
-//     final boundary = boundaryKey.currentContext?.findRenderObject()
-//         as RenderRepaintBoundary?;
-//     if (boundary != null) {
-//       final ui.Image image = await boundary.toImage(pixelRatio: 2.0);
-//       final ByteData? byteData =
-//           await image.toByteData(format: ui.ImageByteFormat.png);
-//       if (byteData != null) {
-//         completer.complete(byteData.buffer.asUint8List());
-//       }
-//     }
-//   });
-
-//   return completer.future;
-// }
-
 Future<Uint8List> generatePdfandShareSupportWeb() async {
-  // final iconBytes = await convertIconToImage(Icon(Icons.date_range));
-  // final iconImage = pw.MemoryImage(iconBytes);
-
   final pdf = pw.Document();
 
   // Fetch data from Firestore

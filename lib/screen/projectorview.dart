@@ -577,6 +577,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
 
                 // Close loading dialog
                 if (mounted) {
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 }
 

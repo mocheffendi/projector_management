@@ -44,7 +44,11 @@ void showPdfDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        content: Image.memory(pngBytes),
+        // content: Image.memory(pngBytes),
+        content: const SizedBox(
+            // width: 250,
+            height: 200,
+            child: Center(child: Text('Pdf and Image already generated'))),
         actions: <Widget>[
           Column(
             children: [
@@ -56,8 +60,9 @@ void showPdfDialog(
                       sharepdf(pdfBytes);
                     },
                     style: ElevatedButton.styleFrom(
-                      side:
-                          const BorderSide(color: Colors.transparent, width: 1),
+                      padding: const EdgeInsets.fromLTRB(30, 16, 30, 16),
+                      backgroundColor: Colors.grey.shade200,
+                      side: const BorderSide(color: Colors.grey, width: 1),
                       // minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -71,13 +76,17 @@ void showPdfDialog(
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    width: 20,
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       shareimage(pngBytes);
                     },
                     style: ElevatedButton.styleFrom(
-                      side:
-                          const BorderSide(color: Colors.transparent, width: 1),
+                      padding: const EdgeInsets.fromLTRB(30, 16, 30, 16),
+                      backgroundColor: Colors.grey.shade200,
+                      side: const BorderSide(color: Colors.grey, width: 1),
                       // minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
