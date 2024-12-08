@@ -62,6 +62,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
 
   List<String> roomOptions = [];
   List<String> notOccupiedStatuses = [];
+  List<String> serviceOptions = [];
 
   @override
   void initState() {
@@ -81,6 +82,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
         setState(() {
           roomOptions = List<String>.from(data['roomOptions']);
           notOccupiedStatuses = List<String>.from(data['notOccupiedStatuses']);
+          serviceOptions = List<String>.from(data['serviceOptions']);
         });
       }
     } catch (e) {
@@ -156,7 +158,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
       await FirebaseFirestore.instance.collection('projectors').add({
         'model': model,
         'sn': sn,
-        'status': 'not use',
+        'status': 'Store LT2',
         'image': base64Image, // Save base64 image string
         'lastUpdated':
             FieldValue.serverTimestamp(), // Add timestamp when adding
@@ -435,7 +437,22 @@ class _ProjectorPageState extends State<ProjectorPage> {
     final formattedDate = lastUpdated != null
         ? DateFormat('dd-MM-yyyy HH:mm:ss').format(lastUpdated)
         : 'Unknown';
-    Color cardColor = [
+    Color cardColor = Colors.grey.shade300; // Default color
+
+    // Color cardColor = [
+    //   'not use',
+    //   'FO Office',
+    //   'Store LT2',
+    //   'Pantry / Panel Una²',
+    //   'Pantry / Panel Lantai5',
+    //   'Pantry / Panel Lantai3',
+    //   'Pantry / Panel Heritage',
+    //   'Office Eng'
+    // ].contains(projector['status'])
+    //     ? Colors.green.shade100
+    //     : Colors.grey.shade300;
+
+    List<String> greenStatuses = [
       'not use',
       'FO Office',
       'Store LT2',
@@ -444,9 +461,33 @@ class _ProjectorPageState extends State<ProjectorPage> {
       'Pantry / Panel Lantai3',
       'Pantry / Panel Heritage',
       'Office Eng'
-    ].contains(projector['status'])
-        ? Colors.green.shade100
-        : Colors.grey.shade300;
+    ];
+    List<String> yellowStatuses = [];
+    List<String> blueStatuses = [
+      'DRM for Service',
+    ];
+    if (greenStatuses.contains(projector['status'])) {
+      cardColor = Colors.green.shade100;
+    } else if (yellowStatuses.contains(projector['status'])) {
+      cardColor = Colors.yellow.shade100;
+    } else if (blueStatuses.contains(projector['status'])) {
+      cardColor = Colors.blue.shade100;
+    }
+
+    // Example projector status
+    final String projectorStatus = projector['status'];
+    final String statusLabel;
+    final Color statusColor;
+    if (notOccupiedStatuses.contains(projectorStatus)) {
+      statusLabel = 'Not Occupied @$projectorStatus';
+      statusColor = Colors.green;
+    } else if (serviceOptions.contains(projectorStatus)) {
+      statusLabel = 'Service @$projectorStatus';
+      statusColor = Colors.blue;
+    } else {
+      statusLabel = 'Occupied @$projectorStatus';
+      statusColor = Colors.red;
+    }
 
     return Card.filled(
       elevation: 8.0,
@@ -475,15 +516,21 @@ class _ProjectorPageState extends State<ProjectorPage> {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text('SN: ${projector['sn']}'),
+                      // Text(
+                      //   notOccupiedStatuses.contains(projector['status'])
+                      //       ? 'Not Occupied @${projector['status']}'
+                      //       : 'Occupied @${projector['status']}',
+                      //   style: TextStyle(
+                      //     color:
+                      //         notOccupiedStatuses.contains(projector['status'])
+                      //             ? Colors.green
+                      //             : Colors.red,
+                      //   ),
+                      // ),
                       Text(
-                        notOccupiedStatuses.contains(projector['status'])
-                            ? 'Not Occupied @${projector['status']}'
-                            : 'Occupied @${projector['status']}',
+                        statusLabel,
                         style: TextStyle(
-                          color:
-                              notOccupiedStatuses.contains(projector['status'])
-                                  ? Colors.green
-                                  : Colors.red,
+                          color: statusColor,
                         ),
                       ),
                       Text(
@@ -603,13 +650,21 @@ class _ProjectorPageState extends State<ProjectorPage> {
             // Categorize projectors
             final occupiedProjectors = projectors
                 .where((projector) =>
-                    !notOccupiedStatuses.contains(projector['status']))
+                    !notOccupiedStatuses.contains(projector['status']) &&
+                    !serviceOptions.contains(projector['status']))
                 .toList();
 
             final notOccupiedProjectors = projectors
                 .where((projector) =>
                     notOccupiedStatuses.contains(projector['status']))
                 .toList();
+
+            final serviceProjectors = projectors
+                .where(
+                    (projector) => serviceOptions.contains(projector['status']))
+                .toList();
+
+            // print(serviceProjectors);
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -645,6 +700,22 @@ class _ProjectorPageState extends State<ProjectorPage> {
                       ),
                     ),
                     ...notOccupiedProjectors.map((projector) {
+                      return _buildProjectorCard(projector);
+                    }).toList(),
+                  ],
+                  if (serviceProjectors.isNotEmpty) ...[
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'On Service',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    ...serviceProjectors.map((projector) {
                       return _buildProjectorCard(projector);
                     }).toList(),
                   ],
@@ -695,11 +766,33 @@ class _ProjectorPageState extends State<ProjectorPage> {
               shape: const CircleBorder(),
               mini: true,
               onPressed: () async {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return const Dialog(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(width: 16),
+                            Text("Generating PDF..."),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
                 final pdfBytes = await generatePdfandShareSupportWeb();
-
                 Uint8List pdfBytesCopy = Uint8List.fromList(pdfBytes);
-
                 final pngBytes = await convertPdfToPng(pdfBytes);
+
+                // Close loading dialog
+                if (mounted) {
+                  Navigator.pop(context);
+                }
 
                 if (mounted) {
                   // ignore: use_build_context_synchronously

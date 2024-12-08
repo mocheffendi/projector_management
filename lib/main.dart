@@ -1,5 +1,5 @@
 // import 'dart:convert'; // To handle image encoding as base64
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
@@ -115,9 +115,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
           systemNavigationBarColor: appBarColor, // navigation bar color
           systemNavigationBarDividerColor: appBarColor,
           statusBarColor: appBarColor, // status bar color
-          systemNavigationBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.dark,
-          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
         ),
         backgroundColor: appBarColor, // AppBar color
         title: Text(

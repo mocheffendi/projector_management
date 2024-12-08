@@ -160,7 +160,7 @@ void showPdfDialog(
                   side: const BorderSide(color: Colors.blueAccent, width: 2),
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
               ),
