@@ -51,20 +51,6 @@ void showPdfDialog(
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // IconButton(
-                  //   onPressed: () {},
-                  //   icon: const Icon(Icons.screen_share_rounded),
-                  // ),
-                  // TextButton(
-                  //   child: const Text('Share Pdf'),
-                  //   onPressed: () {
-                  //     if (kIsWeb) {
-                  //       sharepdfweb(pdfBytes);
-                  //     } else {
-                  //       sharepdf(pdfBytes);
-                  //     }
-                  //   },
-                  // ),
                   ElevatedButton(
                     onPressed: () {
                       sharepdf(pdfBytes);
@@ -105,42 +91,6 @@ void showPdfDialog(
                       ],
                     ),
                   ),
-                  // IconButtonWithLabel(
-                  //     icon: Icons.picture_as_pdf_rounded,
-                  //     label: 'Share Pdf',
-                  //     onPressed: () {
-                  //       sharepdf(pdfBytes);
-                  //     }),
-                  // const SizedBox(
-                  //   width: 10,
-                  // ),
-                  // IconButtonWithLabel(
-                  //     icon: Icons.image_rounded,
-                  //     label: 'Share Image',
-                  //     onPressed: () {
-                  //       shareimage(pngBytes);
-                  //     }),
-                  // TextButton(
-                  //   child: const Text('Share Pdf'),
-                  //   onPressed: () {
-                  //     sharepdf(pdfBytes);
-                  //   },
-                  // ),
-                  // TextButton(
-                  //   child: const Text('Share Image'),
-                  //   onPressed: () {
-                  //     shareimage(pngBytes);
-                  //   },
-                  // ),
-                  // const SizedBox(
-                  //   width: 8,
-                  // ),
-                  // TextButton(
-                  //   child: const Text('Close'),
-                  //   onPressed: () {
-                  //     Navigator.of(context).pop();
-                  //   },
-                  // ),
                 ],
               ),
               const SizedBox(

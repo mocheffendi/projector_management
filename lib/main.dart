@@ -1,13 +1,7 @@
-// import 'dart:convert'; // To handle image encoding as base64
-// import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:projector_management/screen/settingpage.dart';
-// import 'package:file_picker/file_picker.dart';
-// import 'package:intl/intl.dart';
 import 'screen/projectorview.dart';
 import 'screen/screenview.dart';
 import 'screen/soundview.dart';
@@ -25,17 +19,6 @@ void main() async {
     storageBucket: 'myflutter-49607.firebasestorage.app',
   ));
 
-  // const Color appBarColor = Colors.blue;
-
-  // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-  //   systemNavigationBarColor: appBarColor, // navigation bar color
-  //   systemNavigationBarDividerColor: appBarColor,
-  //   statusBarColor: appBarColor, // status bar color
-  //   systemNavigationBarIconBrightness: Brightness.dark,
-  //   statusBarBrightness: Brightness.dark,
-  //   statusBarIconBrightness: Brightness.dark,
-  // ));
-
   runApp(const ProjectorApp());
 }
 
@@ -44,13 +27,6 @@ class ProjectorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   systemNavigationBarColor: Colors.amber, // navigation bar color
-    //   statusBarColor: Colors.white, // status bar color
-    //   statusBarIconBrightness: Brightness.dark, // status bar icon color
-    //   systemNavigationBarIconBrightness:
-    //       Brightness.dark, // color of navigation controls
-    // ));
     return const MaterialApp(
       home: MainAppScreen(),
     );
@@ -91,13 +67,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
   @override
   void initState() {
     super.initState();
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   systemNavigationBarColor: Colors.amber, // navigation bar color
-    //   statusBarColor: Colors.white, // status bar color
-    //   statusBarIconBrightness: Brightness.dark, // status bar icon color
-    //   systemNavigationBarIconBrightness:
-    //       Brightness.dark, // color of navigation controls
-    // ));
   }
 
   @override
@@ -105,13 +74,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-          //   // Status bar color
-          //   statusBarColor: appBarColor,
-          //   systemNavigationBarColor: appBarColor,
-
-          //   // Status bar brightness (optional)
-          //   statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          //   statusBarBrightness: Brightness.light, // For iOS (dark icons)
           systemNavigationBarColor: appBarColor, // navigation bar color
           systemNavigationBarDividerColor: appBarColor,
           statusBarColor: appBarColor, // status bar color
