@@ -84,7 +84,7 @@ void showPdfDialog(
                       shareimage(pngBytes);
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.fromLTRB(30, 16, 30, 16),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                       backgroundColor: Colors.grey.shade200,
                       side: const BorderSide(color: Colors.grey, width: 1),
                       // minimumSize: const Size(double.infinity, 50),
