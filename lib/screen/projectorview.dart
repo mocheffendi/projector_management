@@ -452,22 +452,23 @@ class _ProjectorPageState extends State<ProjectorPage> {
               };
             }).toList();
 
-            // Categorize projectors
+            // Categorize and sort projectors
             final occupiedProjectors = projectors
                 .where((projector) =>
                     !notOccupiedStatuses.contains(projector['status']) &&
                     !serviceOptions.contains(projector['status']))
-                .toList();
-
+                .toList()
+              ..sort((a, b) => a['status'].compareTo(b['status']));
             final notOccupiedProjectors = projectors
                 .where((projector) =>
                     notOccupiedStatuses.contains(projector['status']))
-                .toList();
-
+                .toList()
+              ..sort((a, b) => a['status'].compareTo(b['status']));
             final serviceProjectors = projectors
                 .where(
                     (projector) => serviceOptions.contains(projector['status']))
-                .toList();
+                .toList()
+              ..sort((a, b) => a['status'].compareTo(b['status']));
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
