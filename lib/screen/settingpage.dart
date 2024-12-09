@@ -591,7 +591,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Input and Save Settings")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

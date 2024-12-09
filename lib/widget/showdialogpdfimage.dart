@@ -76,9 +76,6 @@ void showPdfDialog(
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
                   ElevatedButton(
                     onPressed: () {
                       shareimage(pngBytes);
