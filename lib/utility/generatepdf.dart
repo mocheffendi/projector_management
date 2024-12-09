@@ -13,9 +13,20 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 // import 'package:projector_management/utility/pdftoimage.dart';
 
+Map<String, List<String>> categorizedOptions = {
+  "Room": [],
+  "Pantry/Panel": [],
+  "Store": [],
+  "Service Vendor": [],
+};
+
+String? selectedItem = 'DRM'; // Menyimpan item yang dipilih
+
 List<String> roomOptions = [];
+List<String> pantryPanel = [];
+List<String> store = [];
 List<String> notOccupiedStatuses = [];
-List<String> serviceOptions = [];
+List<String> serviceVendor = [];
 
 Future<Uint8List> generatePdfandShareSupportWeb() async {
   final pdf = pw.Document();
@@ -34,26 +45,33 @@ Future<Uint8List> generatePdfandShareSupportWeb() async {
   try {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
         .collection('settings')
-        .doc('config')
+        .doc('config2')
         .get();
 
     if (snapshot.exists) {
-      var data = snapshot.data() as Map<String, dynamic>;
       // setState(() {
-      roomOptions = List<String>.from(data['roomOptions']);
-      notOccupiedStatuses = List<String>.from(data['notOccupiedStatuses']);
-      serviceOptions = List<String>.from(data['serviceOptions']);
+      final data = snapshot.data() as Map<String, dynamic>;
+      categorizedOptions = data.map((key, value) =>
+          MapEntry(key, List<String>.from(value as List<dynamic>)));
       // });
     }
   } catch (e) {
     log('Error fetching settings: $e');
   }
 
+  // log("CategorizedOptions: $categorizedOptions");
+  roomOptions = categorizedOptions["Room"] ?? [];
+  pantryPanel = categorizedOptions["Pantry/Panel"] ?? [];
+  store = categorizedOptions["Store"] ?? [];
+  // log("Room Options: $roomOptions");
+  serviceVendor = categorizedOptions["Service Vendor"] ?? [];
+  notOccupiedStatuses = pantryPanel + store;
+
   // Example statuses
   final occupiedProjectors = projectors
       .where((projector) =>
           !notOccupiedStatuses.contains(projector['status']) &&
-          !serviceOptions.contains(projector['status']))
+          !serviceVendor.contains(projector['status']))
       .toList();
 
   final notOccupiedProjectors = projectors
@@ -61,7 +79,7 @@ Future<Uint8List> generatePdfandShareSupportWeb() async {
       .toList();
 
   final serviceProjectors = projectors
-      .where((projector) => serviceOptions.contains(projector['status']))
+      .where((projector) => serviceVendor.contains(projector['status']))
       .toList();
 
   // Add data to PDF
@@ -147,7 +165,7 @@ pw.Widget _buildProjectorCardpw(Map<String, dynamic> projector) {
     statusLabel = 'Not Occupied @$projectorStatus';
     statusColor = PdfColors.green;
     cardColor = PdfColors.green100;
-  } else if (serviceOptions.contains(projectorStatus)) {
+  } else if (serviceVendor.contains(projectorStatus)) {
     statusLabel = 'Service @$projectorStatus';
     statusColor = PdfColors.blue;
     cardColor = PdfColors.blue100;

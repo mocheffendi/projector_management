@@ -588,7 +588,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(title: const Text("Input and Save Settings")),
@@ -609,8 +609,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   child: Container(
-                    // width: (screenWidth - 48) / 3, // Adjust for spacing
-                    width: 500 / 3,
+                    width: (screenWidth - 48) / 3, // Adjust for spacing
+                    // width: 500 / 3,
                     height: 50,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -650,12 +650,53 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(height: 16),
 
             // ListView for displaying items of the selected category
+            // Expanded(
+            //   child: ListView.builder(
+            //     padding: const EdgeInsets.all(0),
+            //     itemCount: categorizedOptions[selectedCategory]!.length,
+            //     itemBuilder: (context, index) {
+            //       final item = categorizedOptions[selectedCategory]![index];
+            //       return ListTile(
+            //         contentPadding: const EdgeInsets.symmetric(
+            //             vertical: 0,
+            //             horizontal: 16.0), // Mengurangi padding vertikal
+            //         title: Text(item),
+            //         trailing: IconButton(
+            //           icon: const Icon(Icons.delete, color: Colors.red),
+            //           onPressed: () {
+            //             setState(() {
+            //               categorizedOptions[selectedCategory]!.removeAt(index);
+            //             });
+            //           },
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
             Expanded(
               child: ListView.builder(
+                padding: const EdgeInsets.all(0),
                 itemCount: categorizedOptions[selectedCategory]!.length,
                 itemBuilder: (context, index) {
                   final item = categorizedOptions[selectedCategory]![index];
+                  final itemInitials = item.isNotEmpty
+                      ? item.substring(0, 2).toUpperCase()
+                      : ''; // Mengambil 2 huruf pertama item
+
                   return ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 16.0, // Mengurangi padding vertikal
+                    ),
+                    leading: CircleAvatar(
+                      backgroundColor:
+                          Colors.blue, // Warna latar belakang avatar
+                      child: Text(
+                        itemInitials, // Menampilkan dua huruf pertama item
+                        style: const TextStyle(
+                            color: Colors.white), // Menyesuaikan warna teks
+                      ),
+                    ),
                     title: Text(item),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
@@ -670,6 +711,35 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
 
+            // Expanded(
+            //   child: GridView.builder(
+            //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 3, // Jumlah kolom
+            //       crossAxisSpacing: 8.0, // Spasi horizontal antar item
+            //       mainAxisSpacing: 4.0, // Spasi vertikal antar item
+            //     ),
+            //     itemCount: categorizedOptions[selectedCategory]!.length,
+            //     itemBuilder: (context, index) {
+            //       final item = categorizedOptions[selectedCategory]![index];
+            //       return Card(
+            //         margin: const EdgeInsets.all(
+            //             4.0), // Mengurangi margin sekitar item
+            //         child: ListTile(
+            //           title: Text(item),
+            //           trailing: IconButton(
+            //             icon: const Icon(Icons.delete, color: Colors.red),
+            //             onPressed: () {
+            //               setState(() {
+            //                 categorizedOptions[selectedCategory]!
+            //                     .removeAt(index);
+            //               });
+            //             },
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
             // Save settings button
             ElevatedButton(
               onPressed: _saveSettings,
