@@ -21,9 +21,20 @@ class ProjectorPage extends StatefulWidget {
 class _ProjectorPageState extends State<ProjectorPage> {
   final ScrollController _scrollController = ScrollController();
 
+  Map<String, List<String>> categorizedOptions = {
+    "Room": [],
+    "Pantry/Panel": [],
+    "Store": [],
+    "Service Vendor": [],
+  };
+
+  String? selectedItem = 'DRM'; // Menyimpan item yang dipilih
+
   List<String> roomOptions = [];
+  List<String> pantryPanel = [];
+  List<String> store = [];
   List<String> notOccupiedStatuses = [];
-  List<String> serviceOptions = [];
+  List<String> serviceVendor = [];
 
   @override
   void initState() {
@@ -41,20 +52,34 @@ class _ProjectorPageState extends State<ProjectorPage> {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('settings')
-          .doc('config')
+          .doc('config2')
           .get();
 
       if (snapshot.exists) {
-        var data = snapshot.data() as Map<String, dynamic>;
+        // var data = snapshot.data() as Map<String, dynamic>;
+        // setState(() {
+        //   roomOptions = List<String>.from(data['room']);
+        //   notOccupiedStatuses = List<String>.from(data['not Occupied']);
+        //   serviceVendor = List<String>.from(data['Service Vendor']);
+        // });
         setState(() {
-          roomOptions = List<String>.from(data['roomOptions']);
-          notOccupiedStatuses = List<String>.from(data['notOccupiedStatuses']);
-          serviceOptions = List<String>.from(data['serviceOptions']);
+          final data = snapshot.data() as Map<String, dynamic>;
+          categorizedOptions = data.map((key, value) =>
+              MapEntry(key, List<String>.from(value as List<dynamic>)));
         });
       }
     } catch (e) {
       log('Error fetching settings: $e');
     }
+
+    // log("CategorizedOptions: $categorizedOptions");
+    roomOptions = categorizedOptions["Room"] ?? [];
+    pantryPanel = categorizedOptions["Pantry/Panel"] ?? [];
+    store = categorizedOptions["Store"] ?? [];
+    // log("Room Options: $roomOptions");
+    serviceVendor = categorizedOptions["Service Vendor"] ?? [];
+    notOccupiedStatuses = pantryPanel + store;
+    List<String> room = roomOptions + pantryPanel + serviceVendor;
   }
 
   Future<List<Map<String, dynamic>>> fetchProjectors() async {
@@ -305,7 +330,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
       statusLabel = 'Not Occupied @$projectorStatus';
       statusColor = Colors.green;
       cardColor = Colors.green.shade100;
-    } else if (serviceOptions.contains(projectorStatus)) {
+    } else if (serviceVendor.contains(projectorStatus)) {
       statusLabel = 'On Service @$projectorStatus';
       statusColor = Colors.blue;
       cardColor = Colors.blue.shade100;
@@ -365,22 +390,64 @@ class _ProjectorPageState extends State<ProjectorPage> {
                           ),
                           borderRadius: BorderRadius.circular(8),
                         ),
+                        // child: DropdownButton<String>(
+                        //   underline: Container(
+                        //     height: 2,
+                        //     color: Colors.transparent,
+                        //   ),
+                        //   value: projector['status'],
+                        //   onChanged: (newValue) {
+                        //     if (newValue != null) {
+                        //       updateStatus(projector['id'], newValue);
+                        //     }
+                        //   },
+                        //   items: roomOptions.map((room) {
+                        //     return DropdownMenuItem<String>(
+                        //       value: room,
+                        //       child: Text(room),
+                        //     );
+                        //   }).toList(),
+                        // ),
                         child: DropdownButton<String>(
-                          underline: Container(
-                            height: 2,
-                            color: Colors.transparent,
-                          ),
                           value: projector['status'],
+                          // hint: const Text("Select an item"),
+                          underline:
+                              Container(height: 2, color: Colors.transparent),
+                          isExpanded: true,
                           onChanged: (newValue) {
                             if (newValue != null) {
                               updateStatus(projector['id'], newValue);
                             }
                           },
-                          items: roomOptions.map((room) {
-                            return DropdownMenuItem<String>(
-                              value: room,
-                              child: Text(room),
-                            );
+                          items: categorizedOptions.entries.expand((entry) {
+                            final category = entry.key;
+                            final items = entry.value;
+                            // print(
+                            //     "Items: ${items.map((item) => item.toString()).toList()}");
+                            // Header untuk kategori (bukan value)
+                            return [
+                              DropdownMenuItem<String>(
+                                enabled: false,
+                                child: Text(
+                                  category,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              // Daftar item dalam kategori
+                              ...items.map(
+                                (item) => DropdownMenuItem<String>(
+                                  value: item, // Nilai unik untuk item
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(item),
+                                  ),
+                                ),
+                              ),
+                            ];
                           }).toList(),
                         ),
                       )
@@ -456,7 +523,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
             final occupiedProjectors = projectors
                 .where((projector) =>
                     !notOccupiedStatuses.contains(projector['status']) &&
-                    !serviceOptions.contains(projector['status']))
+                    !serviceVendor.contains(projector['status']))
                 .toList()
               ..sort((a, b) => a['status'].compareTo(b['status']));
             final notOccupiedProjectors = projectors
@@ -466,7 +533,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
               ..sort((a, b) => a['status'].compareTo(b['status']));
             final serviceProjectors = projectors
                 .where(
-                    (projector) => serviceOptions.contains(projector['status']))
+                    (projector) => serviceVendor.contains(projector['status']))
                 .toList()
               ..sort((a, b) => a['status'].compareTo(b['status']));
 

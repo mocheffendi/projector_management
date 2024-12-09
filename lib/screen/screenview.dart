@@ -42,7 +42,7 @@ class _ScreenPageState extends State<ScreenPage> {
     'Pantry / Panel Una²',
     'Plataran',
     'VIP Ballroom',
-    'Warehouse LT2',
+    'Store LT2',
     'West Destination',
     'Una Una Exec Lounge',
     'Una Una GD',
