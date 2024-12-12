@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:projector_management/screen/devicepage.dart';
 import 'package:projector_management/screen/settingpage.dart';
 import 'screen/projectorview.dart';
 import 'screen/screenview.dart';
@@ -49,9 +50,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
   // Define the screens for each tab
   final List<Widget> _screens = [
     const ProjectorPage(),
-    const ScreenPage(),
-    const SoundPage(),
-    const AVDevicePage(),
+    const DevicePage(collectionName: 'screens'),
+    const DevicePage(collectionName: 'sounds'),
+    const DevicePage(collectionName: 'avdevices'),
     const SettingsPage()
   ];
 

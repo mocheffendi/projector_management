@@ -20,8 +20,6 @@ Map<String, List<String>> categorizedOptions = {
   "Service Vendor": [],
 };
 
-String? selectedItem = 'DRM'; // Menyimpan item yang dipilih
-
 List<String> roomOptions = [];
 List<String> pantryPanel = [];
 List<String> store = [];
@@ -72,15 +70,18 @@ Future<Uint8List> generatePdfandShareSupportWeb() async {
       .where((projector) =>
           !notOccupiedStatuses.contains(projector['status']) &&
           !serviceVendor.contains(projector['status']))
-      .toList();
+      .toList()
+    ..sort((a, b) => a['status'].compareTo(b['status']));
 
   final notOccupiedProjectors = projectors
       .where((projector) => notOccupiedStatuses.contains(projector['status']))
-      .toList();
+      .toList()
+    ..sort((a, b) => a['status'].compareTo(b['status']));
 
   final serviceProjectors = projectors
       .where((projector) => serviceVendor.contains(projector['status']))
-      .toList();
+      .toList()
+    ..sort((a, b) => a['status'].compareTo(b['status']));
 
   // Add data to PDF
   if (occupiedProjectors.isNotEmpty) {
