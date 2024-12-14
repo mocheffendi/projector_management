@@ -312,6 +312,8 @@ class _DevicePageState extends State<DevicePage> {
             ];
 
             return ListView.builder(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
               itemCount: categorizedDevices.length,
               itemBuilder: (context, index) {
                 return _buildDeviceCard(categorizedDevices[index]);

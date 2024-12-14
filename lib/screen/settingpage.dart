@@ -580,6 +580,39 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  void _showEditDialog(String item, int index) {
+    String updatedItem = item;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edit Item'),
+          content: TextField(
+            controller: TextEditingController(text: item),
+            onChanged: (value) => updatedItem = value,
+            decoration: const InputDecoration(labelText: 'Update Item'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  categorizedOptions[selectedCategory]![index] = updatedItem;
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -685,28 +718,77 @@ class _SettingsPageState extends State<SettingsPage> {
                       ? item.substring(0, 2).toUpperCase()
                       : ''; // Mengambil 2 huruf pertama item
 
-                  return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 0,
-                      horizontal: 16.0, // Mengurangi padding vertikal
+                  return Dismissible(
+                    key: Key(item), // Kunci unik untuk widget Dismissible
+                    background: Container(
+                      color: Colors.blue, // Warna untuk tombol Edit
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: const Icon(Icons.edit, color: Colors.white),
                     ),
-                    leading: CircleAvatar(
-                      backgroundColor:
-                          Colors.blue, // Warna latar belakang avatar
-                      child: Text(
-                        itemInitials, // Menampilkan dua huruf pertama item
-                        style: const TextStyle(
-                            color: Colors.white), // Menyesuaikan warna teks
-                      ),
+                    secondaryBackground: Container(
+                      color: Colors.red, // Warna untuk tombol Remove
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: const Icon(Icons.delete, color: Colors.white),
                     ),
-                    title: Text(item),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () {
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.startToEnd) {
+                        // Tindakan untuk Edit
+                        _showEditDialog(item, index);
+                        return false; // Jangan hapus item saat mengedit
+                      } else if (direction == DismissDirection.endToStart) {
+                        // Tindakan untuk Remove
+                        final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Confirm Delete'),
+                              content: const Text(
+                                  'Are you sure you want to remove this item?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text('Remove'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        return confirm ?? false; // Hapus item jika dikonfirmasi
+                      }
+                      return false;
+                    },
+                    onDismissed: (direction) {
+                      if (direction == DismissDirection.endToStart) {
+                        // Menghapus item dari kategori jika dihapus
                         setState(() {
                           categorizedOptions[selectedCategory]!.removeAt(index);
                         });
-                      },
+                      }
+                    },
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 0,
+                        horizontal: 16.0, // Mengurangi padding vertikal
+                      ),
+                      leading: CircleAvatar(
+                        backgroundColor:
+                            Colors.blue, // Warna latar belakang avatar
+                        child: Text(
+                          itemInitials, // Menampilkan dua huruf pertama item
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ), // Menyesuaikan warna teks
+                        ),
+                      ),
+                      title: Text(item),
                     ),
                   );
                 },
