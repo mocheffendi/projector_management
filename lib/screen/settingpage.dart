@@ -451,7 +451,7 @@
 //   }
 // }
 
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -541,9 +541,11 @@ class _SettingsPageState extends State<SettingsPage> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error fetching settings: $e"),
-      ));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Error fetching settings: $e"),
+        ));
+      }
     }
 
     // log("CategorizedOptions: $categorizedOptions");
@@ -559,13 +561,17 @@ class _SettingsPageState extends State<SettingsPage> {
           .doc('config2')
           .set(categorizedOptions);
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Settings saved successfully"),
-      ));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Settings saved successfully"),
+        ));
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error saving settings: $e"),
-      ));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Error saving settings: $e"),
+        ));
+      }
     }
   }
 
@@ -611,6 +617,26 @@ class _SettingsPageState extends State<SettingsPage> {
         );
       },
     );
+  }
+
+  String getInitials(String text) {
+    // Pisahkan teks menjadi kata-kata berdasarkan spasi
+    final words = text.trim().split(' ');
+
+    if (words.length > 1) {
+      // Jika ada lebih dari satu kata, ambil huruf pertama dari dua kata pertama
+      return words
+          .take(2)
+          .map((word) => word.isNotEmpty ? word[0].toUpperCase() : '')
+          .join();
+    } else {
+      // Jika hanya satu kata, ambil dua huruf pertama
+      final singleWord =
+          words.firstOrNull ?? ''; // Menghindari kesalahan jika string kosong
+      return singleWord.length >= 2
+          ? singleWord.substring(0, 2).toUpperCase()
+          : singleWord.toUpperCase();
+    }
   }
 
   @override
@@ -714,9 +740,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 itemCount: categorizedOptions[selectedCategory]!.length,
                 itemBuilder: (context, index) {
                   final item = categorizedOptions[selectedCategory]![index];
-                  final itemInitials = item.isNotEmpty
-                      ? item.substring(0, 2).toUpperCase()
-                      : ''; // Mengambil 2 huruf pertama item
+                  // final itemInitials = item.isNotEmpty
+                  //     ? item.substring(0, 2).toUpperCase()
+                  //     : ''; // Mengambil 2 huruf pertama item
 
                   return Dismissible(
                     key: Key(item), // Kunci unik untuk widget Dismissible
@@ -782,7 +808,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         backgroundColor:
                             Colors.blue, // Warna latar belakang avatar
                         child: Text(
-                          itemInitials, // Menampilkan dua huruf pertama item
+                          getInitials(
+                              item), // Fungsi untuk mendapatkan inisial dari item
                           style: const TextStyle(
                             color: Colors.white,
                           ), // Menyesuaikan warna teks

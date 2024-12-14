@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,7 +51,7 @@ class _DevicePageState extends State<DevicePage> {
         });
       }
     } catch (e) {
-      log('Error fetching settings: $e');
+      // log('Error fetching settings: $e');
     }
 
     roomOptions = categorizedOptions["Room"] ?? [];
@@ -59,7 +59,7 @@ class _DevicePageState extends State<DevicePage> {
     store = categorizedOptions["Store"] ?? [];
     serviceVendor = categorizedOptions["Service Vendor"] ?? [];
     notOccupiedStatuses = pantryPanel + store;
-    log("notOccupiedStatuses: $notOccupiedStatuses");
+    // log("notOccupiedStatuses: $notOccupiedStatuses");
   }
 
   Future<void> updateStatus(String id, String newStatus) async {
@@ -72,9 +72,9 @@ class _DevicePageState extends State<DevicePage> {
         'status': newStatus,
         'lastUpdated': now,
       });
-      log('Status updated for $id to $newStatus');
+      // log('Status updated for $id to $newStatus');
     } catch (e) {
-      log('Error updating status: $e');
+      // log('Error updating status: $e');
     }
   }
 
@@ -259,6 +259,26 @@ class _DevicePageState extends State<DevicePage> {
     );
   }
 
+  String getInitials(String text) {
+    // Pisahkan teks menjadi kata-kata berdasarkan spasi
+    final words = text.trim().split(' ');
+
+    if (words.length > 1) {
+      // Jika ada lebih dari satu kata, ambil huruf pertama dari dua kata pertama
+      return words
+          .take(2)
+          .map((word) => word.isNotEmpty ? word[0].toUpperCase() : '')
+          .join();
+    } else {
+      // Jika hanya satu kata, ambil dua huruf pertama
+      final singleWord =
+          words.firstOrNull ?? ''; // Menghindari kesalahan jika string kosong
+      return singleWord.length >= 2
+          ? singleWord.substring(0, 2).toUpperCase()
+          : singleWord.toUpperCase();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -394,14 +414,14 @@ class _DevicePageState extends State<DevicePage> {
           .add(deviceData);
       // log('Device added: $deviceData');
     } catch (e) {
-      log('Error adding device: $e');
+      // log('Error adding device: $e');
     }
   }
 
   void _showAddDeviceDialog() {
     final TextEditingController modelController = TextEditingController();
     final TextEditingController typeController = TextEditingController();
-    final TextEditingController statusController = TextEditingController();
+    // final TextEditingController statusController = TextEditingController();
     final TextEditingController snController = TextEditingController();
     String? base64Image;
 
@@ -474,7 +494,7 @@ class _DevicePageState extends State<DevicePage> {
         ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
         : 'Unknown';
 
-    final String deviceType = device['type'] ?? 'Unknown Type';
+    // final String deviceType = device['type'] ?? 'Unknown Type';
     final String deviceSN = device['sn'] ?? 'Unknown SN';
     final String deviceModel = device['model'] ?? 'Unknown Model';
     final String deviceStatus = device['status'] ?? 'Unknown Status';
@@ -615,18 +635,14 @@ class _DevicePageState extends State<DevicePage> {
                                         child: Row(
                                           children: [
                                             CircleAvatar(
-                                              radius: 12,
                                               backgroundColor: Colors
-                                                  .blue, // Icon background color
+                                                  .blue, // Warna latar belakang avatar
                                               child: Text(
-                                                item
-                                                    .substring(0, 2)
-                                                    .toUpperCase(), // Two initial letters
+                                                getInitials(
+                                                    item), // Fungsi untuk mendapatkan inisial dari item
                                                 style: const TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                                ), // Menyesuaikan warna teks
                                               ),
                                             ),
                                             const SizedBox(width: 8),

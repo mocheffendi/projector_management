@@ -79,7 +79,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
     // log("Room Options: $roomOptions");
     serviceVendor = categorizedOptions["Service Vendor"] ?? [];
     notOccupiedStatuses = pantryPanel + store;
-    List<String> room = roomOptions + pantryPanel + serviceVendor;
+    // List<String> room = roomOptions + pantryPanel + serviceVendor;
   }
 
   Future<List<Map<String, dynamic>>> fetchProjectors() async {
@@ -663,10 +663,10 @@ class _ProjectorPageState extends State<ProjectorPage> {
   }
 }
 
-void _showSharedToast(BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('Document shared successfully'),
-    ),
-  );
-}
+// void _showSharedToast(BuildContext context) {
+//   ScaffoldMessenger.of(context).showSnackBar(
+//     const SnackBar(
+//       content: Text('Document shared successfully'),
+//     ),
+//   );
+// }
