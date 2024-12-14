@@ -49,7 +49,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
   // Define the screens for each tab
   final List<Widget> _screens = [
-    const ProjectorPage(),
+    const DevicePage(collectionName: 'projectors'),
     const DevicePage(collectionName: 'screens'),
     const DevicePage(collectionName: 'sounds'),
     const DevicePage(collectionName: 'avdevices'),

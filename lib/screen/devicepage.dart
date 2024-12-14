@@ -1,10 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:projector_management/utility/generatepdfuniversal.dart';
+import 'package:projector_management/utility/pdftoimage.dart';
+import 'package:projector_management/widget/showdialogpdfimage.dart';
 
 Map<String, List<String>> categorizedOptions = {
   "Room": [],
@@ -75,7 +80,7 @@ class _DevicePageState extends State<DevicePage> {
 
   Future<void> _showEditDeviceDialog(Map<String, dynamic> device) async {
     String? updatedModel = device['model'];
-    String? updatedType = device['type'];
+    String? updatedSN = device['sn'];
     String? updatedStatus = device['status'];
     String? base64Image;
 
@@ -93,40 +98,93 @@ class _DevicePageState extends State<DevicePage> {
                 onChanged: (value) => updatedModel = value,
               ),
               TextField(
-                decoration: const InputDecoration(labelText: 'Type'),
-                controller: TextEditingController(text: updatedType),
-                onChanged: (value) => updatedType = value,
+                decoration: const InputDecoration(labelText: 'SN'),
+                controller: TextEditingController(text: updatedSN),
+                onChanged: (value) => updatedSN = value,
               ),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Status'),
-                value: updatedStatus,
-                onChanged: (value) => updatedStatus = value,
-                items: categorizedOptions.entries.expand((entry) {
-                  final category = entry.key;
-                  final items = entry.value;
-                  return [
-                    DropdownMenuItem<String>(
-                      enabled: false,
-                      child: Text(
-                        category,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+              const SizedBox(
+                height: 16,
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: DropdownButton<String>(
+                  value: device['status'],
+                  underline: Container(height: 2, color: Colors.transparent),
+                  isExpanded: true,
+                  onChanged: (newValue) {
+                    if (newValue != null) {
+                      updateStatus(device['id'], newValue);
+                    }
+                  },
+                  items: (categorizedOptions.entries
+                          .toList() // Convert entries to a list for sorting
+                        ..sort((a, b) => a.key.compareTo(
+                            b.key))) // Sort categories alphabetically
+                      .expand((entry) {
+                    final category = entry.key;
+                    final items = entry.value
+                      ..sort((a, b) => a.compareTo(b)); // Sort items descending
+                    return [
+                      DropdownMenuItem<String>(
+                        enabled: false,
+                        child: Text(
+                          category,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    ...items.map(
-                      (item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text(item),
+                      ...items.map(
+                        (item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor:
+                                      Colors.blue, // Icon background color
+                                  child: Text(
+                                    item
+                                        .substring(0, 2)
+                                        .toUpperCase(), // Two initial letters
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  item,
+                                  softWrap:
+                                      true, // Mengizinkan teks membungkus ke baris berikutnya
+                                  overflow: TextOverflow
+                                      .visible, // Overflow tidak dipotong
+                                  maxLines:
+                                      null, // Tidak ada batasan jumlah baris
+                                ), // Display item name
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ];
-                }).toList(),
+                    ];
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
               ),
               ElevatedButton(
                 onPressed: () async {
@@ -150,14 +208,14 @@ class _DevicePageState extends State<DevicePage> {
             TextButton(
               onPressed: () {
                 if (updatedModel != null &&
-                    updatedType != null &&
+                    updatedSN != null &&
                     updatedStatus != null) {
                   FirebaseFirestore.instance
                       .collection(widget.collectionName)
                       .doc(device['id'])
                       .update({
                     'model': updatedModel,
-                    'type': updatedType,
+                    'type': updatedSN,
                     'status': updatedStatus,
                     'image': base64Image,
                     'lastUpdated': Timestamp.now(),
@@ -262,12 +320,67 @@ class _DevicePageState extends State<DevicePage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Tambah perangkat baru
-          _showAddDeviceDialog();
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Stack(
+        fit: StackFit.expand,
+        children: [
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: FloatingActionButton(
+              onPressed: () {
+                // Tambah perangkat baru
+                _showAddDeviceDialog();
+              },
+              child: const Icon(Icons.add),
+            ),
+          ),
+          Positioned(
+            bottom: 65,
+            right: 0,
+            child: FloatingActionButton(
+              shape: const CircleBorder(),
+              mini: true,
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return const Dialog(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(width: 16),
+                            Text("Generating PDF..."),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+
+                final pdfBytes =
+                    await generatePdfandShareSupportWeb(widget.collectionName);
+                Uint8List pdfBytesCopy = Uint8List.fromList(pdfBytes);
+                final pngBytes = await convertPdfToPng(pdfBytes);
+
+                // Close loading dialog
+                if (mounted) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                }
+
+                if (mounted) {
+                  // ignore: use_build_context_synchronously
+                  showPdfDialog(context, pdfBytesCopy, pngBytes);
+                }
+              },
+              child: const Icon(Icons.screen_share_rounded),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -364,20 +477,24 @@ class _DevicePageState extends State<DevicePage> {
     final String deviceModel = device['model'] ?? 'Unknown Model';
     final String deviceStatus = device['status'] ?? 'Unknown Status';
     final String statusLabel;
+    final IconData statusIcon;
     final Color statusColor;
 
     Color cardColor = Colors.grey.shade300;
 
     if (notOccupiedStatuses.contains(deviceStatus)) {
       statusLabel = 'Not Occupied';
+      statusIcon = Icons.shopping_cart_outlined;
       statusColor = Colors.green;
       cardColor = Colors.green.shade100;
     } else if (serviceVendor.contains(deviceStatus)) {
       statusLabel = 'On Service';
+      statusIcon = CupertinoIcons.wrench;
       statusColor = Colors.blue;
       cardColor = Colors.blue.shade100;
     } else {
       statusLabel = 'Occupied';
+      statusIcon = Icons.meeting_room;
       statusColor = Colors.redAccent.shade700;
     }
 
@@ -414,19 +531,27 @@ class _DevicePageState extends State<DevicePage> {
                           ),
                           Text('SN: $deviceSN'),
                           // Text('Type: $deviceType'),
-                          Text(
-                            "$statusLabel: @$deviceStatus",
-                            style: TextStyle(color: statusColor),
+                          Row(
+                            children: [
+                              Icon(statusIcon),
+                              Text(
+                                "$statusLabel: @$deviceStatus",
+                                style: TextStyle(color: statusColor),
+                              ),
+                            ],
                           ),
                           Row(
                             children: [
-                              const Icon(Icons.date_range_rounded),
+                              const Icon(Icons.calendar_month_rounded),
                               Text(
                                 'Last Updated: $formattedDate',
                                 style: const TextStyle(
                                     fontSize: 12, color: Colors.black),
                               ),
                             ],
+                          ),
+                          const SizedBox(
+                            height: 10,
                           ),
                           Container(
                             padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
@@ -491,7 +616,17 @@ class _DevicePageState extends State<DevicePage> {
                                               ),
                                             ),
                                             const SizedBox(width: 8),
-                                            Text(item), // Display item name
+                                            Expanded(
+                                              child: Text(
+                                                item,
+                                                softWrap:
+                                                    true, // Mengizinkan teks membungkus ke baris berikutnya
+                                                overflow: TextOverflow
+                                                    .visible, // Overflow tidak dipotong
+                                                maxLines:
+                                                    null, // Tidak ada batasan jumlah baris
+                                              ),
+                                            ), // Display item name
                                           ],
                                         ),
                                       ),

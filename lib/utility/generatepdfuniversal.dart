@@ -2,41 +2,36 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
+// import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+// import 'package:projector_management/utility/pdftoimage.dart';
 
-Map<String, Map<String, List<String>>> categorizedDevices = {
-  "Projector": {
-    "Room": [],
-    "Pantry/Panel": [],
-    "Store": [],
-    "Service Vendor": [],
-  },
-  "Screen": {
-    "Room": [],
-    "Pantry/Panel": [],
-    "Store": [],
-    "Service Vendor": [],
-  },
-  "Sound": {
-    "Room": [],
-    "Pantry/Panel": [],
-    "Store": [],
-    "Service Vendor": [],
-  },
+Map<String, List<String>> categorizedOptions = {
+  "Room": [],
+  "Pantry/Panel": [],
+  "Store": [],
+  "Service Vendor": [],
 };
 
-Future<Uint8List> generatePdfandShareSupportWeb(String deviceType) async {
+List<String> roomOptions = [];
+List<String> pantryPanel = [];
+List<String> store = [];
+List<String> notOccupiedStatuses = [];
+List<String> serviceVendor = [];
+
+Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
   final pdf = pw.Document();
 
   // Fetch data from Firestore
-  final querySnapshot = await FirebaseFirestore.instance
-      .collection('${deviceType.toLowerCase()}s')
-      .get();
+  final querySnapshot =
+      await FirebaseFirestore.instance.collection(device).get();
   final devices = querySnapshot.docs.map((doc) {
     final data = doc.data();
     return {
@@ -48,109 +43,113 @@ Future<Uint8List> generatePdfandShareSupportWeb(String deviceType) async {
   try {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
         .collection('settings')
-        .doc('${deviceType.toLowerCase()}_config')
+        .doc('config2')
         .get();
 
     if (snapshot.exists) {
+      // setState(() {
       final data = snapshot.data() as Map<String, dynamic>;
-      categorizedDevices[deviceType] = data.map((key, value) =>
+      categorizedOptions = data.map((key, value) =>
           MapEntry(key, List<String>.from(value as List<dynamic>)));
+      // });
     }
   } catch (e) {
-    log('Error fetching settings for $deviceType: $e');
+    log('Error fetching settings: $e');
   }
 
-  final notOccupiedStatuses =
-      List<String>.from(categorizedDevices[deviceType]?["Pantry/Panel"] ?? []) +
-          List<String>.from(categorizedDevices[deviceType]?["Store"] ?? []);
+  // log("CategorizedOptions: $categorizedOptions");
+  roomOptions = categorizedOptions["Room"] ?? [];
+  pantryPanel = categorizedOptions["Pantry/Panel"] ?? [];
+  store = categorizedOptions["Store"] ?? [];
+  // log("Room Options: $roomOptions");
+  serviceVendor = categorizedOptions["Service Vendor"] ?? [];
+  notOccupiedStatuses = pantryPanel + store;
 
-  final serviceVendorStatuses = List<String>.from(
-      categorizedDevices[deviceType]?["Service Vendor"] ?? []);
-
-  final occupiedDevices = devices
+  // Example statuses
+  final occupieddevices = devices
       .where((device) =>
-          !notOccupiedStatuses.contains(device['status'] as String) &&
-          !serviceVendorStatuses.contains(device['status'] as String))
-      .toList();
+          !notOccupiedStatuses.contains(device['status']) &&
+          !serviceVendor.contains(device['status']))
+      .toList()
+    ..sort((a, b) => a['status'].compareTo(b['status']));
 
-  final notOccupiedDevices = devices
-      .where(
-          (device) => notOccupiedStatuses.contains(device['status'] as String))
-      .toList();
+  final notOccupieddevices = devices
+      .where((device) => notOccupiedStatuses.contains(device['status']))
+      .toList()
+    ..sort((a, b) => a['status'].compareTo(b['status']));
 
-  final serviceDevices = devices
-      .where((device) =>
-          serviceVendorStatuses.contains(device['status'] as String))
-      .toList();
+  final servicedevices = devices
+      .where((device) => serviceVendor.contains(device['status']))
+      .toList()
+    ..sort((a, b) => a['status'].compareTo(b['status']));
 
-  pdf.addPage(
-    pw.Page(
-      pageFormat: const PdfPageFormat(400, double.infinity, marginAll: 8.0),
-      build: (pw.Context context) => pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: [
-          _buildSection(
-            'Occupied $deviceType',
-            occupiedDevices.map((e) => Map<String, String>.from(e)).toList(),
-            List<String>.from(notOccupiedStatuses),
-            List<String>.from(serviceVendorStatuses),
-          ),
-          _buildSection(
-            'Not Occupied $deviceType',
-            notOccupiedDevices.map((e) => Map<String, String>.from(e)).toList(),
-            List<String>.from(notOccupiedStatuses),
-            List<String>.from(serviceVendorStatuses),
-          ),
-          _buildSection(
-            'On Service',
-            serviceDevices.map((e) => Map<String, String>.from(e)).toList(),
-            List<String>.from(notOccupiedStatuses),
-            List<String>.from(serviceVendorStatuses),
-          ),
-        ],
+  // Add data to PDF
+  if (occupieddevices.isNotEmpty) {
+    pdf.addPage(
+      pw.Page(
+        pageFormat: const PdfPageFormat(400, double.infinity, marginAll: 8.0),
+        build: (pw.Context context) => pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Text(
+              'Occupied $device',
+              style: pw.TextStyle(
+                fontSize: 18,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.red,
+              ),
+            ),
+            pw.SizedBox(height: 5),
+            ...occupieddevices.map((device) {
+              return pw.Container(
+                margin: const pw.EdgeInsets.only(bottom: 5),
+                child: _builddeviceCardpw(device),
+              );
+            }).toList(),
+            pw.SizedBox(height: 5),
+            pw.Text(
+              'Not Occupied $device',
+              style: pw.TextStyle(
+                fontSize: 18,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.green,
+              ),
+            ),
+            pw.SizedBox(height: 5),
+            ...notOccupieddevices.map((device) {
+              return pw.Container(
+                margin: const pw.EdgeInsets.only(bottom: 5),
+                child: _builddeviceCardpw(device),
+              );
+            }).toList(),
+            pw.SizedBox(height: 5),
+            pw.Text(
+              'On Service',
+              style: pw.TextStyle(
+                fontSize: 18,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.blue,
+              ),
+            ),
+            pw.SizedBox(height: 5),
+            ...servicedevices.map((device) {
+              return pw.Container(
+                margin: const pw.EdgeInsets.only(bottom: 5),
+                child: _builddeviceCardpw(device),
+              );
+            }).toList(),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   final pdfBytes = await pdf.save();
+
   return pdfBytes;
 }
 
-pw.Widget _buildSection(
-  String title,
-  List<Map<String, String>> devices,
-  List<String> notOccupiedStatuses,
-  List<String> serviceVendorStatuses,
-) {
-  return pw.Column(
-    crossAxisAlignment: pw.CrossAxisAlignment.start,
-    children: [
-      pw.Text(
-        title,
-        style: pw.TextStyle(
-          fontSize: 18,
-          fontWeight: pw.FontWeight.bold,
-          color: title.contains('Occupied')
-              ? PdfColors.red
-              : title.contains('Not Occupied')
-                  ? PdfColors.green
-                  : PdfColors.blue,
-        ),
-      ),
-      pw.SizedBox(height: 5),
-      ...devices.map((device) {
-        return pw.Container(
-          margin: const pw.EdgeInsets.only(bottom: 5),
-          child: _buildDeviceCardpw(
-              device, notOccupiedStatuses, serviceVendorStatuses),
-        );
-      }).toList(),
-    ],
-  );
-}
-
-pw.Widget _buildDeviceCardpw(Map<String, dynamic> device,
-    List<String> notOccupiedStatuses, List<String> serviceVendorStatuses) {
+pw.Widget _builddeviceCardpw(Map<String, dynamic> device) {
   final lastUpdated = device['lastUpdated']?.toDate();
   final formattedDate = lastUpdated != null
       ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
@@ -158,6 +157,7 @@ pw.Widget _buildDeviceCardpw(Map<String, dynamic> device,
 
   PdfColor cardColor = PdfColors.grey100;
 
+  // Example device status
   final String deviceStatus = device['status'];
   final String statusLabel;
   final PdfColor statusColor;
@@ -166,7 +166,7 @@ pw.Widget _buildDeviceCardpw(Map<String, dynamic> device,
     statusLabel = 'Not Occupied @$deviceStatus';
     statusColor = PdfColors.green;
     cardColor = PdfColors.green100;
-  } else if (serviceVendorStatuses.contains(deviceStatus)) {
+  } else if (serviceVendor.contains(deviceStatus)) {
     statusLabel = 'Service @$deviceStatus';
     statusColor = PdfColors.blue;
     cardColor = PdfColors.blue100;
@@ -215,10 +215,16 @@ pw.Widget _buildDeviceCardpw(Map<String, dynamic> device,
                   color: statusColor,
                 ),
               ),
-              pw.Text(
-                'Last Updated: $formattedDate',
-                style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey),
-              ),
+              pw.Row(children: [
+                // pw.Image(iconImage, width: 100, height: 100),
+                pw.Text(
+                  'Last Updated: $formattedDate',
+                  style:
+                      const pw.TextStyle(fontSize: 12, color: PdfColors.grey),
+                ),
+              ]),
+              // Dropdowns and popup menus are not supported in PDF widgets.
+              // Replace with static information or remove them.
               pw.Text('Status: ${device['status']}'),
             ],
           ),

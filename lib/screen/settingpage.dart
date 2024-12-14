@@ -590,6 +590,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
+    final sortedCategories = categorizedOptions.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -600,7 +603,8 @@ class _SettingsPageState extends State<SettingsPage> {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: categorizedOptions.keys.map((category) {
+              children: sortedCategories.map((entry) {
+                final category = entry.key;
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -609,7 +613,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                   child: Container(
                     width: (screenWidth - 48) / 3, // Adjust for spacing
-                    // width: 500 / 3,
                     height: 50,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
