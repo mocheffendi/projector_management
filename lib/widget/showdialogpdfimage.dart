@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:projector_management/utility/shareimage.dart';
-import 'package:projector_management/utility/sharepdf.dart';
+import 'package:projector_management/rbin/shareimage.dart';
+import 'package:projector_management/rbin/sharepdf.dart';
 
 void showImageDialog(BuildContext context, Uint8List pngBytes) {
   showDialog(

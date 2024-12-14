@@ -536,6 +536,12 @@ class _DevicePageState extends State<DevicePage> {
                               Icon(statusIcon),
                               Text(
                                 "$statusLabel: @$deviceStatus",
+                                softWrap:
+                                    true, // Mengizinkan teks membungkus ke baris berikutnya
+                                overflow: TextOverflow
+                                    .visible, // Overflow tidak dipotong
+                                maxLines:
+                                    null, // Tidak ada batasan jumlah baris
                                 style: TextStyle(color: statusColor),
                               ),
                             ],
@@ -545,6 +551,12 @@ class _DevicePageState extends State<DevicePage> {
                               const Icon(Icons.calendar_month_rounded),
                               Text(
                                 'Last Updated: $formattedDate',
+                                softWrap:
+                                    true, // Mengizinkan teks membungkus ke baris berikutnya
+                                overflow: TextOverflow
+                                    .visible, // Overflow tidak dipotong
+                                maxLines:
+                                    null, // Tidak ada batasan jumlah baris
                                 style: const TextStyle(
                                     fontSize: 12, color: Colors.black),
                               ),

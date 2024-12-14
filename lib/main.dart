@@ -3,10 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:projector_management/screen/devicepage.dart';
 import 'package:projector_management/screen/settingpage.dart';
-import 'screen/projectorview.dart';
-import 'screen/screenview.dart';
-import 'screen/soundview.dart';
-import 'screen/avdeviceview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
