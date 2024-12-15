@@ -220,6 +220,18 @@ class _DevicePageState extends State<DevicePage> {
                     'image': base64Image,
                     'lastUpdated': Timestamp.now(),
                   });
+
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Colors.blue,
+                      behavior: SnackBarBehavior.floating,
+                      margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                      elevation: 8,
+                      content:
+                          Text("${widget.collectionName} saved successfully"),
+                    ));
+                  }
+
                   Navigator.of(context).pop();
                 }
               },
@@ -392,6 +404,17 @@ class _DevicePageState extends State<DevicePage> {
                 if (mounted) {
                   // ignore: use_build_context_synchronously
                   Navigator.pop(context);
+                }
+
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Colors.blue,
+                    behavior: SnackBarBehavior.floating,
+                    margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                    elevation: 8,
+                    content: Text(
+                        "${widget.collectionName} Pdf Generated successfully"),
+                  ));
                 }
 
                 if (mounted) {

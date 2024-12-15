@@ -563,12 +563,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.blue,
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.fromLTRB(8, 8, 8, 8),
+          elevation: 8,
           content: Text("Settings saved successfully"),
         ));
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+          elevation: 8,
           content: Text("Error saving settings: $e"),
         ));
       }
