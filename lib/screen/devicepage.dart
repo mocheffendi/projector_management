@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 // import 'dart:developer';
 import 'dart:typed_data';
 
@@ -10,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:projector_management/utility/generatepdfuniversal.dart';
 import 'package:projector_management/utility/pdftoimage.dart';
 import 'package:projector_management/widget/showdialogpdfimage.dart';
+import 'package:projector_management/utility/getinitials.dart';
 
 Map<String, List<String>> categorizedOptions = {
   "Room": [],
@@ -36,6 +38,12 @@ class DevicePage extends StatefulWidget {
 }
 
 class _DevicePageState extends State<DevicePage> {
+  @override
+  void initState() {
+    super.initState();
+    _fetchSettings();
+  }
+
   Future<void> _fetchSettings() async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -82,6 +90,8 @@ class _DevicePageState extends State<DevicePage> {
     String? updatedModel = device['model'];
     String? updatedSN = device['sn'];
     String? updatedStatus = device['status'];
+    String? updatedCondition = device['condition'];
+    String? updatedRemark = device['remark'];
     String? base64Image = device['image'];
 
     await showDialog(
@@ -101,6 +111,16 @@ class _DevicePageState extends State<DevicePage> {
                 decoration: const InputDecoration(labelText: 'SN'),
                 controller: TextEditingController(text: updatedSN),
                 onChanged: (value) => updatedSN = value,
+              ),
+              TextField(
+                decoration: const InputDecoration(labelText: 'Condition'),
+                controller: TextEditingController(text: updatedCondition),
+                onChanged: (value) => updatedCondition = value,
+              ),
+              TextField(
+                decoration: const InputDecoration(labelText: 'remark'),
+                controller: TextEditingController(text: updatedRemark),
+                onChanged: (value) => updatedRemark = value,
               ),
               const SizedBox(
                 height: 16,
@@ -209,6 +229,8 @@ class _DevicePageState extends State<DevicePage> {
               onPressed: () {
                 if (updatedModel != null &&
                     updatedSN != null &&
+                    updatedCondition != null &&
+                    updatedRemark != null &&
                     updatedStatus != null) {
                   FirebaseFirestore.instance
                       .collection(widget.collectionName)
@@ -217,6 +239,8 @@ class _DevicePageState extends State<DevicePage> {
                     'model': updatedModel,
                     'sn': updatedSN,
                     'status': updatedStatus,
+                    'condition': updatedCondition,
+                    'remark': updatedRemark,
                     'image': base64Image,
                     'lastUpdated': Timestamp.now(),
                   });
@@ -268,165 +292,6 @@ class _DevicePageState extends State<DevicePage> {
           ],
         );
       },
-    );
-  }
-
-  String getInitials(String text) {
-    // Pisahkan teks menjadi kata-kata berdasarkan spasi
-    final words = text.trim().split(' ');
-
-    if (words.length > 1) {
-      // Jika ada lebih dari satu kata, ambil huruf pertama dari dua kata pertama
-      return words
-          .take(2)
-          .map((word) => word.isNotEmpty ? word[0].toUpperCase() : '')
-          .join();
-    } else {
-      // Jika hanya satu kata, ambil dua huruf pertama
-      final singleWord =
-          words.firstOrNull ?? ''; // Menghindari kesalahan jika string kosong
-      return singleWord.length >= 2
-          ? singleWord.substring(0, 2).toUpperCase()
-          : singleWord.toUpperCase();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchSettings();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection(widget.collectionName)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No devices found.'));
-          } else {
-            final devices = snapshot.data!.docs.map((doc) {
-              final data = doc.data() as Map<String, dynamic>;
-              return {
-                'id': doc.id,
-                ...data,
-              };
-            }).toList();
-
-            // Categorize and sort devices
-            final occupiedDevices = devices
-                .where((device) =>
-                    !notOccupiedStatuses.contains(device['status']) &&
-                    !serviceVendor.contains(device['status']))
-                .toList()
-              ..sort((a, b) => a['status'].compareTo(b['status']));
-            final notOccupiedDevices = devices
-                .where(
-                    (device) => notOccupiedStatuses.contains(device['status']))
-                .toList()
-              ..sort((a, b) => a['status'].compareTo(b['status']));
-            final serviceDevices = devices
-                .where((device) => serviceVendor.contains(device['status']))
-                .toList()
-              ..sort((a, b) => a['status'].compareTo(b['status']));
-
-            final categorizedDevices = [
-              ...occupiedDevices,
-              ...notOccupiedDevices,
-              ...serviceDevices,
-            ];
-
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemCount: categorizedDevices.length,
-              itemBuilder: (context, index) {
-                return _buildDeviceCard(categorizedDevices[index]);
-              },
-            );
-          }
-        },
-      ),
-      floatingActionButton: Stack(
-        fit: StackFit.expand,
-        children: [
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: FloatingActionButton(
-              onPressed: () {
-                // Tambah perangkat baru
-                _showAddDeviceDialog();
-              },
-              child: const Icon(Icons.add),
-            ),
-          ),
-          Positioned(
-            bottom: 65,
-            right: 0,
-            child: FloatingActionButton(
-              shape: const CircleBorder(),
-              mini: true,
-              onPressed: () async {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return const Dialog(
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(width: 16),
-                            Text("Generating PDF..."),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-
-                final pdfBytes =
-                    await generatePdfandShareSupportWeb(widget.collectionName);
-                Uint8List pdfBytesCopy = Uint8List.fromList(pdfBytes);
-                final pngBytes = await convertPdfToPng(pdfBytes);
-
-                // Close loading dialog
-                if (mounted) {
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
-                }
-
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.blue,
-                    behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                    elevation: 8,
-                    content: Text(
-                        "${widget.collectionName} Pdf Generated successfully"),
-                  ));
-                }
-
-                if (mounted) {
-                  // ignore: use_build_context_synchronously
-                  showPdfDialog(context, pdfBytesCopy, pngBytes);
-                }
-              },
-              child: const Icon(Icons.screen_share_rounded),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -521,6 +386,8 @@ class _DevicePageState extends State<DevicePage> {
     final String deviceSN = device['sn'] ?? 'Unknown SN';
     final String deviceModel = device['model'] ?? 'Unknown Model';
     final String deviceStatus = device['status'] ?? 'Unknown Status';
+    final String deviceCondition = device['condition'] ?? 'Unknown Condition';
+    final String deviceRemarks = device['remark'] ?? 'Unknown Remark';
     final String statusLabel;
     final IconData statusIcon;
     final Color statusColor;
@@ -575,6 +442,8 @@ class _DevicePageState extends State<DevicePage> {
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           Text('SN: $deviceSN'),
+                          Text('Condition: $deviceCondition'),
+                          Text(deviceRemarks),
                           // Text('Type: $deviceType'),
                           Row(
                             children: [
@@ -737,6 +606,139 @@ class _DevicePageState extends State<DevicePage> {
               }).toList(),
           ],
         ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection(widget.collectionName)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No devices found.'));
+          } else {
+            final devices = snapshot.data!.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              return {
+                'id': doc.id,
+                ...data,
+              };
+            }).toList();
+
+            // Categorize and sort devices
+            final occupiedDevices = devices
+                .where((device) =>
+                    !notOccupiedStatuses.contains(device['status']) &&
+                    !serviceVendor.contains(device['status']))
+                .toList()
+              ..sort((a, b) => a['status'].compareTo(b['status']));
+            final notOccupiedDevices = devices
+                .where(
+                    (device) => notOccupiedStatuses.contains(device['status']))
+                .toList()
+              ..sort((a, b) => a['status'].compareTo(b['status']));
+            final serviceDevices = devices
+                .where((device) => serviceVendor.contains(device['status']))
+                .toList()
+              ..sort((a, b) => a['status'].compareTo(b['status']));
+
+            final categorizedDevices = [
+              ...occupiedDevices,
+              ...notOccupiedDevices,
+              ...serviceDevices,
+            ];
+
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              itemCount: categorizedDevices.length,
+              itemBuilder: (context, index) {
+                return _buildDeviceCard(categorizedDevices[index]);
+              },
+            );
+          }
+        },
+      ),
+      floatingActionButton: Stack(
+        fit: StackFit.expand,
+        children: [
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: FloatingActionButton(
+              onPressed: () {
+                // Tambah perangkat baru
+                _showAddDeviceDialog();
+              },
+              child: const Icon(Icons.add),
+            ),
+          ),
+          Positioned(
+            bottom: 65,
+            right: 0,
+            child: FloatingActionButton(
+              shape: const CircleBorder(),
+              mini: true,
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return const Dialog(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(width: 16),
+                            Text("Generating PDF..."),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+
+                final pdfBytes =
+                    await generatePdfandShareSupportWeb(widget.collectionName);
+                Uint8List pdfBytesCopy = Uint8List.fromList(pdfBytes);
+                final pngBytes = await convertPdfToPng(pdfBytes);
+
+                // Close loading dialog
+                if (mounted) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                }
+
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Colors.blue,
+                    behavior: SnackBarBehavior.floating,
+                    margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                    elevation: 8,
+                    content: Text(
+                        "${widget.collectionName} Pdf Generated successfully"),
+                  ));
+                }
+
+                if (mounted) {
+                  // ignore: use_build_context_synchronously
+                  showPdfDialog(context, pdfBytesCopy, pngBytes);
+                }
+              },
+              child: const Icon(Icons.screen_share_rounded),
+            ),
+          ),
+        ],
       ),
     );
   }
