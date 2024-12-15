@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 // import 'dart:developer';
 import 'dart:typed_data';
 
@@ -383,11 +382,11 @@ class _DevicePageState extends State<DevicePage> {
         : 'Unknown';
 
     // final String deviceType = device['type'] ?? 'Unknown Type';
-    final String deviceSN = device['sn'] ?? 'Unknown SN';
-    final String deviceModel = device['model'] ?? 'Unknown Model';
-    final String deviceStatus = device['status'] ?? 'Unknown Status';
-    final String deviceCondition = device['condition'] ?? 'Unknown Condition';
-    final String deviceRemarks = device['remark'] ?? 'Unknown Remark';
+    final String deviceSN = device['sn'] ?? '';
+    final String deviceModel = device['model'] ?? '';
+    final String deviceStatus = device['status'] ?? '';
+    final String deviceCondition = device['condition'] ?? '';
+    final String deviceRemarks = device['remark'] ?? '';
     final String statusLabel;
     final IconData statusIcon;
     final Color statusColor;
@@ -720,6 +719,7 @@ class _DevicePageState extends State<DevicePage> {
                 }
 
                 if (mounted) {
+                  // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     backgroundColor: Colors.blue,
                     behavior: SnackBarBehavior.floating,

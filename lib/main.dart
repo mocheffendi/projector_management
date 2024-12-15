@@ -62,11 +62,6 @@
 //   ];
 
 //   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       appBar: AppBar(
@@ -85,41 +80,33 @@
 //         ),
 //       ),
 //       body: _screens[_currentIndex],
-//       bottomNavigationBar: BottomNavigationBar(
-//         type: BottomNavigationBarType.shifting,
-//         currentIndex: _currentIndex,
-//         onTap: (index) {
+//       bottomNavigationBar: NavigationBar(
+//         selectedIndex: _currentIndex,
+//         onDestinationSelected: (int index) {
 //           setState(() {
 //             _currentIndex = index;
 //           });
 //         },
-//         selectedItemColor: Colors.blue,
-//         unselectedItemColor: Colors.grey,
-//         items: const [
-//           BottomNavigationBarItem(
+//         destinations: const [
+//           NavigationDestination(
 //             icon: Icon(Icons.location_searching_rounded),
 //             label: 'Projector',
-//             backgroundColor: Colors.white, // Warna latar belakang saat aktif
 //           ),
-//           BottomNavigationBarItem(
+//           NavigationDestination(
 //             icon: Icon(Icons.video_label),
 //             label: 'Screen',
-//             backgroundColor: Colors.white,
 //           ),
-//           BottomNavigationBarItem(
+//           NavigationDestination(
 //             icon: Icon(Icons.speaker),
 //             label: 'Sound',
-//             backgroundColor: Colors.white,
 //           ),
-//           BottomNavigationBarItem(
+//           NavigationDestination(
 //             icon: Icon(Icons.devices_other),
 //             label: 'AV Device',
-//             backgroundColor: Colors.white,
 //           ),
-//           BottomNavigationBarItem(
+//           NavigationDestination(
 //             icon: Icon(Icons.settings),
 //             label: 'Settings',
-//             backgroundColor: Colors.white,
 //           ),
 //         ],
 //       ),
@@ -167,12 +154,11 @@ class MainAppScreen extends StatefulWidget {
 }
 
 class _MainAppScreenState extends State<MainAppScreen> {
-  // Define the same color for both AppBar and Status Bar
   static const Color appBarColor = Colors.blue;
+  NavigationRailLabelType labelType = NavigationRailLabelType.all;
 
   int _currentIndex = 0;
 
-  // Define the screens for each tab
   final List<Widget> _screens = [
     const DevicePage(collectionName: 'projectors'),
     const DevicePage(collectionName: 'screens'),
@@ -181,7 +167,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
     const SettingsPage()
   ];
 
-  // Define titles for each tab
   final List<String> _titles = [
     'Projector Management | Novotel Samator',
     'Screen Management | Novotel Samator',
@@ -192,17 +177,31 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth < 500) {
+          // Tampilan untuk layar kecil (Mobile)
+          return _buildMobileLayout();
+        } else {
+          // Tampilan untuk layar besar (Desktop)
+          return _buildDesktopLayout();
+        }
+      },
+    );
+  }
+
+  Widget _buildMobileLayout() {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-          systemNavigationBarColor: appBarColor, // navigation bar color
+          systemNavigationBarColor: appBarColor,
           systemNavigationBarDividerColor: appBarColor,
-          statusBarColor: appBarColor, // status bar color
+          statusBarColor: appBarColor,
           systemNavigationBarIconBrightness: Brightness.light,
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light,
         ),
-        backgroundColor: appBarColor, // AppBar color
+        backgroundColor: appBarColor,
         title: Text(
           _titles[_currentIndex],
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -236,6 +235,56 @@ class _MainAppScreenState extends State<MainAppScreen> {
           NavigationDestination(
             icon: Icon(Icons.settings),
             label: 'Settings',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopLayout() {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: appBarColor,
+        title: Text(
+          _titles[_currentIndex],
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Row(
+        children: [
+          NavigationRail(
+            labelType: labelType,
+            selectedIndex: _currentIndex,
+            onDestinationSelected: (int index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            destinations: const [
+              NavigationRailDestination(
+                icon: Icon(Icons.location_searching_rounded),
+                label: Text('Projector'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.video_label),
+                label: Text('Screen'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.speaker),
+                label: Text('Sound'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.devices_other),
+                label: Text('AV Device'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.settings),
+                label: Text('Settings'),
+              ),
+            ],
+          ),
+          Expanded(
+            child: _screens[_currentIndex],
           ),
         ],
       ),
