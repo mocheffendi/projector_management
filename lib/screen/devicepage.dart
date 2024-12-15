@@ -82,7 +82,7 @@ class _DevicePageState extends State<DevicePage> {
     String? updatedModel = device['model'];
     String? updatedSN = device['sn'];
     String? updatedStatus = device['status'];
-    String? base64Image;
+    String? base64Image = device['image'];
 
     await showDialog(
       context: context,
@@ -215,7 +215,7 @@ class _DevicePageState extends State<DevicePage> {
                       .doc(device['id'])
                       .update({
                     'model': updatedModel,
-                    'type': updatedSN,
+                    'sn': updatedSN,
                     'status': updatedStatus,
                     'image': base64Image,
                     'lastUpdated': Timestamp.now(),

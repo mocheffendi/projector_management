@@ -100469,7 +100469,7 @@ n=J.a7(a)
 o.a=n.h(a,"model")
 o.b=n.h(a,"sn")
 p=n.h(a,"status")
-o.c=null
+o.c=n.h(a,"image")
 n=q.c
 n.toString
 s=2
@@ -100636,7 +100636,7 @@ B.cq(r,$.eu(),!0)
 s=B.lY(new B.dB(r))
 q=p.b.a.c
 q=B.n6(s,s.gl5().ig(q)).h9(J.j(p.d,"id"))
-o=B.aLm(B.aB(["model",o.a,"type",o.b,"status",p.c,"image",o.c,"lastUpdated",B.aDw(1000*Date.now())],t.K,t.X))
+o=B.aLm(B.aB(["model",o.a,"sn",o.b,"status",p.c,"image",o.c,"lastUpdated",B.aDw(1000*Date.now())],t.K,t.X))
 o.toString
 q.a.bR(0,o)
 B.e7(p.e,!1).dT()}},
