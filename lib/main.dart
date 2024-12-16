@@ -390,15 +390,19 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              // systemNavigationBarColor: appBarColor,
-              // systemNavigationBarDividerColor: appBarColor,
-              // statusBarColor: appBarColor,
+            systemOverlayStyle: SystemUiOverlayStyle(
+              systemNavigationBarColor:
+                  Theme.of(context).colorScheme.surfaceContainerHighest,
+              systemNavigationBarDividerColor:
+                  Theme.of(context).colorScheme.surfaceContainerHighest,
+              statusBarColor:
+                  Theme.of(context).colorScheme.surfaceContainerHighest,
               systemNavigationBarIconBrightness: Brightness.light,
               statusBarBrightness: Brightness.light,
               statusBarIconBrightness: Brightness.light,
             ),
-            // backgroundColor: appBarColor,
+            backgroundColor:
+                Theme.of(context).colorScheme.surfaceContainerHighest,
             title: Text(
               _titles[_currentIndex],
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
