@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = ThemeData(
+  fontFamily: 'Roboto', // Font default untuk semua teks
   useMaterial3: true,
   brightness: Brightness.light,
   colorScheme: ColorScheme.fromSwatch(
@@ -33,6 +34,8 @@ final ThemeData lightTheme = ThemeData(
     bodyLarge: TextStyle(
         color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
     bodyMedium: TextStyle(color: Colors.black),
+    bodySmall: TextStyle(
+        color: Colors.black87, fontSize: 12, fontWeight: FontWeight.bold),
     labelLarge: TextStyle(color: Colors.black),
   ),
   navigationBarTheme: NavigationBarThemeData(
@@ -47,6 +50,7 @@ final ThemeData lightTheme = ThemeData(
 );
 
 final ThemeData darkTheme = ThemeData(
+  fontFamily: 'Roboto', // Font default untuk semua teks
   useMaterial3: true,
   brightness: Brightness.dark,
   colorScheme: ColorScheme.fromSwatch(
@@ -59,9 +63,9 @@ final ThemeData darkTheme = ThemeData(
     tertiary: Colors.red.shade100,
     surface: const Color.fromARGB(255, 46, 44, 44),
     error: const Color(0xffcf6679),
-    onPrimary: Colors.blue.shade900,
-    onSecondary: Colors.green.shade900,
-    onTertiary: const Color.fromARGB(255, 112, 17, 1),
+    onPrimary: Colors.blue.shade900.withOpacity(0.4),
+    onSecondary: Colors.green.shade900.withOpacity(0.4),
+    onTertiary: const Color.fromARGB(255, 112, 17, 1).withOpacity(0.4),
     onError: Colors.black,
     surfaceContainerHighest: Colors.blueGrey.shade900,
   ),
@@ -80,6 +84,8 @@ final ThemeData darkTheme = ThemeData(
     bodyLarge: TextStyle(
         color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
     bodyMedium: TextStyle(color: Colors.white),
+    bodySmall: TextStyle(
+        color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold),
     labelLarge: TextStyle(color: Colors.white),
   ),
   navigationBarTheme: NavigationBarThemeData(

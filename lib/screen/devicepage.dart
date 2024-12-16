@@ -450,6 +450,7 @@ class _DevicePageState extends State<DevicePage> {
                                     .visible, // Overflow tidak dipotong
                                 maxLines:
                                     null, // Tidak ada batasan jumlah baris
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
