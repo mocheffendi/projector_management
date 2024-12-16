@@ -402,7 +402,7 @@ class _DevicePageState extends State<DevicePage> {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 4, 24, 4),
+                      padding: const EdgeInsets.fromLTRB(32, 4, 32, 4),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -480,82 +480,85 @@ class _DevicePageState extends State<DevicePage> {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(32, 4, 32, 4),
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: DropdownButton<String>(
-                        value: device['status'],
-                        underline:
-                            Container(height: 2, color: Colors.transparent),
-                        isExpanded: true,
-                        onChanged: (newValue) {
-                          if (newValue != null) {
-                            updateStatus(device['id'], newValue);
-                          }
-                        },
-                        items: (categorizedOptions.entries
-                                .toList() // Convert entries to a list for sorting
-                              ..sort((a, b) => a.key.compareTo(
-                                  b.key))) // Sort categories alphabetically
-                            .expand((entry) {
-                          final category = entry.key;
-                          final items = entry.value
-                            ..sort((a, b) =>
-                                a.compareTo(b)); // Sort items descending
-                          return [
-                            DropdownMenuItem<String>(
-                              enabled: false,
-                              child: Text(
-                                category,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            ...items.map(
-                              (item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 16.0),
-                                  child: Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundColor: Colors
-                                            .blue, // Warna latar belakang avatar
-                                        child: Text(
-                                          getInitials(
-                                              item), // Fungsi untuk mendapatkan inisial dari item
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                          ), // Menyesuaikan warna teks
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          item,
-                                          softWrap:
-                                              true, // Mengizinkan teks membungkus ke baris berikutnya
-                                          overflow: TextOverflow
-                                              .visible, // Overflow tidak dipotong
-                                          maxLines:
-                                              null, // Tidak ada batasan jumlah baris
-                                        ),
-                                      ), // Display item name
-                                    ],
+                        child: DropdownButton<String>(
+                          value: device['status'],
+                          underline:
+                              Container(height: 2, color: Colors.transparent),
+                          isExpanded: true,
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              updateStatus(device['id'], newValue);
+                            }
+                          },
+                          items: (categorizedOptions.entries
+                                  .toList() // Convert entries to a list for sorting
+                                ..sort((a, b) => a.key.compareTo(
+                                    b.key))) // Sort categories alphabetically
+                              .expand((entry) {
+                            final category = entry.key;
+                            final items = entry.value
+                              ..sort((a, b) =>
+                                  a.compareTo(b)); // Sort items descending
+                            return [
+                              DropdownMenuItem<String>(
+                                enabled: false,
+                                child: Text(
+                                  category,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ),
-                            ),
-                          ];
-                        }).toList(),
+                              ...items.map(
+                                (item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Row(
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundColor: Colors
+                                              .blue, // Warna latar belakang avatar
+                                          child: Text(
+                                            getInitials(
+                                                item), // Fungsi untuk mendapatkan inisial dari item
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ), // Menyesuaikan warna teks
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            item,
+                                            softWrap:
+                                                true, // Mengizinkan teks membungkus ke baris berikutnya
+                                            overflow: TextOverflow
+                                                .visible, // Overflow tidak dipotong
+                                            maxLines:
+                                                null, // Tidak ada batasan jumlah baris
+                                          ),
+                                        ), // Display item name
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ];
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ],
