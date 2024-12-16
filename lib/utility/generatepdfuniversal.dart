@@ -24,7 +24,7 @@ Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
     };
   }).toList();
 
-  fetchSettings();
+  await fetchSettings();
 
   // Example statuses
   final occupieddevices = devices
@@ -180,12 +180,12 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device) {
                 // pw.Image(iconImage, width: 100, height: 100),
                 pw.Text(
                   'Last Updated: $formattedDate',
-                  style:
-                      const pw.TextStyle(fontSize: 12, color: PdfColors.grey),
+                  style: pw.TextStyle(
+                      fontSize: 12,
+                      color: PdfColors.grey,
+                      fontWeight: pw.FontWeight.bold),
                 ),
               ]),
-              // Dropdowns and popup menus are not supported in PDF widgets.
-              // Replace with static information or remove them.
               pw.Text('Status: ${device['status']}'),
             ],
           ),

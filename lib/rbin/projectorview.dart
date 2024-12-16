@@ -651,7 +651,7 @@ class _ProjectorPageState extends State<ProjectorPage> {
 
                 if (mounted) {
                   // ignore: use_build_context_synchronously
-                  showPdfDialog(context, pdfBytesCopy, pngBytes);
+                  showPdfBottomSheet(context, pdfBytesCopy, pngBytes);
                 }
               },
               child: const Icon(Icons.screen_share_rounded),

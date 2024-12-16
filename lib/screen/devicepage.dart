@@ -399,20 +399,16 @@ class _DevicePageState extends State<DevicePage> {
           children: [
             Stack(
               children: [
-                Row(
+                Column(
                   children: [
-                    device['image'] != null && device['image']!.isNotEmpty
-                        ? Image.memory(
-                            base64Decode(device['image']),
-                            width: 150,
-                            height: 100,
-                            fit: BoxFit.fitWidth,
-                          )
-                        : const Icon(Icons.image_not_supported, size: 100),
-                    const SizedBox(width: 10),
-                    Expanded(
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey)),
+                      padding: const EdgeInsets.all(
+                          4.0), // Padding internal untuk jarak
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             deviceModel,
@@ -420,123 +416,143 @@ class _DevicePageState extends State<DevicePage> {
                             // const TextStyle(
                             //     fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          Text('SN: $deviceSN'),
-                          Text('Condition: $deviceCondition'),
-                          Text(deviceRemarks),
-                          // Text('Type: $deviceType'),
-                          Row(
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        device['image'] != null && device['image']!.isNotEmpty
+                            ? Image.memory(
+                                base64Decode(device['image']),
+                                width: 150,
+                                height: 100,
+                                fit: BoxFit.fitWidth,
+                              )
+                            : const Icon(Icons.image_not_supported, size: 100),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(statusIcon),
-                              Text(
-                                "$statusLabel: @$deviceStatus",
-                                softWrap:
-                                    true, // Mengizinkan teks membungkus ke baris berikutnya
-                                overflow: TextOverflow
-                                    .visible, // Overflow tidak dipotong
-                                maxLines:
-                                    null, // Tidak ada batasan jumlah baris
-                                style: TextStyle(color: statusColor),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.calendar_month_rounded),
-                              Text(
-                                'Last Updated: $formattedDate',
-                                softWrap:
-                                    true, // Mengizinkan teks membungkus ke baris berikutnya
-                                overflow: TextOverflow
-                                    .visible, // Overflow tidak dipotong
-                                maxLines:
-                                    null, // Tidak ada batasan jumlah baris
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: DropdownButton<String>(
-                              value: device['status'],
-                              underline: Container(
-                                  height: 2, color: Colors.transparent),
-                              isExpanded: true,
-                              onChanged: (newValue) {
-                                if (newValue != null) {
-                                  updateStatus(device['id'], newValue);
-                                }
-                              },
-                              items: (categorizedOptions.entries
-                                      .toList() // Convert entries to a list for sorting
-                                    ..sort((a, b) => a.key.compareTo(b
-                                        .key))) // Sort categories alphabetically
-                                  .expand((entry) {
-                                final category = entry.key;
-                                final items = entry.value
-                                  ..sort((a, b) =>
-                                      a.compareTo(b)); // Sort items descending
-                                return [
-                                  DropdownMenuItem<String>(
-                                    enabled: false,
-                                    child: Text(
-                                      category,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                              Text('SN: $deviceSN'),
+                              Text('Condition: $deviceCondition'),
+                              Text(deviceRemarks),
+                              // Text('Type: $deviceType'),
+                              Row(
+                                children: [
+                                  Icon(statusIcon),
+                                  Text(
+                                    "$statusLabel: @$deviceStatus",
+                                    softWrap:
+                                        true, // Mengizinkan teks membungkus ke baris berikutnya
+                                    overflow: TextOverflow
+                                        .visible, // Overflow tidak dipotong
+                                    maxLines:
+                                        null, // Tidak ada batasan jumlah baris
+                                    style: TextStyle(color: statusColor),
                                   ),
-                                  ...items.map(
-                                    (item) => DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        child: Row(
-                                          children: [
-                                            CircleAvatar(
-                                              backgroundColor: Colors
-                                                  .blue, // Warna latar belakang avatar
-                                              child: Text(
-                                                getInitials(
-                                                    item), // Fungsi untuk mendapatkan inisial dari item
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ), // Menyesuaikan warna teks
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Expanded(
-                                              child: Text(
-                                                item,
-                                                softWrap:
-                                                    true, // Mengizinkan teks membungkus ke baris berikutnya
-                                                overflow: TextOverflow
-                                                    .visible, // Overflow tidak dipotong
-                                                maxLines:
-                                                    null, // Tidak ada batasan jumlah baris
-                                              ),
-                                            ), // Display item name
-                                          ],
+                                ],
+                              ),
+
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.calendar_month_rounded),
+                        Text(
+                          'Last Updated: $formattedDate',
+                          softWrap:
+                              true, // Mengizinkan teks membungkus ke baris berikutnya
+                          overflow:
+                              TextOverflow.visible, // Overflow tidak dipotong
+                          maxLines: null, // Tidak ada batasan jumlah baris
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: DropdownButton<String>(
+                        value: device['status'],
+                        underline:
+                            Container(height: 2, color: Colors.transparent),
+                        isExpanded: true,
+                        onChanged: (newValue) {
+                          if (newValue != null) {
+                            updateStatus(device['id'], newValue);
+                          }
+                        },
+                        items: (categorizedOptions.entries
+                                .toList() // Convert entries to a list for sorting
+                              ..sort((a, b) => a.key.compareTo(
+                                  b.key))) // Sort categories alphabetically
+                            .expand((entry) {
+                          final category = entry.key;
+                          final items = entry.value
+                            ..sort((a, b) =>
+                                a.compareTo(b)); // Sort items descending
+                          return [
+                            DropdownMenuItem<String>(
+                              enabled: false,
+                              child: Text(
+                                category,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            ...items.map(
+                              (item) => DropdownMenuItem<String>(
+                                value: item,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 16.0),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors
+                                            .blue, // Warna latar belakang avatar
+                                        child: Text(
+                                          getInitials(
+                                              item), // Fungsi untuk mendapatkan inisial dari item
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ), // Menyesuaikan warna teks
                                         ),
                                       ),
-                                    ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          item,
+                                          softWrap:
+                                              true, // Mengizinkan teks membungkus ke baris berikutnya
+                                          overflow: TextOverflow
+                                              .visible, // Overflow tidak dipotong
+                                          maxLines:
+                                              null, // Tidak ada batasan jumlah baris
+                                        ),
+                                      ), // Display item name
+                                    ],
                                   ),
-                                ];
-                              }).toList(),
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ];
+                        }).toList(),
                       ),
                     ),
                   ],
@@ -711,7 +727,7 @@ class _DevicePageState extends State<DevicePage> {
 
                 if (mounted) {
                   // ignore: use_build_context_synchronously
-                  showPdfDialog(context, pdfBytesCopy, pngBytes);
+                  showPdfBottomSheet(context, pdfBytesCopy, pngBytes);
                 }
               },
               child: const Icon(Icons.screen_share_rounded),
