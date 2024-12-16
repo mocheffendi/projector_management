@@ -51,6 +51,7 @@ dependencies:
   tuple: ^2.0.2
   pdf_render: ^1.4.12
   html: ^0.15.5
+  flutter_riverpod: ^2.6.1
 
 dev_dependencies:
   flutter_test:

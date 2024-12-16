@@ -112,6 +112,7 @@ class _DevicePageState extends State<DevicePage> {
                 onChanged: (value) => updatedSN = value,
               ),
               TextField(
+                style: const TextStyle(),
                 decoration: const InputDecoration(labelText: 'Condition'),
                 controller: TextEditingController(text: updatedCondition),
                 onChanged: (value) => updatedCondition = value,
@@ -393,20 +394,38 @@ class _DevicePageState extends State<DevicePage> {
 
     Color cardColor = Colors.grey.shade300;
 
+    // if (notOccupiedStatuses.contains(deviceStatus)) {
+    //   statusLabel = 'Not Occupied';
+    //   statusIcon = Icons.shopping_cart_outlined;
+    //   statusColor = Colors.green;
+    //   cardColor = Colors.green.shade100;
+    // } else if (serviceVendor.contains(deviceStatus)) {
+    //   statusLabel = 'On Service';
+    //   statusIcon = CupertinoIcons.wrench;
+    //   statusColor = Colors.blue;
+    //   cardColor = Colors.blue.shade100;
+    // } else {
+    //   statusLabel = 'Occupied';
+    //   statusIcon = Icons.meeting_room;
+    //   statusColor = Colors.redAccent.shade700;
+    // }
+
     if (notOccupiedStatuses.contains(deviceStatus)) {
       statusLabel = 'Not Occupied';
       statusIcon = Icons.shopping_cart_outlined;
-      statusColor = Colors.green;
-      cardColor = Colors.green.shade100;
+      statusColor =
+          Theme.of(context).colorScheme.secondary; // Warna sekunder tema
+      cardColor = Theme.of(context).colorScheme.onSecondary;
     } else if (serviceVendor.contains(deviceStatus)) {
       statusLabel = 'On Service';
       statusIcon = CupertinoIcons.wrench;
-      statusColor = Colors.blue;
-      cardColor = Colors.blue.shade100;
+      statusColor = Theme.of(context).colorScheme.primary; // Warna primer tema
+      cardColor = Theme.of(context).colorScheme.onPrimary;
     } else {
       statusLabel = 'Occupied';
       statusIcon = Icons.meeting_room;
-      statusColor = Colors.redAccent.shade700;
+      statusColor = Theme.of(context).colorScheme.tertiary; // Warna error tema
+      cardColor = Theme.of(context).colorScheme.onTertiary;
     }
 
     return Card(
@@ -437,8 +456,9 @@ class _DevicePageState extends State<DevicePage> {
                         children: [
                           Text(
                             deviceModel,
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            // const TextStyle(
+                            //     fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           Text('SN: $deviceSN'),
                           Text('Condition: $deviceCondition'),
@@ -470,8 +490,6 @@ class _DevicePageState extends State<DevicePage> {
                                     .visible, // Overflow tidak dipotong
                                 maxLines:
                                     null, // Tidak ada batasan jumlah baris
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.black),
                               ),
                             ],
                           ),
