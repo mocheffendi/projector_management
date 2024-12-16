@@ -841,9 +841,10 @@ class _SettingsPageState extends State<SettingsPage> {
             //   ),
             // ),
             // Save settings button
-            ElevatedButton(
+            ElevatedButton.icon(
+              icon: const Icon(Icons.cloud_upload_outlined),
               onPressed: _saveSettings,
-              child: const Text("Save Settings"),
+              label: const Text("Save Settings"),
             ),
           ],
         ),
