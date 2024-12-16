@@ -401,22 +401,25 @@ class _DevicePageState extends State<DevicePage> {
               children: [
                 Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey)),
-                      padding: const EdgeInsets.all(
-                          4.0), // Padding internal untuk jarak
-                      child: Column(
-                        children: [
-                          Text(
-                            deviceModel,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            // const TextStyle(
-                            //     fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 4, 24, 4),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey)),
+                        padding: const EdgeInsets.all(
+                            4.0), // Padding internal untuk jarak
+                        child: Column(
+                          children: [
+                            Text(
+                              deviceModel,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                              // const TextStyle(
+                              //     fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Row(
