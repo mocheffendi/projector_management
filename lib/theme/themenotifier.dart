@@ -15,3 +15,19 @@ final themeNotifierProvider =
     StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {
   return ThemeNotifier();
 });
+
+// StateNotifier untuk mengelola categorizedOptions
+class CategorizedOptionsNotifier
+    extends StateNotifier<Map<String, List<String>>> {
+  CategorizedOptionsNotifier() : super({});
+
+  void updateOptions(Map<String, dynamic> data) {
+    state = data.map((key, value) =>
+        MapEntry(key, List<String>.from(value as List<dynamic>)));
+  }
+}
+
+final categorizedOptionsProvider = StateNotifierProvider<
+    CategorizedOptionsNotifier, Map<String, List<String>>>(
+  (ref) => CategorizedOptionsNotifier(),
+);

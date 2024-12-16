@@ -10,7 +10,7 @@ final ThemeData lightTheme = ThemeData(
     primary: const Color(0xff2196f3), // Warna utama
     secondary: Colors.green,
     tertiary: Colors.red,
-    surface: const Color.fromARGB(255, 199, 192, 192),
+    surface: const Color.fromARGB(255, 238, 254, 255),
     error: const Color(0xffd32f2f),
     onPrimary: Colors.blue.shade100,
     onSecondary: Colors.green.shade100,
@@ -47,11 +47,11 @@ final ThemeData darkTheme = ThemeData(
     primary: const Color(0xff2196f3), // Warna utama
     secondary: const Color(0xffbbdefb),
     tertiary: Colors.red.shade100,
-    surface: const Color(0xff121212),
+    surface: const Color.fromARGB(255, 46, 44, 44),
     error: const Color(0xffcf6679),
     onPrimary: Colors.blue.shade900,
     onSecondary: Colors.green.shade900,
-    onTertiary: Colors.brown.shade900,
+    onTertiary: const Color.fromARGB(255, 112, 17, 1),
     onError: Colors.black,
   ),
   appBarTheme: AppBarTheme(

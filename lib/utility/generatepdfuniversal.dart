@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,19 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-
-Map<String, List<String>> categorizedOptions = {
-  "Room": [],
-  "Pantry/Panel": [],
-  "Store": [],
-  "Service Vendor": [],
-};
-
-List<String> roomOptions = [];
-List<String> pantryPanel = [];
-List<String> store = [];
-List<String> notOccupiedStatuses = [];
-List<String> serviceVendor = [];
+import 'package:projector_management/utility/fetchsetting.dart';
 
 Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
   final pdf = pw.Document();
@@ -36,30 +24,7 @@ Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
     };
   }).toList();
 
-  try {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('settings')
-        .doc('config2')
-        .get();
-
-    if (snapshot.exists) {
-      // setState(() {
-      final data = snapshot.data() as Map<String, dynamic>;
-      categorizedOptions = data.map((key, value) =>
-          MapEntry(key, List<String>.from(value as List<dynamic>)));
-      // });
-    }
-  } catch (e) {
-    log('Error fetching settings: $e');
-  }
-
-  // log("CategorizedOptions: $categorizedOptions");
-  roomOptions = categorizedOptions["Room"] ?? [];
-  pantryPanel = categorizedOptions["Pantry/Panel"] ?? [];
-  store = categorizedOptions["Store"] ?? [];
-  // log("Room Options: $roomOptions");
-  serviceVendor = categorizedOptions["Service Vendor"] ?? [];
-  notOccupiedStatuses = pantryPanel + store;
+  fetchSettings();
 
   // Example statuses
   final occupieddevices = devices
