@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 // import 'dart:developer';
-import 'dart:typed_data';
+// import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -12,6 +13,25 @@ import 'package:projector_management/utility/fetchsetting.dart';
 
 Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
   final pdf = pw.Document();
+
+  final Uint8List info =
+      (await rootBundle.load('assets/png/info.png')).buffer.asUint8List();
+  final Uint8List store =
+      (await rootBundle.load('assets/png/store.png')).buffer.asUint8List();
+  final Uint8List hotel =
+      (await rootBundle.load('assets/png/hotel.png')).buffer.asUint8List();
+  final Uint8List service =
+      (await rootBundle.load('assets/png/screwdriver_wrench.png'))
+          .buffer
+          .asUint8List();
+  final Uint8List time =
+      (await rootBundle.load('assets/png/stopwatch.png')).buffer.asUint8List();
+  final Uint8List condition =
+      (await rootBundle.load('assets/png/wave_square.png'))
+          .buffer
+          .asUint8List();
+  final Uint8List calendar =
+      (await rootBundle.load('assets/png/calendar.png')).buffer.asUint8List();
 
   // Fetch data from Firestore
   final querySnapshot =
@@ -45,7 +65,9 @@ Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
     ..sort((a, b) => a['status'].compareTo(b['status']));
 
   // Add data to PDF
-  if (occupieddevices.isNotEmpty) {
+  if ((occupieddevices.isNotEmpty) ||
+      (notOccupieddevices.isNotEmpty) ||
+      (servicedevices.isNotEmpty)) {
     pdf.addPage(
       pw.Page(
         pageFormat: const PdfPageFormat(400, double.infinity, marginAll: 8.0),
@@ -64,7 +86,8 @@ Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
             ...occupieddevices.map((device) {
               return pw.Container(
                 margin: const pw.EdgeInsets.only(bottom: 5),
-                child: _builddeviceCardpw(device),
+                child: _builddeviceCardpw(
+                    device, info, condition, time, hotel, calendar),
               );
             }).toList(),
             pw.SizedBox(height: 5),
@@ -80,7 +103,8 @@ Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
             ...notOccupieddevices.map((device) {
               return pw.Container(
                 margin: const pw.EdgeInsets.only(bottom: 5),
-                child: _builddeviceCardpw(device),
+                child: _builddeviceCardpw(
+                    device, info, condition, time, store, calendar),
               );
             }).toList(),
             pw.SizedBox(height: 5),
@@ -96,7 +120,8 @@ Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
             ...servicedevices.map((device) {
               return pw.Container(
                 margin: const pw.EdgeInsets.only(bottom: 5),
-                child: _builddeviceCardpw(device),
+                child: _builddeviceCardpw(
+                    device, info, condition, time, service, calendar),
               );
             }).toList(),
           ],
@@ -110,7 +135,8 @@ Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
   return pdfBytes;
 }
 
-pw.Widget _builddeviceCardpw(Map<String, dynamic> device) {
+pw.Widget _builddeviceCardpw(Map<String, dynamic> device, Uint8List info,
+    Uint8List condition, Uint8List time, Uint8List status, Uint8List calendar) {
   final lastUpdated = device['lastUpdated']?.toDate();
   final formattedDate = lastUpdated != null
       ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
@@ -118,6 +144,11 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device) {
 
   PdfColor cardColor = PdfColors.grey100;
 
+  final imageInfo = pw.MemoryImage(info); // Convert to MemoryImage
+  final imageCondition = pw.MemoryImage(condition);
+  final imageTime = pw.MemoryImage(time);
+  final imageStatus = pw.MemoryImage(status);
+  final imageCalendar = pw.MemoryImage(calendar);
   // Example device status
   final String deviceStatus = device['status'];
   final String statusLabel;
@@ -169,15 +200,55 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device) {
                   fontWeight: pw.FontWeight.bold,
                 ),
               ),
-              pw.Text('SN: ${device['sn']}'),
-              pw.Text(
-                statusLabel,
-                style: pw.TextStyle(
-                  color: statusColor,
+              pw.Row(children: [
+                pw.Image(
+                  imageInfo,
+                  width: 12,
+                  height: 12,
+                  fit: pw.BoxFit.contain,
                 ),
-              ),
+                pw.Text('SN: ${device['sn']}'),
+              ]),
+              pw.Row(children: [
+                pw.Image(
+                  imageCondition,
+                  width: 12,
+                  height: 12,
+                  fit: pw.BoxFit.contain,
+                ),
+                pw.Text('Condition: ${device['condition']}'),
+              ]),
+              pw.Row(children: [
+                pw.Image(
+                  imageTime,
+                  width: 12,
+                  height: 12,
+                  fit: pw.BoxFit.contain,
+                ),
+                pw.Text('${device['remark']}'),
+              ]),
+              pw.Row(children: [
+                pw.Image(
+                  imageStatus,
+                  width: 12,
+                  height: 12,
+                  fit: pw.BoxFit.contain,
+                ),
+                pw.Text(
+                  statusLabel,
+                  style: pw.TextStyle(
+                    color: statusColor,
+                  ),
+                ),
+              ]),
               pw.Row(children: [
                 // pw.Image(iconImage, width: 100, height: 100),
+                pw.Image(
+                  imageCalendar,
+                  width: 12,
+                  height: 12,
+                  fit: pw.BoxFit.contain,
+                ),
                 pw.Text(
                   'Last Updated: $formattedDate',
                   style: pw.TextStyle(
@@ -186,7 +257,15 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device) {
                       fontWeight: pw.FontWeight.bold),
                 ),
               ]),
-              pw.Text('Status: ${device['status']}'),
+              pw.Row(children: [
+                pw.Image(
+                  imageStatus,
+                  width: 12,
+                  height: 12,
+                  fit: pw.BoxFit.contain,
+                ),
+                pw.Text('Status: ${device['status']}'),
+              ])
             ],
           ),
         ),

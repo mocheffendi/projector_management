@@ -81,6 +81,13 @@ flutter:
     - assets/epson_2155w.png
     - assets/panasonic_ex800.png
     - assets/sony_ch370.png
+    - assets/png/info.png
+    - assets/png/store.png
+    - assets/png/hotel.png
+    - assets/png/screwdriver_wrench.png
+    - assets/png/stopwatch.png
+    - assets/png/wave_square.png
+    - assets/png/calendar.png
 
   fonts:
     - family: Roboto
