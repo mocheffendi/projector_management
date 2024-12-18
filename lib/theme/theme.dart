@@ -61,12 +61,12 @@ final ThemeData darkTheme = ThemeData(
     accentColor: const Color(0xff2196f3),
   ).copyWith(
     primary: const Color(0xff2196f3), // Warna utama
-    secondary: const Color(0xffbbdefb),
+    secondary: Colors.green,
     tertiary: Colors.red.shade100,
     surface: const Color.fromARGB(255, 46, 44, 44),
     error: const Color(0xffcf6679),
-    onPrimary: Colors.blue.shade900.withOpacity(0.4),
-    onSecondary: Colors.green.shade900.withOpacity(0.4),
+    onPrimary: Colors.blue.shade900,
+    onSecondary: Colors.green.shade900,
     onTertiary: const Color.fromARGB(255, 112, 17, 1).withOpacity(0.4),
     onError: Colors.black,
     surfaceContainerHighest: Colors.blueGrey.shade900,
