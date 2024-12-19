@@ -980,7 +980,10 @@ class _DevicePageState extends State<DevicePage> {
                     radius: 32,
                     child: Text(
                       getInitials(deviceStatus),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   label: Text(
