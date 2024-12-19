@@ -98,6 +98,10 @@ class _DevicePageState extends State<DevicePage> {
                   underline: Container(height: 2, color: Colors.transparent),
                   isExpanded: true,
                   onChanged: (newValue) {
+                    setState(() {
+                      device['status'] = newValue;
+                    });
+                    // updateStatus(device['id'], newValue);
                     if (newValue != null) {
                       updateStatus(device['id'], newValue);
                     }
@@ -971,6 +975,14 @@ class _DevicePageState extends State<DevicePage> {
                       style: Theme.of(context).textTheme.bodyLarge),
                 ),
                 Chip(
+                  avatar: CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    radius: 32,
+                    child: Text(
+                      getInitials(deviceStatus),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
                   label: Text(
                     deviceStatus,
                     style: Theme.of(context).textTheme.bodyMedium,

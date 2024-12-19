@@ -8,14 +8,14 @@ final ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.blue,
     accentColor: const Color(0xff2196f3),
   ).copyWith(
-    primary: const Color(0xff2196f3), // Warna utama
-    secondary: Colors.green,
-    tertiary: Colors.red,
+    primary: const Color(0xff2196f3), // on Service StatusColor
+    secondary: Colors.green, // not Occupied statusColor
+    tertiary: Colors.red, // Occupied statusColor
     surface: const Color.fromARGB(255, 238, 254, 255),
     error: const Color(0xffd32f2f),
-    onPrimary: Colors.blue.shade100,
-    onSecondary: Colors.green.shade100,
-    onTertiary: Colors.brown.shade100,
+    onPrimary: Colors.blue.shade100, // on Service CardColor
+    onSecondary: Colors.green.shade100, // not Occupied cardColor
+    onTertiary: Colors.red.shade100, // Occupied CardColor
     onError: Colors.red,
     surfaceContainerHighest: Colors.blue.shade700,
     tertiaryFixed: Colors.grey.shade300,
@@ -62,12 +62,12 @@ final ThemeData darkTheme = ThemeData(
   ).copyWith(
     primary: const Color(0xff2196f3), // Warna utama
     secondary: Colors.green,
-    tertiary: Colors.red.shade100,
+    tertiary: Colors.red,
     surface: const Color.fromARGB(255, 46, 44, 44),
     error: const Color(0xffcf6679),
     onPrimary: Colors.blue.shade900,
     onSecondary: Colors.green.shade900,
-    onTertiary: const Color.fromARGB(255, 112, 17, 1).withOpacity(0.4),
+    onTertiary: Colors.red.shade900,
     onError: Colors.black,
     surfaceContainerHighest: Colors.blueGrey.shade900,
     tertiaryFixed: Colors.grey.shade900,
@@ -87,7 +87,7 @@ final ThemeData darkTheme = ThemeData(
   textTheme: const TextTheme(
     bodyLarge: TextStyle(
         color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-    bodyMedium: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    bodyMedium: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     bodySmall: TextStyle(
         color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
     labelLarge: TextStyle(color: Colors.white),
