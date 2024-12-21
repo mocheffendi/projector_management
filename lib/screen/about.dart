@@ -8,7 +8,7 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('About'),
-        backgroundColor: Colors.indigoAccent,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -32,7 +32,7 @@ class AboutPage extends StatelessWidget {
               ),
               child: const Center(
                 child: CircleAvatar(
-                  radius: 80,
+                  radius: 120,
                   backgroundImage: AssetImage('assets/images/eng.jpg'),
                 ),
               ),
@@ -42,13 +42,13 @@ class AboutPage extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     'AV Product Inventory and Management',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.indigoAccent,
                     ),
@@ -60,23 +60,23 @@ class AboutPage extends StatelessWidget {
                         Text(
                           'Version: 0.1.45',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 11,
                             color: Colors.grey[800],
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 2),
                         Text(
                           'Developed by: Mochammad Effendi',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 11,
                             color: Colors.grey[800],
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 2),
                         Text(
                           'Position: Engineering Attendance',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 11,
                             color: Colors.grey[800],
                           ),
                         ),
@@ -87,7 +87,7 @@ class AboutPage extends StatelessWidget {
                   const Text(
                     'About the Software',
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.indigo,
                     ),
@@ -95,8 +95,9 @@ class AboutPage extends StatelessWidget {
                   const SizedBox(height: 10),
                   const Text(
                     'This software helps you manage and track audiovisual product inventory with ease and efficiency. It is designed to simplify your workflow and enhance productivity.',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 11,
                       color: Colors.black87,
                       height: 1.5,
                     ),

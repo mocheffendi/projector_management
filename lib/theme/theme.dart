@@ -89,7 +89,7 @@ final ThemeData darkTheme = ThemeData(
         color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
     bodyMedium: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     bodySmall: TextStyle(
-        color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+        color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
     labelLarge: TextStyle(color: Colors.white),
   ),
   navigationBarTheme: NavigationBarThemeData(

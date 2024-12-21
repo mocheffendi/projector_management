@@ -1,5 +1,5 @@
 import 'dart:convert';
-// import 'dart:developer';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,6 +39,7 @@ class _DevicePageState extends State<DevicePage> {
         'status': newStatus,
         'lastUpdated': now,
       });
+
       // log('Status updated for $id to $newStatus');
     } catch (e) {
       // log('Error updating status: $e');
@@ -85,88 +86,91 @@ class _DevicePageState extends State<DevicePage> {
               const SizedBox(
                 height: 16,
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: DropdownButton<String>(
-                  value: device['status'],
-                  underline: Container(height: 2, color: Colors.transparent),
-                  isExpanded: true,
-                  onChanged: (newValue) {
-                    setState(() {
-                      device['status'] = newValue;
-                    });
-                    // updateStatus(device['id'], newValue);
-                    if (newValue != null) {
-                      updateStatus(device['id'], newValue);
-                    }
-                  },
-                  items: (categorizedOptions.entries
-                          .toList() // Convert entries to a list for sorting
-                        ..sort((a, b) => a.key.compareTo(
-                            b.key))) // Sort categories alphabetically
-                      .expand((entry) {
-                    final category = entry.key;
-                    final items = entry.value
-                      ..sort((a, b) => a.compareTo(b)); // Sort items descending
-                    return [
-                      DropdownMenuItem<String>(
-                        enabled: false,
-                        child: Text(
-                          category,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ...items.map(
-                        (item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 12,
-                                  backgroundColor:
-                                      Colors.blue, // Icon background color
-                                  child: Text(
-                                    item
-                                        .substring(0, 2)
-                                        .toUpperCase(), // Two initial letters
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  item,
-                                  softWrap:
-                                      true, // Mengizinkan teks membungkus ke baris berikutnya
-                                  overflow: TextOverflow
-                                      .visible, // Overflow tidak dipotong
-                                  maxLines:
-                                      null, // Tidak ada batasan jumlah baris
-                                ), // Display item name
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ];
-                  }).toList(),
-                ),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+              //   decoration: BoxDecoration(
+              //     border: Border.all(
+              //       color: Colors.grey,
+              //     ),
+              //     borderRadius: BorderRadius.circular(8),
+              //   ),
+              //   child: DropdownButton<String>(
+              //     value: device['status'],
+              //     underline: Container(height: 2, color: Colors.transparent),
+              //     isExpanded: true,
+              //     onChanged: (newValue) {
+              //       device['status'] = newValue;
+              //       log('Selected value: ${device['status']}');
+              //       setState(() {
+              //         if (newValue != null) {
+              //           updateStatus(device['id'], newValue);
+              //         }
+              //       });
+
+              //       Navigator.pop(context);
+              //       // updateStatus(device['id'], newValue);
+              //     },
+              //     items: (categorizedOptions.entries
+              //             .toList() // Convert entries to a list for sorting
+              //           ..sort((a, b) => a.key.compareTo(
+              //               b.key))) // Sort categories alphabetically
+              //         .expand((entry) {
+              //       final category = entry.key;
+              //       final items = entry.value
+              //         ..sort((a, b) => a.compareTo(b)); // Sort items descending
+              //       return [
+              //         DropdownMenuItem<String>(
+              //           enabled: false,
+              //           child: Text(
+              //             category,
+              //             style: const TextStyle(
+              //               fontSize: 16,
+              //               fontWeight: FontWeight.bold,
+              //               color: Colors.black,
+              //             ),
+              //           ),
+              //         ),
+              //         ...items.map(
+              //           (item) => DropdownMenuItem<String>(
+              //             value: item,
+              //             child: Padding(
+              //               padding: const EdgeInsets.only(left: 16.0),
+              //               child: Row(
+              //                 children: [
+              //                   CircleAvatar(
+              //                     radius: 12,
+              //                     backgroundColor:
+              //                         Colors.blue, // Icon background color
+              //                     child: Text(
+              //                       item
+              //                           .substring(0, 2)
+              //                           .toUpperCase(), // Two initial letters
+              //                       style: const TextStyle(
+              //                         color: Colors.white,
+              //                         fontSize: 12,
+              //                         fontWeight: FontWeight.bold,
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   const SizedBox(width: 8),
+              //                   Text(
+              //                     item,
+              //                     softWrap:
+              //                         true, // Mengizinkan teks membungkus ke baris berikutnya
+              //                     overflow: TextOverflow
+              //                         .visible, // Overflow tidak dipotong
+              //                     maxLines:
+              //                         null, // Tidak ada batasan jumlah baris
+              //                   ), // Display item name
+              //                 ],
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ];
+              //     }).toList(),
+              //   ),
+              // ),
               const SizedBox(
                 height: 16,
               ),
@@ -894,6 +898,105 @@ class _DevicePageState extends State<DevicePage> {
     );
   }
 
+  Future<void> _showChooseRoom(Map<String, dynamic> device) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Choose Location'),
+          content: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: DropdownButton<String>(
+                value: device['status'],
+                underline: Container(height: 2, color: Colors.transparent),
+                isExpanded: true,
+                onChanged: (newValue) {
+                  device['status'] = newValue;
+
+                  setState(() {
+                    if (newValue != null) {
+                      updateStatus(device['id'], newValue);
+                    }
+                  });
+
+                  Navigator.pop(context);
+                  // updateStatus(device['id'], newValue);
+                },
+                items: (categorizedOptions.entries
+                        .toList() // Convert entries to a list for sorting
+                      ..sort((a, b) => a.key
+                          .compareTo(b.key))) // Sort categories alphabetically
+                    .expand((entry) {
+                  final category = entry.key;
+                  final items = entry.value
+                    ..sort((a, b) => a.compareTo(b)); // Sort items descending
+                  return [
+                    DropdownMenuItem<String>(
+                      enabled: false,
+                      child: Text(
+                        category,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    ...items.map(
+                      (item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 12,
+                                backgroundColor:
+                                    Colors.blue, // Icon background color
+                                child: Text(
+                                  item
+                                      .substring(0, 2)
+                                      .toUpperCase(), // Two initial letters
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                item,
+                                softWrap:
+                                    true, // Mengizinkan teks membungkus ke baris berikutnya
+                                overflow: TextOverflow
+                                    .visible, // Overflow tidak dipotong
+                                maxLines:
+                                    null, // Tidak ada batasan jumlah baris
+                              ), // Display item name
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ];
+                }).toList(),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildDeviceCard(Map<String, dynamic> device) {
     final lastUpdated = device['lastUpdated']?.toDate();
     final formattedDate = lastUpdated != null
@@ -974,23 +1077,40 @@ class _DevicePageState extends State<DevicePage> {
                   child: Text(deviceModel,
                       style: Theme.of(context).textTheme.bodyLarge),
                 ),
-                Chip(
-                  avatar: CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    radius: 32,
-                    child: Text(
-                      getInitials(deviceStatus),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
+                GestureDetector(
+                  onTap: () {
+                    _showChooseRoom(device);
+                  },
+                  child: Chip(
+                    avatar: Container(
+                      // padding: const EdgeInsets.all(2), // Ketebalan border
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Warna background di luar border
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white, // Warna border
+                          width: 1, // Ketebalan border
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        foregroundColor: Colors.white,
+                        backgroundColor: statusColor,
+                        // radius: 48,
+                        child: Text(
+                          getInitials(deviceStatus),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
+                    label: Text(
+                      deviceStatus,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    backgroundColor: statusColor,
                   ),
-                  label: Text(
-                    deviceStatus,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  backgroundColor: statusColor,
                 ),
               ],
             ),
