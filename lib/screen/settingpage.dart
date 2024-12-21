@@ -455,6 +455,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:projector_management/screen/about.dart';
 import 'package:projector_management/utility/getinitials.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -841,10 +842,27 @@ class _SettingsPageState extends State<SettingsPage> {
             //   ),
             // ),
             // Save settings button
-            ElevatedButton.icon(
-              icon: const Icon(Icons.cloud_upload_outlined),
-              onPressed: _saveSettings,
-              label: const Text("Save Settings"),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.cloud_upload_outlined),
+                  onPressed: _saveSettings,
+                  label: const Text("Save Settings"),
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.adobe_rounded),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AboutPage()));
+                  },
+                  label: const Text("About"),
+                ),
+              ],
             ),
           ],
         ),

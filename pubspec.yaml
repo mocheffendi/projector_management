@@ -88,6 +88,7 @@ flutter:
     - assets/png/stopwatch.png
     - assets/png/wave_square.png
     - assets/png/calendar.png
+    - assets/images/eng.jpg
 
   fonts:
     - family: Roboto

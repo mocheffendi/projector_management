@@ -1085,6 +1085,495 @@ class _DevicePageState extends State<DevicePage> {
     );
   }
 
+  // Widget _buildDeviceCard(Map<String, dynamic> device) {
+  //   final lastUpdated = device['lastUpdated']?.toDate();
+  //   final formattedDate = lastUpdated != null
+  //       ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
+  //       : 'Unknown';
+
+  //   final String deviceModel = device['model'] ?? 'Unknown Model';
+  //   final String deviceSN = device['sn'] ?? '';
+  //   final String deviceCondition = device['condition'] ?? 'Unknown Condition';
+  //   final String deviceStatus = device['status'] ?? 'Unknown Status';
+  //   final String deviceRemarks = device['remark'] ?? '';
+
+  //   final Color statusColor;
+  //   final String statusLabel;
+  //   final IconData statusIcon;
+
+  //   if (notOccupiedStatuses.contains(deviceStatus)) {
+  //     statusLabel = 'Not Occupied';
+  //     statusIcon = Icons.shopping_cart_outlined;
+  //     statusColor = Theme.of(context).colorScheme.secondary;
+  //   } else if (serviceVendor.contains(deviceStatus)) {
+  //     statusLabel = 'On Service';
+  //     statusIcon = CupertinoIcons.wrench;
+  //     statusColor = Theme.of(context).colorScheme.primary;
+  //   } else {
+  //     statusLabel = 'Occupied';
+  //     statusIcon = Icons.meeting_room;
+  //     statusColor = Theme.of(context).colorScheme.tertiary;
+  //   }
+
+  //   return GestureDetector(
+  //     onTap: () => _showDeviceDetails(device),
+  //     child: Container(
+  //       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+  //       padding: const EdgeInsets.all(16),
+  //       decoration: BoxDecoration(
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.circular(20),
+  //         boxShadow: [
+  //           BoxShadow(
+  //             color: Colors.grey.withOpacity(0.3),
+  //             blurRadius: 10,
+  //             offset: const Offset(2, 4),
+  //           ),
+  //         ],
+  //       ),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           // Device Image
+  //           Center(
+  //             child: Hero(
+  //               tag: device['id'] ?? 'deviceImage',
+  //               child: device['image'] != null && device['image']!.isNotEmpty
+  //                   ? ClipRRect(
+  //                       borderRadius: BorderRadius.circular(10),
+  //                       child: Image.memory(
+  //                         base64Decode(device['image']),
+  //                         width: double.infinity,
+  //                         height: 180,
+  //                         fit: BoxFit.cover,
+  //                       ),
+  //                     )
+  //                   : Icon(
+  //                       Icons.devices_other,
+  //                       size: 80,
+  //                       color: Colors.grey.shade400,
+  //                     ),
+  //             ),
+  //           ),
+  //           const SizedBox(height: 12),
+
+  //           // Device Info
+  //           Text(
+  //             deviceModel,
+  //             style: Theme.of(context).textTheme.bodyLarge,
+  //           ),
+  //           const SizedBox(height: 8),
+  //           Text(
+  //             'SN: $deviceSN',
+  //             style: Theme.of(context).textTheme.bodySmall,
+  //           ),
+  //           const SizedBox(height: 4),
+  //           Text(
+  //             'Condition: $deviceCondition',
+  //             style: Theme.of(context).textTheme.bodySmall,
+  //           ),
+  //           const SizedBox(height: 4),
+  //           Text(
+  //             'Remarks: $deviceRemarks',
+  //             style: Theme.of(context).textTheme.bodySmall,
+  //             maxLines: 2,
+  //             overflow: TextOverflow.ellipsis,
+  //           ),
+  //           const SizedBox(height: 8),
+
+  //           // Status
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Chip(
+  //                 avatar: CircleAvatar(
+  //                   backgroundColor: statusColor,
+  //                   child: Icon(
+  //                     statusIcon,
+  //                     size: 16,
+  //                     color: Colors.white,
+  //                   ),
+  //                 ),
+  //                 label: Text(
+  //                   deviceStatus,
+  //                   style: Theme.of(context)
+  //                       .textTheme
+  //                       .bodySmall
+  //                       ?.copyWith(color: Colors.white),
+  //                 ),
+  //                 backgroundColor: statusColor,
+  //               ),
+  //               Text(
+  //                 formattedDate,
+  //                 style: Theme.of(context)
+  //                     .textTheme
+  //                     .bodySmall
+  //                     ?.copyWith(color: Colors.grey.shade600),
+  //               ),
+  //             ],
+  //           ),
+  //           const SizedBox(height: 8),
+
+  //           // Update Button
+  //           ElevatedButton.icon(
+  //             onPressed: () => _showEditDeviceDialog(device),
+  //             icon: const Icon(Icons.edit, size: 16),
+  //             label: const Text('Update'),
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: statusColor,
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(12),
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget _buildDeviceCard(Map<String, dynamic> device) {
+  //   final lastUpdated = device['lastUpdated']?.toDate();
+  //   final formattedDate = lastUpdated != null
+  //       ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
+  //       : 'Unknown';
+
+  //   final String deviceModel = device['model'] ?? 'Unknown Model';
+  //   final String deviceSN = device['sn'] ?? '';
+  //   final String deviceCondition = device['condition'] ?? 'Unknown Condition';
+  //   final String deviceStatus = device['status'] ?? 'Unknown Status';
+  //   final String deviceRemarks = device['remark'] ?? '';
+
+  //   Color cardColor = Colors.grey.shade300;
+
+  //   final String statusLabel;
+  //   final IconData statusIcon;
+  //   final Color statusColor;
+
+  //   if (notOccupiedStatuses.contains(deviceStatus)) {
+  //     statusLabel = 'Not Occupied';
+  //     statusIcon = Icons.shopping_cart_outlined;
+  //     statusColor = Theme.of(context).colorScheme.secondary;
+  //     cardColor = Theme.of(context).colorScheme.onSecondary;
+  //   } else if (serviceVendor.contains(deviceStatus)) {
+  //     statusLabel = 'On Service';
+  //     statusIcon = CupertinoIcons.wrench;
+  //     statusColor = Theme.of(context).colorScheme.primary;
+  //     cardColor = Theme.of(context).colorScheme.onPrimary;
+  //   } else {
+  //     statusLabel = 'Occupied';
+  //     statusIcon = Icons.meeting_room;
+  //     statusColor = Theme.of(context).colorScheme.tertiary;
+  //     cardColor = Theme.of(context).colorScheme.onTertiary;
+  //   }
+
+  //   return GestureDetector(
+  //     onTap: () => _showDeviceDetails(device),
+  //     child: Container(
+  //       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+  //       padding: const EdgeInsets.all(16),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(20),
+  //         gradient: LinearGradient(
+  //           colors: [
+  //             Theme.of(context).colorScheme.onTertiaryFixed,
+  //             statusColor.withOpacity(0.1),
+  //           ],
+  //           begin: Alignment.topLeft,
+  //           end: Alignment.bottomRight,
+  //         ),
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           // Header
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Expanded(
+  //                 child: Text(deviceModel,
+  //                     style: Theme.of(context).textTheme.bodyLarge),
+  //               ),
+  //               Chip(
+  //                 avatar: CircleAvatar(
+  //                   backgroundColor: Colors.blue,
+  //                   radius: 32,
+  //                   child: Text(
+  //                     getInitials(deviceStatus),
+  //                     style: const TextStyle(
+  //                         color: Colors.white,
+  //                         fontSize: 12,
+  //                         fontWeight: FontWeight.bold),
+  //                   ),
+  //                 ),
+  //                 label: Text(
+  //                   deviceStatus,
+  //                   style: Theme.of(context).textTheme.bodyMedium,
+  //                 ),
+  //                 backgroundColor: statusColor,
+  //               ),
+  //             ],
+  //           ),
+  //           const SizedBox(height: 16),
+  //           // Content in two vertical columns
+  //           Row(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               // Left Column
+  //               Expanded(
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Hero(
+  //                       tag: device['id'] ?? 'deviceImage',
+  //                       child: device['image'] != null &&
+  //                               device['image']!.isNotEmpty
+  //                           ? ClipRRect(
+  //                               borderRadius: BorderRadius.circular(10),
+  //                               child: Image.memory(
+  //                                 base64Decode(device['image']),
+  //                                 width: double.infinity,
+  //                                 height: 100,
+  //                                 fit: BoxFit.cover,
+  //                               ),
+  //                             )
+  //                           : Icon(
+  //                               Icons.devices_other,
+  //                               size: 80,
+  //                               color: Colors.grey.shade400,
+  //                             ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(width: 16),
+  //               // Right Column
+  //               Expanded(
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Text(
+  //                       'SN: $deviceSN',
+  //                       style: Theme.of(context).textTheme.bodySmall,
+  //                     ),
+  //                     const SizedBox(height: 8),
+  //                     Text(
+  //                       'Condition: $deviceCondition',
+  //                       style: Theme.of(context).textTheme.bodySmall,
+  //                     ),
+  //                     const SizedBox(height: 8),
+  //                     Text(
+  //                       'Remarks: $deviceRemarks',
+  //                       style: Theme.of(context).textTheme.bodySmall,
+  //                       maxLines: 3,
+  //                       overflow: TextOverflow.ellipsis,
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           const SizedBox(height: 16),
+  //           // Footer
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Row(
+  //                 children: [
+  //                   Icon(
+  //                     Icons.calendar_today,
+  //                     size: 16,
+  //                     color: Colors.grey.shade600,
+  //                   ),
+  //                   const SizedBox(width: 4),
+  //                   Text(
+  //                     formattedDate,
+  //                     style: Theme.of(context).textTheme.bodySmall,
+  //                   ),
+  //                 ],
+  //               ),
+  //               ElevatedButton.icon(
+  //                 onPressed: () => _showEditDeviceDialog(device),
+  //                 icon: const Icon(Icons.edit, size: 16),
+  //                 label: Text(
+  //                   'Update',
+  //                   style: Theme.of(context).textTheme.bodyMedium,
+  //                 ),
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: statusColor,
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(12),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget _buildDeviceCard(Map<String, dynamic> device) {
+  //   final lastUpdated = device['lastUpdated']?.toDate();
+  //   final formattedDate = lastUpdated != null
+  //       ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
+  //       : 'Unknown';
+
+  //   final String deviceModel = device['model'] ?? 'Unknown Model';
+  //   final String deviceSN = device['sn'] ?? '';
+  //   final String deviceCondition = device['condition'] ?? 'Unknown Condition';
+  //   final String deviceStatus = device['status'] ?? 'Unknown Status';
+  //   final String deviceRemarks = device['remark'] ?? '';
+
+  //   Color cardColor = Colors.grey.shade300;
+
+  //   final String statusLabel;
+  //   final IconData statusIcon;
+  //   final Color statusColor;
+
+  //   if (notOccupiedStatuses.contains(deviceStatus)) {
+  //     statusLabel = 'Not Occupied';
+  //     statusIcon = Icons.shopping_cart_outlined;
+  //     statusColor = Theme.of(context).colorScheme.secondary;
+  //     cardColor = Theme.of(context).colorScheme.onSecondary;
+  //   } else if (serviceVendor.contains(deviceStatus)) {
+  //     statusLabel = 'On Service';
+  //     statusIcon = CupertinoIcons.wrench;
+  //     statusColor = Theme.of(context).colorScheme.primary;
+  //     cardColor = Theme.of(context).colorScheme.onPrimary;
+  //   } else {
+  //     statusLabel = 'Occupied';
+  //     statusIcon = Icons.meeting_room;
+  //     statusColor = Theme.of(context).colorScheme.tertiary;
+  //     cardColor = Theme.of(context).colorScheme.onTertiary;
+  //   }
+
+  //   return GestureDetector(
+  //     onTap: () => _showDeviceDetails(device),
+  //     child: Container(
+  //       margin: const EdgeInsets.all(8),
+  //       padding: const EdgeInsets.all(16),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(20),
+  //         gradient: LinearGradient(
+  //           colors: [
+  //             Theme.of(context).colorScheme.onTertiaryFixed,
+  //             statusColor.withOpacity(0.1),
+  //           ],
+  //           begin: Alignment.topLeft,
+  //           end: Alignment.bottomRight,
+  //         ),
+  //       ),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           // Header
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Expanded(
+  //                 child: Text(deviceModel,
+  //                     style: Theme.of(context).textTheme.bodyLarge),
+  //               ),
+  //               Chip(
+  //                 avatar: CircleAvatar(
+  //                   backgroundColor: Colors.blue,
+  //                   radius: 32,
+  //                   child: Text(
+  //                     getInitials(deviceStatus),
+  //                     style: const TextStyle(
+  //                         color: Colors.white,
+  //                         fontSize: 12,
+  //                         fontWeight: FontWeight.bold),
+  //                   ),
+  //                 ),
+  //                 label: Text(
+  //                   deviceStatus,
+  //                   style: Theme.of(context).textTheme.bodyMedium,
+  //                 ),
+  //                 backgroundColor: statusColor,
+  //               ),
+  //             ],
+  //           ),
+  //           const SizedBox(height: 16),
+  //           // Device Image
+  //           Hero(
+  //             tag: device['id'] ?? 'deviceImage',
+  //             child: device['image'] != null && device['image']!.isNotEmpty
+  //                 ? ClipRRect(
+  //                     borderRadius: BorderRadius.circular(10),
+  //                     child: Image.memory(
+  //                       base64Decode(device['image']),
+  //                       width: double.infinity,
+  //                       height: 120,
+  //                       fit: BoxFit.cover,
+  //                     ),
+  //                   )
+  //                 : Icon(
+  //                     Icons.devices_other,
+  //                     size: 80,
+  //                     color: Colors.grey.shade400,
+  //                   ),
+  //           ),
+  //           const SizedBox(height: 16),
+  //           // Device Details
+  //           Text(
+  //             'SN: $deviceSN',
+  //             style: Theme.of(context).textTheme.bodySmall,
+  //           ),
+  //           const SizedBox(height: 8),
+  //           Text(
+  //             'Condition: $deviceCondition',
+  //             style: Theme.of(context).textTheme.bodySmall,
+  //           ),
+  //           const SizedBox(height: 8),
+  //           Text(
+  //             'Remarks: $deviceRemarks',
+  //             style: Theme.of(context).textTheme.bodySmall,
+  //             maxLines: 3,
+  //             overflow: TextOverflow.ellipsis,
+  //           ),
+  //           const SizedBox(height: 16),
+  //           // Footer
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Row(
+  //                 children: [
+  //                   Icon(
+  //                     Icons.calendar_today,
+  //                     size: 16,
+  //                     color: Colors.grey.shade600,
+  //                   ),
+  //                   const SizedBox(width: 4),
+  //                   Text(
+  //                     formattedDate,
+  //                     style: Theme.of(context).textTheme.bodySmall,
+  //                   ),
+  //                 ],
+  //               ),
+  //               ElevatedButton.icon(
+  //                 onPressed: () => _showEditDeviceDialog(device),
+  //                 icon: const Icon(Icons.edit, size: 16),
+  //                 label: Text(
+  //                   'Update',
+  //                   style: Theme.of(context).textTheme.bodyMedium,
+  //                 ),
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: statusColor,
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(12),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1139,6 +1628,18 @@ class _DevicePageState extends State<DevicePage> {
                 return _buildDeviceCard(categorizedDevices[index]);
               },
             );
+            // return GridView.builder(
+            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount: 2,
+            //     crossAxisSpacing: 8,
+            //     mainAxisSpacing: 8,
+            //     childAspectRatio: 0.8,
+            //   ),
+            //   itemCount: devices.length,
+            //   itemBuilder: (context, index) {
+            //     return _buildDeviceCard(devices[index]);
+            //   },
+            // );
           }
         },
       ),
