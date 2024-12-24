@@ -371,7 +371,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        log("Constraints maxwidth : ${constraints.maxWidth}");
+        // log("Constraints maxwidth : ${constraints.maxWidth}");
         if (constraints.maxWidth < 501) {
           // Tampilan untuk layar kecil (Mobile)
           return _buildMobileLayout(context);

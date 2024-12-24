@@ -30,10 +30,39 @@ class AboutPage extends StatelessWidget {
                   bottomRight: Radius.circular(30),
                 ),
               ),
-              child: const Center(
-                child: CircleAvatar(
-                  radius: 120,
-                  backgroundImage: AssetImage('assets/images/eng.jpg'),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FullScreenImage(
+                          imagePath: 'assets/images/eng.jpg',
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 240,
+                    height: 240,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [Colors.blueAccent, Colors.purpleAccent],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0), // Border thickness
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/images/eng.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -106,6 +135,29 @@ class AboutPage extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class FullScreenImage extends StatelessWidget {
+  final String imagePath;
+  const FullScreenImage({required this.imagePath, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Center(
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.contain,
         ),
       ),
     );

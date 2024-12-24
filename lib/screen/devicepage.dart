@@ -276,7 +276,8 @@ class _DevicePageState extends State<DevicePage> {
 
   void _showAddDeviceDialog() {
     final TextEditingController modelController = TextEditingController();
-    final TextEditingController typeController = TextEditingController();
+    final TextEditingController conditionController = TextEditingController();
+    final TextEditingController remarkController = TextEditingController();
     // final TextEditingController statusController = TextEditingController();
     final TextEditingController snController = TextEditingController();
     String? base64Image;
@@ -298,8 +299,15 @@ class _DevicePageState extends State<DevicePage> {
                 decoration: const InputDecoration(labelText: 'SN'),
               ),
               TextField(
-                controller: typeController,
-                decoration: const InputDecoration(labelText: 'Type'),
+                controller: conditionController,
+                decoration: const InputDecoration(labelText: 'Condition'),
+              ),
+              TextField(
+                controller: remarkController,
+                decoration: const InputDecoration(labelText: 'Remark'),
+              ),
+              const SizedBox(
+                height: 8,
               ),
               ElevatedButton(
                 onPressed: () async {
@@ -329,8 +337,8 @@ class _DevicePageState extends State<DevicePage> {
                   'sn': snController.text,
                   'status': 'Store LT2',
                   'image': base64Image, // Save base64 image string
-                  'type': typeController.text,
-                  // 'status': statusController.text,
+                  'condition': conditionController.text,
+                  'remark': remarkController.text,
                   'lastUpdated': Timestamp.now(),
                 };
                 addDevice(newDevice);
