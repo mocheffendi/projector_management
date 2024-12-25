@@ -1049,7 +1049,7 @@ class _DevicePageState extends State<DevicePage> {
     return GestureDetector(
       onTap: () => _showDeviceDetails(device), // Action on tap
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),

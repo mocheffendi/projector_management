@@ -729,7 +729,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding: const EdgeInsets.all(0),
                 itemCount: categorizedOptions[selectedCategory]!.length,
                 itemBuilder: (context, index) {
-                  final item = categorizedOptions[selectedCategory]![index];
+                  // Ambil dan urutkan daftar item
+                  final sortedItems = categorizedOptions[selectedCategory]!
+                    ..sort();
+
+                  // Akses item yang sudah diurutkan
+                  final item = sortedItems[index];
+                  // final item = categorizedOptions[selectedCategory]![index];
                   // final itemInitials = item.isNotEmpty
                   //     ? item.substring(0, 2).toUpperCase()
                   //     : ''; // Mengambil 2 huruf pertama item

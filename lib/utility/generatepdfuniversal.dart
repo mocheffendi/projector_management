@@ -139,7 +139,7 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device, Uint8List info,
       ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
       : 'Unknown';
 
-  PdfColor cardColor = PdfColors.grey100;
+  PdfColor cardColor = PdfColors.red;
 
   final String deviceModel = device['model'] ?? 'Unknown Model';
   final String deviceSN = device['sn'] ?? '';
@@ -160,11 +160,11 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device, Uint8List info,
   if (notOccupiedStatuses.contains(deviceStatus)) {
     statusLabel = 'Not Occupied @$deviceStatus';
     statusColor = PdfColors.green;
-    cardColor = PdfColors.green100;
+    cardColor = PdfColors.green;
   } else if (serviceVendor.contains(deviceStatus)) {
     statusLabel = 'Service @$deviceStatus';
     statusColor = PdfColors.blue;
-    cardColor = PdfColors.blue100;
+    cardColor = PdfColors.blue;
   } else {
     statusLabel = 'Occupied @$deviceStatus';
     statusColor = PdfColors.red;
@@ -283,14 +283,14 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device, Uint8List info,
   // );
 
   return pw.Container(
-    margin: const pw.EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-    padding: const pw.EdgeInsets.all(16),
+    margin: const pw.EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+    padding: const pw.EdgeInsets.all(8),
     decoration: pw.BoxDecoration(
       borderRadius: pw.BorderRadius.circular(20),
       gradient: pw.LinearGradient(
         colors: [
           PdfColors.white,
-          statusColor,
+          cardColor,
         ],
         begin: pw.Alignment.topLeft,
         end: pw.Alignment.bottomRight,
@@ -325,6 +325,10 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device, Uint8List info,
               decoration: pw.BoxDecoration(
                 color: statusColor,
                 borderRadius: pw.BorderRadius.circular(8),
+                border: pw.Border.all(
+                  color: PdfColors.white,
+                  width: 1,
+                ),
               ),
               child: pw.Text(
                 deviceStatus,
@@ -393,10 +397,15 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device, Uint8List info,
           children: [
             pw.Row(
               children: [
-                pw.Icon(
-                  const pw.IconData(0xe935), // Use appropriate icon data
-                  size: 16,
-                  color: PdfColors.grey600,
+                // pw.Icon(
+                //   const pw.IconData(0xe935), // Use appropriate icon data
+                //   size: 16,
+                //   color: PdfColors.grey600,
+                // ),
+                pw.Text(
+                  'Last Updated: ',
+                  style:
+                      const pw.TextStyle(fontSize: 12, color: PdfColors.black),
                 ),
                 pw.SizedBox(width: 4),
                 pw.Text(

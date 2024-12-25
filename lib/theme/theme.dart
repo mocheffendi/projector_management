@@ -37,8 +37,13 @@ final ThemeData lightTheme = ThemeData(
         color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
     bodyMedium: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     bodySmall: TextStyle(
-        color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+        color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold),
     labelLarge: TextStyle(color: Colors.black),
+    headlineMedium: TextStyle(color: Colors.blue),
+    headlineSmall: TextStyle(color: Colors.blue),
+    labelSmall: TextStyle(color: Colors.blue),
+    labelMedium: TextStyle(color: Colors.blue),
+    titleMedium: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
   ),
   navigationBarTheme: NavigationBarThemeData(
     iconTheme: const WidgetStatePropertyAll(IconThemeData(
@@ -89,8 +94,13 @@ final ThemeData darkTheme = ThemeData(
         color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
     bodyMedium: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     bodySmall: TextStyle(
-        color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+        color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
     labelLarge: TextStyle(color: Colors.white),
+    headlineMedium: TextStyle(color: Colors.blue),
+    headlineSmall: TextStyle(color: Colors.blue),
+    labelSmall: TextStyle(color: Colors.blue),
+    labelMedium: TextStyle(color: Colors.blue),
+    titleMedium: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
   ),
   navigationBarTheme: NavigationBarThemeData(
     backgroundColor: Colors.blueGrey.shade900,
