@@ -89,6 +89,11 @@ flutter:
     - assets/png/wave_square.png
     - assets/png/calendar.png
     - assets/images/eng.jpg
+    - assets/avspecification/1.png
+    - assets/avspecification/2.png
+    - assets/avspecification/3.png
+    - assets/avspecification/4.png
+    - assets/avspecification/5.png
 
   fonts:
     - family: Roboto

@@ -301,6 +301,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:projector_management/screen/avspecification.dart';
 import 'package:projector_management/screen/devicepage.dart';
 import 'package:projector_management/screen/settingpage.dart';
 import 'package:projector_management/theme/theme.dart';
@@ -352,18 +353,19 @@ class _MainAppScreenState extends State<MainAppScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
+    AVSpecificationPage(),
     const DevicePage(collectionName: 'projectors'),
     const DevicePage(collectionName: 'screens'),
     const DevicePage(collectionName: 'sounds'),
-    const DevicePage(collectionName: 'avdevices'),
+    // const DevicePage(collectionName: 'avdevices'),
     const SettingsPage()
   ];
 
   final List<String> _titles = [
-    'Projector Management | Novotel Samator',
-    'Screen Management | Novotel Samator',
-    'Sound Management | Novotel Samator',
-    'AV Device Management | Novotel Samator',
+    'AV Specifiation | Novotel Samator',
+    'Projector | Novotel Samator',
+    'Screen | Novotel Samator',
+    'Sound | Novotel Samator',
     'Settings | Novotel Samator',
   ];
 
@@ -426,6 +428,10 @@ class _MainAppScreenState extends State<MainAppScreen> {
             },
             destinations: const [
               NavigationDestination(
+                icon: Icon(Icons.devices_other),
+                label: 'AV Specs',
+              ),
+              NavigationDestination(
                 icon: Icon(Icons.location_searching_rounded),
                 label: 'Projector',
               ),
@@ -436,10 +442,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
               NavigationDestination(
                 icon: Icon(Icons.speaker),
                 label: 'Sound',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.devices_other),
-                label: 'AV Device',
               ),
               NavigationDestination(
                 icon: Icon(Icons.settings),
@@ -485,6 +487,10 @@ class _MainAppScreenState extends State<MainAppScreen> {
                 },
                 destinations: const [
                   NavigationRailDestination(
+                    icon: Icon(Icons.devices_other),
+                    label: Text('AV Specs'),
+                  ),
+                  NavigationRailDestination(
                     icon: Icon(Icons.location_searching_rounded),
                     label: Text('Projector'),
                   ),
@@ -495,10 +501,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
                   NavigationRailDestination(
                     icon: Icon(Icons.speaker),
                     label: Text('Sound'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.devices_other),
-                    label: Text('AV Device'),
                   ),
                   NavigationRailDestination(
                     icon: Icon(Icons.settings),

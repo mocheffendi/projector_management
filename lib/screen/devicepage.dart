@@ -1742,20 +1742,66 @@ class _DevicePageState extends State<DevicePage> {
                 .toList()
               ..sort((a, b) => a['status'].compareTo(b['status']));
 
-            final categorizedDevices = [
-              ...occupiedDevices,
-              ...notOccupiedDevices,
-              ...serviceDevices,
-            ];
+            // final categorizedDevices = [
+            //   ...occupiedDevices,
+            //   ...notOccupiedDevices,
+            //   ...serviceDevices,
+            // ];
 
-            return ListView.builder(
+            return ListView(
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
-              itemCount: categorizedDevices.length,
-              itemBuilder: (context, index) {
-                return _buildDeviceCard(categorizedDevices[index]);
-              },
+              children: [
+                if (occupiedDevices.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Occupied',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                  ),
+                  ...occupiedDevices.map((device) => _buildDeviceCard(device)),
+                ],
+                if (notOccupiedDevices.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Not Occupied ',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green),
+                    ),
+                  ),
+                  ...notOccupiedDevices
+                      .map((device) => _buildDeviceCard(device)),
+                ],
+                if (serviceDevices.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'On Service',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue),
+                    ),
+                  ),
+                  ...serviceDevices.map((device) => _buildDeviceCard(device)),
+                ],
+              ],
             );
+            // return ListView.builder(
+            //   shrinkWrap: true,
+            //   physics: const BouncingScrollPhysics(),
+            //   itemCount: categorizedDevices.length,
+            //   itemBuilder: (context, index) {
+            //     return _buildDeviceCard(categorizedDevices[index]);
+            //   },
+            // );
             // return GridView.builder(
             //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             //     crossAxisCount: 2,

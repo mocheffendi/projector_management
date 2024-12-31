@@ -147,13 +147,6 @@ pw.Widget _builddeviceCardpw(Map<String, dynamic> device, Uint8List info,
   final String deviceStatus = device['status'] ?? 'Unknown Status';
   final String deviceRemarks = device['remark'] ?? '';
 
-  // final imageInfo = pw.MemoryImage(info); // Convert to MemoryImage
-  // final imageCondition = pw.MemoryImage(condition);
-  // final imageTime = pw.MemoryImage(time);
-  // final imageStatus = pw.MemoryImage(status);
-  // final imageCalendar = pw.MemoryImage(calendar);
-  // Example device status
-  // final String deviceStatus = device['status'];
   final String statusLabel;
   final PdfColor statusColor;
 
