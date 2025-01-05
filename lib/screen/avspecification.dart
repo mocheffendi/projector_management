@@ -902,8 +902,7 @@ class AVSpecificationPage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 180,
-            width: double.infinity,
+            height: 200,
             child: PageView.builder(
               controller: controller,
               itemCount: sliderItems1.length,
@@ -938,21 +937,18 @@ class AVSpecificationPage extends StatelessWidget {
                         ],
                         color: Colors.grey[900],
                       ),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.asset(
-                              item['image']!,
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Center(
-                                child: Icon(Icons.error, color: Colors.red),
-                              ),
-                            ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          item['image']!,
+                          fit: BoxFit.fill,
+                          height: 160,
+                          width: double.infinity,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Center(
+                            child: Icon(Icons.error, color: Colors.red),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
