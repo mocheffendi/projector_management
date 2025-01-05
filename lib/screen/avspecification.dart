@@ -787,8 +787,219 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+// import 'package:share_plus/share_plus.dart';
+// import 'dart:typed_data';
+// import 'package:flutter/services.dart';
+
+// class AVSpecificationPage extends StatelessWidget {
+//   AVSpecificationPage({super.key});
+
+//   final List<Map<String, String>> sliderItems1 = [
+//     {
+//       'image': 'assets/novotel/1.png',
+//     },
+//     {
+//       'image': 'assets/novotel/2.png',
+//     },
+//     {
+//       'image': 'assets/novotel/3.png',
+//     },
+//     {
+//       'image': 'assets/novotel/4.png',
+//     },
+//     {
+//       'image': 'assets/novotel/5.png',
+//     },
+//   ];
+
+//   final List<Map<String, String>> sliderItems = [
+//     {
+//       'image': 'assets/avspecification/1.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/2.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/3.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/4.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/5.png',
+//     },
+//   ];
+
+//   Future<void> _shareImageFromMemory(String assetPath) async {
+//     try {
+//       // Load image bytes from the asset
+//       final ByteData byteData = await rootBundle.load(assetPath);
+//       final Uint8List bytes = byteData.buffer.asUint8List();
+
+//       // Share the image bytes directly
+//       await Share.shareXFiles([
+//         XFile.fromData(bytes,
+//             name: assetPath.split('/').last, mimeType: 'image/png'),
+//       ], text: 'Check out this image!');
+//     } catch (e) {
+//       debugPrint('Error sharing image: $e');
+//     }
+//   }
+
+//   double _calculatePercentageTo2026() {
+//     final now = DateTime.now();
+//     final startOfYear = DateTime(now.year, 1, 1);
+//     final endOfYear = DateTime(2026, 1, 1);
+
+//     final totalDays = endOfYear.difference(startOfYear).inDays;
+//     final elapsedDays = now.difference(startOfYear).inDays;
+
+//     return (elapsedDays / totalDays) * 100;
+//   }
+
+//   String _getGreeting() {
+//     final hour = DateTime.now().hour;
+//     if (hour < 12) {
+//       return 'Hi Good Morning Heartist';
+//     } else if (hour < 18) {
+//       return 'Hi Good Afternoon Heartist';
+//     } else {
+//       return 'Hi Good Evening Heartist';
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final PageController controller = PageController(viewportFraction: 0.8);
+//     final double progressPercentage = _calculatePercentageTo2026();
+
+//     return Scaffold(
+//       body: Column(
+//         children: [
+//           Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   _getGreeting(),
+//                   style: Theme.of(context).textTheme.headlineSmall,
+//                 ),
+//                 const SizedBox(height: 8.0),
+//                 Text(
+//                   '${progressPercentage.toStringAsFixed(2)}% of the way to 2026',
+//                   style: Theme.of(context).textTheme.bodyLarge,
+//                 ),
+//                 const SizedBox(height: 8.0),
+//                 LinearProgressIndicator(
+//                   value: progressPercentage / 100,
+//                   minHeight: 10,
+//                   backgroundColor: Colors.grey[300],
+//                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           Expanded(
+//             child: PageView.builder(
+//               controller: controller,
+//               itemCount: sliderItems1.length,
+//               itemBuilder: (context, index) {
+//                 final item = sliderItems1[index];
+//                 return Padding(
+//                   padding: const EdgeInsets.only(right: 8.0),
+//                   child: Container(
+//                     margin: const EdgeInsets.symmetric(vertical: 8.0),
+//                     decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.circular(16),
+//                       // boxShadow: [
+//                       //   BoxShadow(
+//                       //     color: Colors.black.withOpacity(0.5),
+//                       //     blurRadius: 8,
+//                       //     offset: const Offset(0, 4),
+//                       //   ),
+//                       // ],
+//                       color: Colors.grey[900],
+//                     ),
+//                     child: ClipRRect(
+//                       borderRadius: BorderRadius.circular(16),
+//                       child: Image.asset(
+//                         item['image']!,
+//                         fit: BoxFit.fill,
+//                         // height: 160,
+//                         width: double.infinity,
+//                         errorBuilder: (context, error, stackTrace) =>
+//                             const Center(
+//                           child: Icon(Icons.error, color: Colors.red),
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 );
+//               },
+//             ),
+//           ),
+//           Expanded(
+//             child: ListView.builder(
+//               itemCount: sliderItems.length,
+//               itemBuilder: (context, index) {
+//                 final item = sliderItems[index];
+//                 return Padding(
+//                   padding: const EdgeInsets.symmetric(
+//                       horizontal: 16.0, vertical: 8.0),
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       ClipRRect(
+//                         borderRadius: BorderRadius.circular(12),
+//                         child: Image.asset(
+//                           item['image']!,
+//                           fit: BoxFit.fill,
+//                           width: double.infinity,
+//                           height: 400,
+//                           errorBuilder: (context, error, stackTrace) =>
+//                               const Center(
+//                             child: Icon(Icons.error, color: Colors.red),
+//                           ),
+//                         ),
+//                       ),
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.end,
+//                         children: [
+//                           IconButton(
+//                             onPressed: () async {
+//                               final imagePath = item['image'];
+//                               if (imagePath != null) {
+//                                 await _shareImageFromMemory(imagePath);
+//                               } else {
+//                                 ScaffoldMessenger.of(context).showSnackBar(
+//                                   const SnackBar(
+//                                     content: Text('Image path not found!'),
+//                                   ),
+//                                 );
+//                               }
+//                             },
+//                             icon: const Icon(Icons.share),
+//                             color: Colors.blue,
+//                           ),
+//                         ],
+//                       ),
+//                     ],
+//                   ),
+//                 );
+//               },
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 
@@ -815,19 +1026,25 @@ class AVSpecificationPage extends StatelessWidget {
 
   final List<Map<String, String>> sliderItems = [
     {
-      'image': 'assets/avspecification/1.png',
+      'image': 'assets/avspecification/6.png',
     },
     {
-      'image': 'assets/avspecification/2.png',
+      'image': 'assets/avspecification/7.png',
     },
     {
-      'image': 'assets/avspecification/3.png',
+      'image': 'assets/avspecification/8.png',
     },
     {
-      'image': 'assets/avspecification/4.png',
+      'image': 'assets/avspecification/9.png',
     },
     {
-      'image': 'assets/avspecification/5.png',
+      'image': 'assets/avspecification/10.png',
+    },
+    {
+      'image': 'assets/avspecification/11.png',
+    },
+    {
+      'image': 'assets/avspecification/12.png',
     },
   ];
 
@@ -850,7 +1067,7 @@ class AVSpecificationPage extends StatelessWidget {
   double _calculatePercentageTo2026() {
     final now = DateTime.now();
     final startOfYear = DateTime(now.year, 1, 1);
-    final endOfYear = DateTime(2026, 1, 1);
+    final endOfYear = DateTime(now.year + 1, 1, 1);
 
     final totalDays = endOfYear.difference(startOfYear).inDays;
     final elapsedDays = now.difference(startOfYear).inDays;
@@ -871,7 +1088,6 @@ class AVSpecificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController(viewportFraction: 0.8);
     final double progressPercentage = _calculatePercentageTo2026();
 
     return Scaffold(
@@ -887,74 +1103,68 @@ class AVSpecificationPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 8.0),
-                Text(
-                  '${progressPercentage.toStringAsFixed(2)}% of the way to 2026',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 8.0),
-                LinearProgressIndicator(
-                  value: progressPercentage / 100,
-                  minHeight: 10,
-                  backgroundColor: Colors.grey[300],
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      // color: Colors.grey[300],
+                      border: Border.all(color: Colors.grey)),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Progress ${progressPercentage.toStringAsFixed(2)}% on the way to ${DateTime.now().year + 1}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: 8.0),
+                      LinearProgressIndicator(
+                        value: progressPercentage / 100,
+                        minHeight: 10,
+                        backgroundColor: Colors.grey[300],
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.blue),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          SizedBox(
-            height: 160,
-            child: PageView.builder(
-              controller: controller,
-              itemCount: sliderItems1.length,
-              itemBuilder: (context, index) {
-                final item = sliderItems1[index];
-                return AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) {
-                    double value = 0.0;
-                    if (controller.position.haveDimensions) {
-                      value = index - controller.page!;
-                      value = (value * 0.3).clamp(-1, 1);
-                    }
-
-                    return Transform.scale(
-                      scale: 1 - (value.abs() * 0.2),
-                      child: child,
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 24),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                        color: Colors.grey[900],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          item['image']!,
-                          fit: BoxFit.fill,
-                          height: 160,
-                          width: double.infinity,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Center(
-                            child: Icon(Icons.error, color: Colors.red),
-                          ),
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 160.0,
+              enlargeCenterPage: true,
+              autoPlay: true,
+              aspectRatio: 16 / 9,
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enableInfiniteScroll: true,
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              viewportFraction: 0.8,
+            ),
+            items: sliderItems1.map((item) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: Colors.grey[900],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        item['image']!,
+                        fit: BoxFit.fill,
+                        width: double.infinity,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Center(
+                          child: Icon(Icons.error, color: Colors.red),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              );
+            }).toList(),
           ),
           Expanded(
             child: ListView.builder(
@@ -973,7 +1183,7 @@ class AVSpecificationPage extends StatelessWidget {
                           item['image']!,
                           fit: BoxFit.fill,
                           width: double.infinity,
-                          height: 400,
+                          height: 200,
                           errorBuilder: (context, error, stackTrace) =>
                               const Center(
                             child: Icon(Icons.error, color: Colors.red),

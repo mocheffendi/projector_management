@@ -52,6 +52,7 @@ dependencies:
   pdf_render: ^1.4.12
   html: ^0.15.5
   flutter_riverpod: ^2.6.1
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -89,11 +90,13 @@ flutter:
     - assets/png/wave_square.png
     - assets/png/calendar.png
     - assets/images/eng.jpg
-    - assets/avspecification/1.png
-    - assets/avspecification/2.png
-    - assets/avspecification/3.png
-    - assets/avspecification/4.png
-    - assets/avspecification/5.png
+    - assets/avspecification/6.png
+    - assets/avspecification/7.png
+    - assets/avspecification/8.png
+    - assets/avspecification/9.png
+    - assets/avspecification/10.png
+    - assets/avspecification/11.png
+    - assets/avspecification/12.png
     - assets/novotel/1.png
     - assets/novotel/2.png
     - assets/novotel/3.png

@@ -362,7 +362,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
   ];
 
   final List<String> _titles = [
-    'AV Specifiation | Novotel Samator',
+    'AV Specification | Novotel Samator',
     'Projector | Novotel Samator',
     'Screen | Novotel Samator',
     'Sound | Novotel Samator',
