@@ -104488,7 +104488,7 @@ if(s<12)return"Hi Good Morning Heartist"
 else if(s<18)return"Hi Good Afternoon Heartist"
 else return"Hi Good Evening Heartist"},
 J(a){var s=null,r=864e8,q=A.b0U(0.8),p=new A.dx(Date.now(),0,!1),o=A.a90(A.ps(p),1,1,0,0,0,0),n=B.l.b0(A.a90(2026,1,1,0,0,0,0).jh(o).a,r),m=B.l.b0(p.jh(o).a,r)/n*100,l=t.D
-return A.y4(s,s,A.ei(A.a([new A.bI(B.dS,A.ei(A.a([A.bX(this.ad6(),s,s,s,s,A.Q(a).p2.f,s,s),B.cE,A.bX(B.m.aj(m,2)+"% of the way to 2026",s,s,s,s,A.Q(a).p2.y,s,s),B.cE,new A.DN(10,m/100,B.h0,s,B.MI,s,s,s)],l),B.ch,B.ak,B.aN),s),A.dA(new A.EH(q,new A.UO(new A.a6h(this,q),5,!0,!0,!0,s),s),200,s),A.ov(A.aNo(new A.a6i(this),5,s))],l),B.aj,B.ak,B.aN),s,!1,s)}}
+return A.y4(s,s,A.ei(A.a([new A.bI(B.dS,A.ei(A.a([A.bX(this.ad6(),s,s,s,s,A.Q(a).p2.f,s,s),B.cE,A.bX(B.m.aj(m,2)+"% of the way to 2026",s,s,s,s,A.Q(a).p2.y,s,s),B.cE,new A.DN(10,m/100,B.h0,s,B.MI,s,s,s)],l),B.ch,B.ak,B.aN),s),A.dA(new A.EH(q,new A.UO(new A.a6h(this,q),5,!0,!0,!0,s),s),160,s),A.ov(A.aNo(new A.a6i(this),5,s))],l),B.aj,B.ak,B.aN),s,!1,s)}}
 A.a6h.prototype={
 $2(a,b){var s=null,r=this.a.c[b],q=this.b,p=A.fM(16),o=A.a([new A.bC(0,B.ar,A.a0(B.m.ai(127.5),0,0,0),B.pm,8)],t.G),n=A.fM(16),m=r.h(0,"image")
 m.toString

@@ -902,7 +902,7 @@ class AVSpecificationPage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 200,
+            height: 160,
             child: PageView.builder(
               controller: controller,
               itemCount: sliderItems1.length,
