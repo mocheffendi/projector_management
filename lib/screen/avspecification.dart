@@ -1064,13 +1064,24 @@ class AVSpecificationPage extends StatelessWidget {
     }
   }
 
+  // double _calculatePercentageTo2026() {
+  //   final now = DateTime.now();
+  //   final startOfYear = DateTime(now.year, 1, 1);
+  //   final endOfYear = DateTime(now.year + 1, 1, 1);
+
+  //   final totalDays = endOfYear.difference(startOfYear).inDays;
+  //   final elapsedDays = now.difference(startOfYear).inDays;
+
+  //   return (elapsedDays / totalDays) * 100;
+  // }
+
   double _calculatePercentageTo2026() {
     final now = DateTime.now();
-    final startOfYear = DateTime(now.year, 1, 1);
-    final endOfYear = DateTime(now.year + 1, 1, 1);
+    final startOfMonth = DateTime(now.year, now.month, 1);
+    final endOfMonth = DateTime(now.year, now.month + 1, 1);
 
-    final totalDays = endOfYear.difference(startOfYear).inDays;
-    final elapsedDays = now.difference(startOfYear).inDays;
+    final totalDays = endOfMonth.difference(startOfMonth).inDays;
+    final elapsedDays = now.difference(startOfMonth).inDays;
 
     return (elapsedDays / totalDays) * 100;
   }
@@ -1089,6 +1100,21 @@ class AVSpecificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double progressPercentage = _calculatePercentageTo2026();
+    final monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    final nextMonth = monthNames[DateTime.now().month % 12];
 
     return Scaffold(
       body: Column(
@@ -1112,7 +1138,7 @@ class AVSpecificationPage extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Progress ${progressPercentage.toStringAsFixed(2)}% on the way to ${DateTime.now().year + 1}',
+                        'Progress ${progressPercentage.toStringAsFixed(2)}% on the way to $nextMonth',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const SizedBox(height: 8.0),
