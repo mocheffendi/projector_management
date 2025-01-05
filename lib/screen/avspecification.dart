@@ -1183,7 +1183,7 @@ class AVSpecificationPage extends StatelessWidget {
                           item['image']!,
                           fit: BoxFit.fill,
                           width: double.infinity,
-                          height: 200,
+                          height: 400,
                           errorBuilder: (context, error, stackTrace) =>
                               const Center(
                             child: Icon(Icons.error, color: Colors.red),
