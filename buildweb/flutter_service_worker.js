@@ -3,9 +3,9 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "97dd13789c213efcd04468cadd981287",
-"assets/AssetManifest.bin.json": "dd2633c5da14a1ac58f83abc706ca59d",
-"assets/AssetManifest.json": "745614801d66fe53fcf4ece9b5ff76c3",
+const RESOURCES = {"assets/AssetManifest.bin": "0eb7b0657f0b06ede556721a7691fabb",
+"assets/AssetManifest.bin.json": "57970d4bb7d494288bf74eb3829750d5",
+"assets/AssetManifest.json": "866ac6728603f1234813b34fd81f138f",
 "assets/assets/avspecification/1.png": "fed1f1933b720d08fd737852da019911",
 "assets/assets/avspecification/2.png": "388add83b8e2d75ea9e5f0efc34b0954",
 "assets/assets/avspecification/3.png": "8a4958c82aa6cabd3c9279491fb2a9bb",
@@ -15,6 +15,11 @@ const RESOURCES = {"assets/AssetManifest.bin": "97dd13789c213efcd04468cadd981287
 "assets/assets/epson_2155w.png": "ddb2831f3261855565967627f91288d7",
 "assets/assets/epson_x51.png": "525e7a16cd81999442a89cc2b024b5ae",
 "assets/assets/images/eng.jpg": "ad00722049b0c6d2111cfa6642b2b592",
+"assets/assets/novotel/1.png": "aeb4c60be15347d72ebcf43001e8eaba",
+"assets/assets/novotel/2.png": "00e2cec797158f8f93e753591ae0fb3b",
+"assets/assets/novotel/3.png": "de467199478984bf6fa37a3bcdca219d",
+"assets/assets/novotel/4.png": "72f777fc2f99cd7f7f3f4f1e0e8d8fd0",
+"assets/assets/novotel/5.png": "fe94010aae28932730df93ff39b28ee1",
 "assets/assets/panasonic_ex800.png": "2db76f49ff5bc21c8622bc58e8ea708f",
 "assets/assets/png/calendar.png": "4308707d11f2a80e5c7588411cf55898",
 "assets/assets/png/hotel.png": "78057f00454b213706e5b294940fbeaa",
@@ -43,14 +48,14 @@ const RESOURCES = {"assets/AssetManifest.bin": "97dd13789c213efcd04468cadd981287
 "canvaskit/skwasm.worker.js": "89990e8c92bcb123999aa81f7e203b1c",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "flutter.js": "f393d3c16b631f36852323de8e583132",
-"flutter_bootstrap.js": "beea01dd6241a06f1fce0094695cd9e9",
+"flutter_bootstrap.js": "32a3530ca79db81d59267af0fe729713",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
 "index.html": "eb792e2f7bf404abdb165eddac5d04bc",
 "/": "eb792e2f7bf404abdb165eddac5d04bc",
-"main.dart.js": "04e6ed8585b7eebbc2f0b5918c7d3a0c",
+"main.dart.js": "034c1dc8d7b536bd8b70313b5410ad3f",
 "manifest.json": "4fe2bdc102df2d7a9af04cd82d6ecb23",
 "version.json": "73855b5d94312a332a3e56d444d7168c"};
 // The application shell files that are downloaded before a service worker can

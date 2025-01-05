@@ -40,7 +40,8 @@ final ThemeData lightTheme = ThemeData(
         color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold),
     labelLarge: TextStyle(color: Colors.black),
     headlineMedium: TextStyle(color: Colors.blue),
-    headlineSmall: TextStyle(color: Colors.blue),
+    headlineSmall: TextStyle(
+        color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 18),
     labelSmall: TextStyle(color: Colors.blue),
     labelMedium: TextStyle(color: Colors.blue),
     titleMedium: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
@@ -97,7 +98,7 @@ final ThemeData darkTheme = ThemeData(
         color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
     labelLarge: TextStyle(color: Colors.white),
     headlineMedium: TextStyle(color: Colors.blue),
-    headlineSmall: TextStyle(color: Colors.blue),
+    headlineSmall: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
     labelSmall: TextStyle(color: Colors.blue),
     labelMedium: TextStyle(color: Colors.blue),
     titleMedium: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
