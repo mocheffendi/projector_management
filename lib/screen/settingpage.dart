@@ -650,8 +650,8 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             // Button row to switch categories (square buttons)
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 4,
+              runSpacing: 2,
               children: sortedCategories.map((entry) {
                 final category = entry.key;
                 return GestureDetector(
@@ -661,7 +661,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   child: Container(
-                    width: (screenWidth - 48) / 3, // Adjust for spacing
+                    width: (screenWidth - 48) / 4, // Adjust for spacing
                     height: 50,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -677,7 +677,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ? Colors.white
                             : Colors.black,
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
                     ),
