@@ -863,8 +863,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.adobe_rounded),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AboutPage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AboutPage()));
                   },
                   label: const Text("About"),
                 ),
