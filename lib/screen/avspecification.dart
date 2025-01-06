@@ -2676,6 +2676,17 @@ class ImageDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.black,
+          // Theme.of(context).colorScheme.surfaceContainerHighest,
+          systemNavigationBarDividerColor: Colors.black,
+          // Theme.of(context).colorScheme.surfaceContainerHighest,
+          statusBarColor: Colors.black,
+          // Theme.of(context).colorScheme.surfaceContainerHighest,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
+        ),
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),

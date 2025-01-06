@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:projector_management/theme/themenotifier.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -156,6 +158,22 @@ class AboutPage extends StatelessWidget {
   }
 }
 
+Future<void> shareImageFromMemory(String assetPath) async {
+  try {
+    // Load image bytes from the asset
+    final ByteData byteData = await rootBundle.load(assetPath);
+    final Uint8List bytes = byteData.buffer.asUint8List();
+
+    // Share the image bytes directly
+    await Share.shareXFiles([
+      XFile.fromData(bytes,
+          name: assetPath.split('/').last, mimeType: 'image/png'),
+    ], text: 'Check out this image!');
+  } catch (e) {
+    debugPrint('Error sharing image: $e');
+  }
+}
+
 class FullScreenImage extends StatelessWidget {
   final String imagePath;
   const FullScreenImage({required this.imagePath, super.key});
@@ -190,13 +208,37 @@ class FullScreenImage extends StatelessWidget {
         //     onPressed: themeNotifier.toggleTheme,
         //   ),
         // ],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share, color: Colors.white),
+            onPressed: () async {
+              final image = imagePath;
+              if (image != null) {
+                await shareImageFromMemory(image);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Image path not found!'),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Hero(
           tag: 'profile-image',
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.contain,
+          child: PhotoView(
+            imageProvider: AssetImage(imagePath),
+            backgroundDecoration: const BoxDecoration(
+              color: Colors.black,
+            ),
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 2.0,
+            errorBuilder: (context, error, stackTrace) => const Center(
+              child: Icon(Icons.error, color: Colors.red),
+            ),
           ),
         ),
       ),
