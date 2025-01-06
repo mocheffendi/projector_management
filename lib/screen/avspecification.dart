@@ -2235,6 +2235,7 @@ class AVSpecificationPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(color: Colors.grey)),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Progress ${progressPercentage.toStringAsFixed(0)}% on the way to $nextMonth',
