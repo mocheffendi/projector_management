@@ -2395,6 +2395,628 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+// import 'package:share_plus/share_plus.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
+// import 'dart:typed_data';
+// import 'package:flutter/services.dart';
+// import 'package:photo_view/photo_view.dart';
+
+// Future<void> shareImageFromMemory(String assetPath) async {
+//   try {
+//     // Load image bytes from the asset
+//     final ByteData byteData = await rootBundle.load(assetPath);
+//     final Uint8List bytes = byteData.buffer.asUint8List();
+
+//     // Share the image bytes directly
+//     await Share.shareXFiles([
+//       XFile.fromData(bytes,
+//           name: assetPath.split('/').last, mimeType: 'image/png'),
+//     ], text: 'Check out this image!');
+//   } catch (e) {
+//     debugPrint('Error sharing image: $e');
+//   }
+// }
+
+// class AVSpecificationPage extends StatelessWidget {
+//   AVSpecificationPage({super.key});
+
+//   final List<Map<String, String>> sliderItems1 = [
+//     {
+//       'image': 'assets/novotel/1.png',
+//     },
+//     {
+//       'image': 'assets/novotel/2.png',
+//     },
+//     {
+//       'image': 'assets/novotel/3.png',
+//     },
+//     {
+//       'image': 'assets/novotel/4.png',
+//     },
+//     {
+//       'image': 'assets/novotel/5.png',
+//     },
+//   ];
+
+//   final List<Map<String, String>> sliderItems = [
+//     {
+//       'image': 'assets/avspecification/6.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/7.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/8.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/9.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/10.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/11.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/12.png',
+//     },
+//   ];
+
+//   double _calculatePercentageToNextMonth() {
+//     final now = DateTime.now();
+//     final startOfMonth = DateTime(now.year, now.month, 1);
+//     final endOfMonth = DateTime(now.year, now.month + 1, 1);
+
+//     final totalDays = endOfMonth.difference(startOfMonth).inDays;
+//     final elapsedDays = now.difference(startOfMonth).inDays;
+
+//     return (elapsedDays / totalDays) * 100;
+//   }
+
+//   String _getGreeting() {
+//     final hour = DateTime.now().hour;
+//     if (hour < 12) {
+//       return 'Hi Good Morning Heartist';
+//     } else if (hour < 18) {
+//       return 'Hi Good Afternoon Heartist';
+//     } else {
+//       return 'Hi Good Evening Heartist';
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final double progressPercentage = _calculatePercentageToNextMonth();
+//     final monthNames = [
+//       'January',
+//       'February',
+//       'March',
+//       'April',
+//       'May',
+//       'June',
+//       'July',
+//       'August',
+//       'September',
+//       'October',
+//       'November',
+//       'December'
+//     ];
+//     final nextMonth = monthNames[DateTime.now().month % 12];
+
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           // Background image
+//           Positioned.fill(
+//             child: Image.asset(
+//               'assets/bg.jpg', // Replace with your background image path
+//               fit: BoxFit.cover,
+//             ),
+//           ),
+//           // Page content
+//           SingleChildScrollView(
+//             child: Column(
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(16.0),
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text(
+//                         _getGreeting(),
+//                         style: Theme.of(context).textTheme.headlineSmall,
+//                       ),
+//                       const SizedBox(height: 8.0),
+//                       Container(
+//                         padding: const EdgeInsets.all(8.0),
+//                         decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(8),
+//                             border: Border.all(color: Colors.grey)),
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Text(
+//                               'Progress ${progressPercentage.toStringAsFixed(2)}% on the way to $nextMonth',
+//                               style: Theme.of(context).textTheme.bodySmall,
+//                             ),
+//                             const SizedBox(height: 8.0),
+//                             LinearProgressIndicator(
+//                               value: progressPercentage / 100,
+//                               minHeight: 10,
+//                               backgroundColor: Colors.grey[300],
+//                               valueColor: const AlwaysStoppedAnimation<Color>(
+//                                   Colors.blue),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 CarouselSlider(
+//                   options: CarouselOptions(
+//                     height: 160.0,
+//                     enlargeCenterPage: true,
+//                     autoPlay: true,
+//                     aspectRatio: 16 / 9,
+//                     autoPlayCurve: Curves.fastOutSlowIn,
+//                     enableInfiniteScroll: true,
+//                     autoPlayAnimationDuration:
+//                         const Duration(milliseconds: 800),
+//                     viewportFraction: 0.8,
+//                   ),
+//                   items: sliderItems1.map((item) {
+//                     return Builder(
+//                       builder: (BuildContext context) {
+//                         return Container(
+//                           margin: const EdgeInsets.symmetric(vertical: 8.0),
+//                           decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(16),
+//                             color: Colors.grey[900],
+//                           ),
+//                           child: ClipRRect(
+//                             borderRadius: BorderRadius.circular(16),
+//                             child: Image.asset(
+//                               item['image']!,
+//                               fit: BoxFit.fill,
+//                               width: double.infinity,
+//                               errorBuilder: (context, error, stackTrace) =>
+//                                   const Center(
+//                                 child: Icon(Icons.error, color: Colors.red),
+//                               ),
+//                             ),
+//                           ),
+//                         );
+//                       },
+//                     );
+//                   }).toList(),
+//                 ),
+//                 ListView.builder(
+//                   shrinkWrap: true,
+//                   physics: const NeverScrollableScrollPhysics(),
+//                   itemCount: sliderItems.length,
+//                   itemBuilder: (context, index) {
+//                     final item = sliderItems[index];
+//                     return Padding(
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 16.0, vertical: 8.0),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           GestureDetector(
+//                             onTap: () {
+//                               Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                   builder: (context) => ImageDetailPage(
+//                                     imagePath: item['image']!,
+//                                   ),
+//                                 ),
+//                               );
+//                             },
+//                             child: Hero(
+//                               tag: item['image']!,
+//                               child: ClipRRect(
+//                                 borderRadius: BorderRadius.circular(12),
+//                                 child: Image.asset(
+//                                   item['image']!,
+//                                   fit: BoxFit.fill,
+//                                   width: double.infinity,
+//                                   height: 400,
+//                                   errorBuilder: (context, error, stackTrace) =>
+//                                       const Center(
+//                                     child: Icon(Icons.error, color: Colors.red),
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                           Row(
+//                             mainAxisAlignment: MainAxisAlignment.end,
+//                             children: [
+//                               IconButton(
+//                                 onPressed: () async {
+//                                   final imagePath = item['image'];
+//                                   if (imagePath != null) {
+//                                     await shareImageFromMemory(imagePath);
+//                                   } else {
+//                                     ScaffoldMessenger.of(context).showSnackBar(
+//                                       const SnackBar(
+//                                         content: Text('Image path not found!'),
+//                                       ),
+//                                     );
+//                                   }
+//                                 },
+//                                 icon: const Icon(Icons.share),
+//                                 color: Colors.blue,
+//                               ),
+//                             ],
+//                           ),
+//                         ],
+//                       ),
+//                     );
+//                   },
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class ImageDetailPage extends StatelessWidget {
+//   final String imagePath;
+
+//   const ImageDetailPage({required this.imagePath, Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         systemOverlayStyle: const SystemUiOverlayStyle(
+//           systemNavigationBarColor: Colors.black,
+//           // Theme.of(context).colorScheme.surfaceContainerHighest,
+//           systemNavigationBarDividerColor: Colors.black,
+//           // Theme.of(context).colorScheme.surfaceContainerHighest,
+//           statusBarColor: Colors.black,
+//           // Theme.of(context).colorScheme.surfaceContainerHighest,
+//           systemNavigationBarIconBrightness: Brightness.light,
+//           statusBarBrightness: Brightness.light,
+//           statusBarIconBrightness: Brightness.light,
+//         ),
+//         backgroundColor: Colors.black,
+//         leading: IconButton(
+//           icon: const Icon(Icons.arrow_back, color: Colors.white),
+//           onPressed: () {
+//             Navigator.pop(context);
+//           },
+//         ),
+//         actions: [
+//           IconButton(
+//             icon: const Icon(Icons.share, color: Colors.white),
+//             onPressed: () async {
+//               final image = imagePath;
+//               if (image != null) {
+//                 await shareImageFromMemory(image);
+//               } else {
+//                 ScaffoldMessenger.of(context).showSnackBar(
+//                   const SnackBar(
+//                     content: Text('Image path not found!'),
+//                   ),
+//                 );
+//               }
+//             },
+//           ),
+//         ],
+//       ),
+//       backgroundColor: Colors.black,
+//       body: Center(
+//         child: Hero(
+//           tag: imagePath,
+//           child: PhotoView(
+//             imageProvider: AssetImage(imagePath),
+//             backgroundDecoration: const BoxDecoration(
+//               color: Colors.black,
+//             ),
+//             minScale: PhotoViewComputedScale.contained,
+//             maxScale: PhotoViewComputedScale.covered * 2.0,
+//             errorBuilder: (context, error, stackTrace) => const Center(
+//               child: Icon(Icons.error, color: Colors.red),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// import 'package:flutter/material.dart';
+// import 'package:share_plus/share_plus.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
+// import 'dart:typed_data';
+// import 'package:flutter/services.dart';
+// import 'package:photo_view/photo_view.dart';
+
+// Future<void> shareImageFromMemory(String assetPath) async {
+//   try {
+//     // Load image bytes from the asset
+//     final ByteData byteData = await rootBundle.load(assetPath);
+//     final Uint8List bytes = byteData.buffer.asUint8List();
+
+//     // Share the image bytes directly
+//     await Share.shareXFiles([
+//       XFile.fromData(bytes,
+//           name: assetPath.split('/').last, mimeType: 'image/png'),
+//     ], text: 'Check out this image!');
+//   } catch (e) {
+//     debugPrint('Error sharing image: $e');
+//   }
+// }
+
+// class AVSpecificationPage extends StatelessWidget {
+//   AVSpecificationPage({super.key});
+
+//   final List<Map<String, String>> sliderItems1 = [
+//     {
+//       'image': 'assets/novotel/1.png',
+//     },
+//     {
+//       'image': 'assets/novotel/2.png',
+//     },
+//     {
+//       'image': 'assets/novotel/3.png',
+//     },
+//     {
+//       'image': 'assets/novotel/4.png',
+//     },
+//     {
+//       'image': 'assets/novotel/5.png',
+//     },
+//   ];
+
+//   final List<Map<String, String>> sliderItems = [
+//     {
+//       'image': 'assets/avspecification/6.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/7.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/8.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/9.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/10.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/11.png',
+//     },
+//     {
+//       'image': 'assets/avspecification/12.png',
+//     },
+//   ];
+
+//   double _calculatePercentageToNextMonth() {
+//     final now = DateTime.now();
+//     final startOfMonth = DateTime(now.year, now.month, 1);
+//     final endOfMonth = DateTime(now.year, now.month + 1, 1);
+
+//     final totalDays = endOfMonth.difference(startOfMonth).inDays;
+//     final elapsedDays = now.difference(startOfMonth).inDays;
+
+//     return (elapsedDays / totalDays) * 100;
+//   }
+
+//   String _getGreeting() {
+//     final hour = DateTime.now().hour;
+//     if (hour < 12) {
+//       return 'Hi Good Morning Heartists';
+//     } else if (hour < 18) {
+//       return 'Hi Good Afternoon Heartists';
+//     } else {
+//       return 'Hi Good Evening Heartists';
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final double progressPercentage = _calculatePercentageToNextMonth();
+//     final month = [
+//       'January',
+//       'February',
+//       'March',
+//       'April',
+//       'May',
+//       'June',
+//       'July',
+//       'August',
+//       'September',
+//       'October',
+//       'November',
+//       'December'
+//     ];
+//     final nextMonth = month[DateTime.now().month % 12];
+
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           // Background image
+//           Positioned.fill(
+//             child: Image.asset(
+//               'assets/bg.jpg', // Replace with your background image path
+//               fit: BoxFit.cover,
+//             ),
+//           ),
+//           // Page content
+//           Center(
+//             child: ConstrainedBox(
+//               constraints: const BoxConstraints(maxWidth: 500),
+//               child: SingleChildScrollView(
+//                 child: Column(
+//                   children: [
+//                     Padding(
+//                       padding: const EdgeInsets.all(16.0),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text(
+//                             _getGreeting(),
+//                             style: Theme.of(context).textTheme.headlineSmall,
+//                           ),
+//                           const SizedBox(height: 8.0),
+//                           Container(
+//                             padding: const EdgeInsets.all(8.0),
+//                             decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(8),
+//                                 border: Border.all(color: Colors.grey)),
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Progress ${progressPercentage.toStringAsFixed(2)}% on the way to $nextMonth',
+//                                   style: Theme.of(context).textTheme.bodySmall,
+//                                 ),
+//                                 const SizedBox(height: 8.0),
+//                                 LinearProgressIndicator(
+//                                   value: progressPercentage / 100,
+//                                   minHeight: 10,
+//                                   backgroundColor: Colors.grey[300],
+//                                   valueColor:
+//                                       const AlwaysStoppedAnimation<Color>(
+//                                           Colors.blue),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                     CarouselSlider(
+//                       options: CarouselOptions(
+//                         height: 160.0,
+//                         enlargeCenterPage: true,
+//                         autoPlay: true,
+//                         aspectRatio: 16 / 9,
+//                         autoPlayCurve: Curves.fastOutSlowIn,
+//                         enableInfiniteScroll: true,
+//                         autoPlayAnimationDuration:
+//                             const Duration(milliseconds: 800),
+//                         viewportFraction: 0.8,
+//                       ),
+//                       items: sliderItems1.map((item) {
+//                         return Builder(
+//                           builder: (BuildContext context) {
+//                             return Container(
+//                               margin: const EdgeInsets.symmetric(vertical: 8.0),
+//                               decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(16),
+//                                 color: Colors.grey[900],
+//                               ),
+//                               child: ClipRRect(
+//                                 borderRadius: BorderRadius.circular(16),
+//                                 child: Image.asset(
+//                                   item['image']!,
+//                                   fit: BoxFit.fill,
+//                                   width: double.infinity,
+//                                   errorBuilder: (context, error, stackTrace) =>
+//                                       const Center(
+//                                     child: Icon(Icons.error, color: Colors.red),
+//                                   ),
+//                                 ),
+//                               ),
+//                             );
+//                           },
+//                         );
+//                       }).toList(),
+//                     ),
+//                     ListView.builder(
+//                       shrinkWrap: true,
+//                       physics: const NeverScrollableScrollPhysics(),
+//                       itemCount: sliderItems.length,
+//                       itemBuilder: (context, index) {
+//                         final item = sliderItems[index];
+//                         return Padding(
+//                           padding: const EdgeInsets.symmetric(
+//                               horizontal: 16.0, vertical: 8.0),
+//                           child: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               GestureDetector(
+//                                 onTap: () {
+//                                   Navigator.push(
+//                                     context,
+//                                     MaterialPageRoute(
+//                                       builder: (context) => ImageDetailPage(
+//                                         imagePath: item['image']!,
+//                                       ),
+//                                     ),
+//                                   );
+//                                 },
+//                                 child: Hero(
+//                                   tag: item['image']!,
+//                                   child: ClipRRect(
+//                                     borderRadius: BorderRadius.circular(12),
+//                                     child: Image.asset(
+//                                       item['image']!,
+//                                       fit: BoxFit.fill,
+//                                       width: double.infinity,
+//                                       height: 400,
+//                                       errorBuilder:
+//                                           (context, error, stackTrace) =>
+//                                               const Center(
+//                                         child: Icon(Icons.error,
+//                                             color: Colors.red),
+//                                       ),
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ),
+//                               Row(
+//                                 mainAxisAlignment: MainAxisAlignment.end,
+//                                 children: [
+//                                   IconButton(
+//                                     onPressed: () async {
+//                                       final imagePath = item['image'];
+//                                       if (imagePath != null) {
+//                                         await shareImageFromMemory(imagePath);
+//                                       } else {
+//                                         ScaffoldMessenger.of(context)
+//                                             .showSnackBar(
+//                                           const SnackBar(
+//                                             content:
+//                                                 Text('Image path not found!'),
+//                                           ),
+//                                         );
+//                                       }
+//                                     },
+//                                     icon: const Icon(Icons.share),
+//                                     color: Colors.blue,
+//                                   ),
+//                                 ],
+//                               ),
+//                             ],
+//                           ),
+//                         );
+//                       },
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -2463,7 +3085,16 @@ class AVSpecificationPage extends StatelessWidget {
     },
   ];
 
-  double _calculatePercentageTo2026() {
+  final List<Map<String, String>> sliderItems2 = [
+    {
+      'image': 'assets/banner/1.png',
+    },
+    {
+      'image': 'assets/banner/2.png',
+    },
+  ];
+
+  double _calculatePercentageToNextMonth() {
     final now = DateTime.now();
     final startOfMonth = DateTime(now.year, now.month, 1);
     final endOfMonth = DateTime(now.year, now.month + 1, 1);
@@ -2487,7 +3118,7 @@ class AVSpecificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progressPercentage = _calculatePercentageTo2026();
+    final double progressPercentage = _calculatePercentageToNextMonth();
     final monthNames = [
       'January',
       'February',
@@ -2515,150 +3146,335 @@ class AVSpecificationPage extends StatelessWidget {
             ),
           ),
           // Page content
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _getGreeting(),
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 8.0),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Progress ${progressPercentage.toStringAsFixed(0)}% on the way to $nextMonth',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            const SizedBox(height: 8.0),
-                            LinearProgressIndicator(
-                              value: progressPercentage / 100,
-                              minHeight: 10,
-                              backgroundColor: Colors.grey[300],
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                  Colors.blue),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 160.0,
-                    enlargeCenterPage: true,
-                    autoPlay: true,
-                    aspectRatio: 16 / 9,
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enableInfiniteScroll: true,
-                    autoPlayAnimationDuration:
-                        const Duration(milliseconds: 800),
-                    viewportFraction: 0.8,
-                  ),
-                  items: sliderItems1.map((item) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.grey[900],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.asset(
-                              item['image']!,
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Center(
-                                child: Icon(Icons.error, color: Colors.red),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: sliderItems.length,
-                  itemBuilder: (context, index) {
-                    final item = sliderItems[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 800),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ImageDetailPage(
-                                    imagePath: item['image']!,
-                                  ),
+                          Text(
+                            _getGreeting(),
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 8.0),
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.grey)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Progress ${progressPercentage.toStringAsFixed(2)}% on the way to $nextMonth',
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
-                              );
-                            },
-                            child: Hero(
-                              tag: item['image']!,
+                                const SizedBox(height: 8.0),
+                                LinearProgressIndicator(
+                                  value: progressPercentage / 100,
+                                  minHeight: 10,
+                                  backgroundColor: Colors.grey[300],
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(
+                                          Colors.blue),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    CarouselSlider(
+                      options: CarouselOptions(
+                        height: 160.0,
+                        enlargeCenterPage: true,
+                        autoPlay: true,
+                        aspectRatio: 16 / 9,
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enableInfiniteScroll: true,
+                        autoPlayAnimationDuration:
+                            const Duration(milliseconds: 800),
+                        viewportFraction: 0.8,
+                      ),
+                      items: sliderItems1.map((item) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: Colors.grey[900],
+                              ),
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(16),
                                 child: Image.asset(
                                   item['image']!,
                                   fit: BoxFit.fill,
                                   width: double.infinity,
-                                  height: 400,
                                   errorBuilder: (context, error, stackTrace) =>
                                       const Center(
                                     child: Icon(Icons.error, color: Colors.red),
                                   ),
                                 ),
                               ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: Container(
+                            padding: const EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.2),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Audio Video',
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                const SizedBox(
+                                  height: 8.0,
+                                ),
+                                SizedBox(
+                                  height: 206,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: sliderItems.length,
+                                    itemBuilder: (context, index) {
+                                      final item = sliderItems[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0, vertical: 8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  CustomPageRoute(
+                                                    page: ImageDetailPage(
+                                                      imagePath: item['image']!,
+                                                    ),
+                                                    forwardDuration: const Duration(
+                                                        milliseconds:
+                                                            800), // Slow forward
+                                                    reverseDuration: const Duration(
+                                                        milliseconds:
+                                                            800), // Slower reverse
+                                                  ),
+                                                );
+                                              },
+                                              child: Hero(
+                                                tag: item['image']!,
+                                                transitionOnUserGestures: true,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  child: Image.asset(
+                                                    item['image']!,
+                                                    fit: BoxFit.cover,
+                                                    width: 150,
+                                                    height: 150,
+                                                    errorBuilder: (context,
+                                                            error,
+                                                            stackTrace) =>
+                                                        const Center(
+                                                      child: Icon(Icons.error,
+                                                          color: Colors.red),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () async {
+                                                    final imagePath =
+                                                        item['image'];
+                                                    if (imagePath != null) {
+                                                      await shareImageFromMemory(
+                                                          imagePath);
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                          content: Text(
+                                                              'Image path not found!'),
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                  icon: const Icon(Icons.share),
+                                                  color: Colors.blue,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-                                  final imagePath = item['image'];
-                                  if (imagePath != null) {
-                                    await shareImageFromMemory(imagePath);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Image path not found!'),
-                                      ),
-                                    );
-                                  }
-                                },
-                                icon: const Icon(Icons.share),
-                                color: Colors.blue,
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
-                    );
-                  },
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: Container(
+                            padding: const EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.2),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Panduan Ukuran Banner',
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                const SizedBox(
+                                  height: 8.0,
+                                ),
+                                SizedBox(
+                                  height: 206,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: sliderItems2.length,
+                                    itemBuilder: (context, index) {
+                                      final item = sliderItems2[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0, vertical: 8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  CustomPageRoute(
+                                                    page: ImageDetailPage(
+                                                      imagePath: item['image']!,
+                                                    ),
+                                                    forwardDuration: const Duration(
+                                                        milliseconds:
+                                                            800), // Slow forward
+                                                    reverseDuration: const Duration(
+                                                        milliseconds:
+                                                            800), // Slower reverse
+                                                  ),
+                                                );
+                                              },
+                                              child: Hero(
+                                                tag: item['image']!,
+                                                transitionOnUserGestures: true,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  child: Image.asset(
+                                                    item['image']!,
+                                                    fit: BoxFit.cover,
+                                                    width: 150,
+                                                    height: 150,
+                                                    errorBuilder: (context,
+                                                            error,
+                                                            stackTrace) =>
+                                                        const Center(
+                                                      child: Icon(Icons.error,
+                                                          color: Colors.red),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () async {
+                                                    final imagePath =
+                                                        item['image'];
+                                                    if (imagePath != null) {
+                                                      await shareImageFromMemory(
+                                                          imagePath);
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                          content: Text(
+                                                              'Image path not found!'),
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                  icon: const Icon(Icons.share),
+                                                  color: Colors.blue,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
@@ -2731,4 +3547,28 @@ class ImageDetailPage extends StatelessWidget {
       ),
     );
   }
+}
+
+/// CustomPageRoute for different forward and reverse durations.
+class CustomPageRoute extends PageRouteBuilder {
+  final Widget page;
+  final Duration forwardDuration;
+  final Duration reverseDuration;
+
+  CustomPageRoute({
+    required this.page,
+    this.forwardDuration = const Duration(milliseconds: 300),
+    this.reverseDuration = const Duration(milliseconds: 300),
+  }) : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        );
+
+  @override
+  Duration get transitionDuration => forwardDuration;
+
+  @override
+  Duration get reverseTransitionDuration => reverseDuration;
 }

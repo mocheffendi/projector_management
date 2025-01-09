@@ -104,6 +104,8 @@ flutter:
     - assets/novotel/3.png
     - assets/novotel/4.png
     - assets/novotel/5.png
+    - assets/banner/1.png
+    - assets/banner/2.png
 
   fonts:
     - family: Roboto
