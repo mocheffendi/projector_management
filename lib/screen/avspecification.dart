@@ -3261,7 +3261,7 @@ class AVSpecificationPage extends StatelessWidget {
                                     height: 8.0,
                                   ),
                                   SizedBox(
-                                    height: 206,
+                                    height: 145,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemCount: sliderItems.length,
@@ -3294,6 +3294,23 @@ class AVSpecificationPage extends StatelessWidget {
                                                     ),
                                                   );
                                                 },
+                                                onLongPress: () async {
+                                                  final imagePath =
+                                                      item['image'];
+                                                  if (imagePath != null) {
+                                                    await shareImageFromMemory(
+                                                        imagePath);
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text(
+                                                            'Image path not found!'),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
                                                 child: Hero(
                                                   tag: item['image']!,
                                                   transitionOnUserGestures:
@@ -3305,8 +3322,8 @@ class AVSpecificationPage extends StatelessWidget {
                                                     child: Image.asset(
                                                       item['image']!,
                                                       fit: BoxFit.cover,
-                                                      width: 150,
-                                                      height: 150,
+                                                      width: 128,
+                                                      height: 128,
                                                       errorBuilder: (context,
                                                               error,
                                                               stackTrace) =>
@@ -3318,34 +3335,34 @@ class AVSpecificationPage extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  IconButton(
-                                                    onPressed: () async {
-                                                      final imagePath =
-                                                          item['image'];
-                                                      if (imagePath != null) {
-                                                        await shareImageFromMemory(
-                                                            imagePath);
-                                                      } else {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          const SnackBar(
-                                                            content: Text(
-                                                                'Image path not found!'),
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
-                                                    icon:
-                                                        const Icon(Icons.share),
-                                                    color: Colors.blue,
-                                                  ),
-                                                ],
-                                              ),
+                                              // Row(
+                                              //   mainAxisAlignment:
+                                              //       MainAxisAlignment.end,
+                                              //   children: [
+                                              //     IconButton(
+                                              //       onPressed: () async {
+                                              //         final imagePath =
+                                              //             item['image'];
+                                              //         if (imagePath != null) {
+                                              //           await shareImageFromMemory(
+                                              //               imagePath);
+                                              //         } else {
+                                              //           ScaffoldMessenger.of(
+                                              //                   context)
+                                              //               .showSnackBar(
+                                              //             const SnackBar(
+                                              //               content: Text(
+                                              //                   'Image path not found!'),
+                                              //             ),
+                                              //           );
+                                              //         }
+                                              //       },
+                                              //       icon:
+                                              //           const Icon(Icons.share),
+                                              //       color: Colors.blue,
+                                              //     ),
+                                              //   ],
+                                              // ),
                                             ],
                                           ),
                                         );
@@ -3396,7 +3413,7 @@ class AVSpecificationPage extends StatelessWidget {
                                     height: 8.0,
                                   ),
                                   SizedBox(
-                                    height: 206,
+                                    height: 145,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemCount: sliderItems2.length,
@@ -3429,6 +3446,23 @@ class AVSpecificationPage extends StatelessWidget {
                                                     ),
                                                   );
                                                 },
+                                                onLongPress: () async {
+                                                  final imagePath =
+                                                      item['image'];
+                                                  if (imagePath != null) {
+                                                    await shareImageFromMemory(
+                                                        imagePath);
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text(
+                                                            'Image path not found!'),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
                                                 child: Hero(
                                                   tag: item['image']!,
                                                   transitionOnUserGestures:
@@ -3440,8 +3474,8 @@ class AVSpecificationPage extends StatelessWidget {
                                                     child: Image.asset(
                                                       item['image']!,
                                                       fit: BoxFit.cover,
-                                                      width: 150,
-                                                      height: 150,
+                                                      width: 128,
+                                                      height: 128,
                                                       errorBuilder: (context,
                                                               error,
                                                               stackTrace) =>
@@ -3453,34 +3487,34 @@ class AVSpecificationPage extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  IconButton(
-                                                    onPressed: () async {
-                                                      final imagePath =
-                                                          item['image'];
-                                                      if (imagePath != null) {
-                                                        await shareImageFromMemory(
-                                                            imagePath);
-                                                      } else {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          const SnackBar(
-                                                            content: Text(
-                                                                'Image path not found!'),
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
-                                                    icon:
-                                                        const Icon(Icons.share),
-                                                    color: Colors.blue,
-                                                  ),
-                                                ],
-                                              ),
+                                              // Row(
+                                              //   mainAxisAlignment:
+                                              //       MainAxisAlignment.end,
+                                              //   children: [
+                                              //     IconButton(
+                                              //       onPressed: () async {
+                                              //         final imagePath =
+                                              //             item['image'];
+                                              //         if (imagePath != null) {
+                                              //           await shareImageFromMemory(
+                                              //               imagePath);
+                                              //         } else {
+                                              //           ScaffoldMessenger.of(
+                                              //                   context)
+                                              //               .showSnackBar(
+                                              //             const SnackBar(
+                                              //               content: Text(
+                                              //                   'Image path not found!'),
+                                              //             ),
+                                              //           );
+                                              //         }
+                                              //       },
+                                              //       icon:
+                                              //           const Icon(Icons.share),
+                                              //       color: Colors.blue,
+                                              //     ),
+                                              //   ],
+                                              // ),
                                             ],
                                           ),
                                         );
