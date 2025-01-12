@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:projector_management/theme/themenotifier.dart';
+import 'package:projector_management/utility/custompageroute.dart';
 import 'package:share_plus/share_plus.dart';
 
 class AboutPage extends StatelessWidget {
@@ -70,10 +71,14 @@ class AboutPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const FullScreenImage(
+                        CustomPageRoute(
+                          page: const FullScreenImage(
                             imagePath: 'assets/images/eng.jpg',
                           ),
+                          forwardDuration:
+                              const Duration(milliseconds: 800), // Slow forward
+                          reverseDuration: const Duration(
+                              milliseconds: 800), // Slower reverse
                         ),
                       );
                     },
