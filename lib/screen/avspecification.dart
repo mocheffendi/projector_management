@@ -3227,122 +3227,133 @@ class AVSpecificationPage extends StatelessWidget {
                         );
                       }).toList(),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                            child: Container(
+                              padding: const EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.2),
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Audio Video',
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                ),
-                                const SizedBox(
-                                  height: 8.0,
-                                ),
-                                SizedBox(
-                                  height: 206,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: sliderItems.length,
-                                    itemBuilder: (context, index) {
-                                      final item = sliderItems[index];
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  CustomPageRoute(
-                                                    page: ImageDetailPage(
-                                                      imagePath: item['image']!,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Audio Video',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  SizedBox(
+                                    height: 206,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: sliderItems.length,
+                                      itemBuilder: (context, index) {
+                                        final item = sliderItems[index];
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0, vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    CustomPageRoute(
+                                                      page: ImageDetailPage(
+                                                        imagePath:
+                                                            item['image']!,
+                                                      ),
+                                                      forwardDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  800), // Slow forward
+                                                      reverseDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  800), // Slower reverse
                                                     ),
-                                                    forwardDuration: const Duration(
-                                                        milliseconds:
-                                                            800), // Slow forward
-                                                    reverseDuration: const Duration(
-                                                        milliseconds:
-                                                            800), // Slower reverse
-                                                  ),
-                                                );
-                                              },
-                                              child: Hero(
-                                                tag: item['image']!,
-                                                transitionOnUserGestures: true,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  child: Image.asset(
-                                                    item['image']!,
-                                                    fit: BoxFit.cover,
-                                                    width: 150,
-                                                    height: 150,
-                                                    errorBuilder: (context,
-                                                            error,
-                                                            stackTrace) =>
-                                                        const Center(
-                                                      child: Icon(Icons.error,
-                                                          color: Colors.red),
+                                                  );
+                                                },
+                                                child: Hero(
+                                                  tag: item['image']!,
+                                                  transitionOnUserGestures:
+                                                      true,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    child: Image.asset(
+                                                      item['image']!,
+                                                      fit: BoxFit.cover,
+                                                      width: 150,
+                                                      height: 150,
+                                                      errorBuilder: (context,
+                                                              error,
+                                                              stackTrace) =>
+                                                          const Center(
+                                                        child: Icon(Icons.error,
+                                                            color: Colors.red),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () async {
-                                                    final imagePath =
-                                                        item['image'];
-                                                    if (imagePath != null) {
-                                                      await shareImageFromMemory(
-                                                          imagePath);
-                                                    } else {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        const SnackBar(
-                                                          content: Text(
-                                                              'Image path not found!'),
-                                                        ),
-                                                      );
-                                                    }
-                                                  },
-                                                  icon: const Icon(Icons.share),
-                                                  color: Colors.blue,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: () async {
+                                                      final imagePath =
+                                                          item['image'];
+                                                      if (imagePath != null) {
+                                                        await shareImageFromMemory(
+                                                            imagePath);
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text(
+                                                                'Image path not found!'),
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    icon:
+                                                        const Icon(Icons.share),
+                                                    color: Colors.blue,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -3351,122 +3362,133 @@ class AVSpecificationPage extends StatelessWidget {
                     const SizedBox(
                       height: 8.0,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                            child: Container(
+                              padding: const EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.2),
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Panduan Ukuran Banner',
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                ),
-                                const SizedBox(
-                                  height: 8.0,
-                                ),
-                                SizedBox(
-                                  height: 206,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: sliderItems2.length,
-                                    itemBuilder: (context, index) {
-                                      final item = sliderItems2[index];
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  CustomPageRoute(
-                                                    page: ImageDetailPage(
-                                                      imagePath: item['image']!,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Panduan Ukuran Banner',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  SizedBox(
+                                    height: 206,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: sliderItems2.length,
+                                      itemBuilder: (context, index) {
+                                        final item = sliderItems2[index];
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0, vertical: 8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    CustomPageRoute(
+                                                      page: ImageDetailPage(
+                                                        imagePath:
+                                                            item['image']!,
+                                                      ),
+                                                      forwardDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  800), // Slow forward
+                                                      reverseDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  800), // Slower reverse
                                                     ),
-                                                    forwardDuration: const Duration(
-                                                        milliseconds:
-                                                            800), // Slow forward
-                                                    reverseDuration: const Duration(
-                                                        milliseconds:
-                                                            800), // Slower reverse
-                                                  ),
-                                                );
-                                              },
-                                              child: Hero(
-                                                tag: item['image']!,
-                                                transitionOnUserGestures: true,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  child: Image.asset(
-                                                    item['image']!,
-                                                    fit: BoxFit.cover,
-                                                    width: 150,
-                                                    height: 150,
-                                                    errorBuilder: (context,
-                                                            error,
-                                                            stackTrace) =>
-                                                        const Center(
-                                                      child: Icon(Icons.error,
-                                                          color: Colors.red),
+                                                  );
+                                                },
+                                                child: Hero(
+                                                  tag: item['image']!,
+                                                  transitionOnUserGestures:
+                                                      true,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    child: Image.asset(
+                                                      item['image']!,
+                                                      fit: BoxFit.cover,
+                                                      width: 150,
+                                                      height: 150,
+                                                      errorBuilder: (context,
+                                                              error,
+                                                              stackTrace) =>
+                                                          const Center(
+                                                        child: Icon(Icons.error,
+                                                            color: Colors.red),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () async {
-                                                    final imagePath =
-                                                        item['image'];
-                                                    if (imagePath != null) {
-                                                      await shareImageFromMemory(
-                                                          imagePath);
-                                                    } else {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        const SnackBar(
-                                                          content: Text(
-                                                              'Image path not found!'),
-                                                        ),
-                                                      );
-                                                    }
-                                                  },
-                                                  icon: const Icon(Icons.share),
-                                                  color: Colors.blue,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: () async {
+                                                      final imagePath =
+                                                          item['image'];
+                                                      if (imagePath != null) {
+                                                        await shareImageFromMemory(
+                                                            imagePath);
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text(
+                                                                'Image path not found!'),
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    icon:
+                                                        const Icon(Icons.share),
+                                                    color: Colors.blue,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
