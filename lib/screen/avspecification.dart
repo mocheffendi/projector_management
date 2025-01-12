@@ -3016,30 +3016,11 @@
 // }
 
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:projector_management/screen/imagedetailpage.dart';
 import 'package:projector_management/utility/custompageroute.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
-import 'package:photo_view/photo_view.dart';
-
-Future<void> shareImageFromMemory(String assetPath) async {
-  try {
-    // Load image bytes from the asset
-    final ByteData byteData = await rootBundle.load(assetPath);
-    final Uint8List bytes = byteData.buffer.asUint8List();
-
-    // Share the image bytes directly
-    await Share.shareXFiles([
-      XFile.fromData(bytes,
-          name: assetPath.split('/').last, mimeType: 'image/png'),
-    ], text: 'Check out this image!');
-  } catch (e) {
-    debugPrint('Error sharing image: $e');
-  }
-}
+import 'package:projector_management/utility/shareimagefrommemory.dart';
 
 class AVSpecificationPage extends StatelessWidget {
   AVSpecificationPage({super.key});
@@ -3092,6 +3073,9 @@ class AVSpecificationPage extends StatelessWidget {
     },
     {
       'image': 'assets/banner/2.png',
+    },
+    {
+      'image': 'assets/banner/3.png',
     },
   ];
 
@@ -3149,7 +3133,7 @@ class AVSpecificationPage extends StatelessWidget {
           // Page content
           Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 800),
+              constraints: const BoxConstraints(maxWidth: 800),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -3287,7 +3271,7 @@ class AVSpecificationPage extends StatelessWidget {
                                                       forwardDuration:
                                                           const Duration(
                                                               milliseconds:
-                                                                  800), // Slow forward
+                                                                  600), // Slow forward
                                                       reverseDuration:
                                                           const Duration(
                                                               milliseconds:
@@ -3439,7 +3423,7 @@ class AVSpecificationPage extends StatelessWidget {
                                                       forwardDuration:
                                                           const Duration(
                                                               milliseconds:
-                                                                  800), // Slow forward
+                                                                  600), // Slow forward
                                                       reverseDuration:
                                                           const Duration(
                                                               milliseconds:
@@ -3535,72 +3519,6 @@ class AVSpecificationPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ImageDetailPage extends StatelessWidget {
-  final String imagePath;
-
-  const ImageDetailPage({required this.imagePath, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          systemNavigationBarColor: Colors.black,
-          // Theme.of(context).colorScheme.surfaceContainerHighest,
-          systemNavigationBarDividerColor: Colors.black,
-          // Theme.of(context).colorScheme.surfaceContainerHighest,
-          statusBarColor: Colors.black,
-          // Theme.of(context).colorScheme.surfaceContainerHighest,
-          systemNavigationBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.light,
-        ),
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share, color: Colors.white),
-            onPressed: () async {
-              final image = imagePath;
-              if (image != null) {
-                await shareImageFromMemory(image);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Image path not found!'),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
-      ),
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Hero(
-          tag: imagePath,
-          child: PhotoView(
-            imageProvider: AssetImage(imagePath),
-            backgroundDecoration: const BoxDecoration(
-              color: Colors.black,
-            ),
-            minScale: PhotoViewComputedScale.contained,
-            maxScale: PhotoViewComputedScale.covered * 2.0,
-            errorBuilder: (context, error, stackTrace) => const Center(
-              child: Icon(Icons.error, color: Colors.red),
-            ),
-          ),
-        ),
       ),
     );
   }

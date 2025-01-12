@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:photo_view/photo_view.dart';
+import 'package:projector_management/screen/imagedetailpage.dart';
 import 'package:projector_management/theme/themenotifier.dart';
 import 'package:projector_management/utility/custompageroute.dart';
-import 'package:share_plus/share_plus.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -72,18 +71,18 @@ class AboutPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         CustomPageRoute(
-                          page: const FullScreenImage(
+                          page: const ImageDetailPage(
                             imagePath: 'assets/images/eng.jpg',
                           ),
                           forwardDuration:
-                              const Duration(milliseconds: 800), // Slow forward
+                              const Duration(milliseconds: 600), // Slow forward
                           reverseDuration: const Duration(
-                              milliseconds: 800), // Slower reverse
+                              milliseconds: 600), // Slower reverse
                         ),
                       );
                     },
                     child: Hero(
-                      tag: 'profile-image',
+                      tag: 'assets/images/eng.jpg',
                       child: Container(
                         width: 240,
                         height: 240,
@@ -163,90 +162,76 @@ class AboutPage extends StatelessWidget {
   }
 }
 
-Future<void> shareImageFromMemory(String assetPath) async {
-  try {
-    // Load image bytes from the asset
-    final ByteData byteData = await rootBundle.load(assetPath);
-    final Uint8List bytes = byteData.buffer.asUint8List();
 
-    // Share the image bytes directly
-    await Share.shareXFiles([
-      XFile.fromData(bytes,
-          name: assetPath.split('/').last, mimeType: 'image/png'),
-    ], text: 'Check out this image!');
-  } catch (e) {
-    debugPrint('Error sharing image: $e');
-  }
-}
 
-class FullScreenImage extends StatelessWidget {
-  final String imagePath;
-  const FullScreenImage({required this.imagePath, super.key});
+// class FullScreenImage extends StatelessWidget {
+//   final String imagePath;
+//   const FullScreenImage({required this.imagePath, super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          systemNavigationBarColor: Colors.black,
-          // Theme.of(context).colorScheme.surfaceContainerHighest,
-          systemNavigationBarDividerColor: Colors.black,
-          // Theme.of(context).colorScheme.surfaceContainerHighest,
-          statusBarColor: Colors.black,
-          // Theme.of(context).colorScheme.surfaceContainerHighest,
-          systemNavigationBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.light,
-        ),
-        backgroundColor: Colors.black,
-        // Theme.of(context).colorScheme.surfaceContainerHighest,
-        // title: const Text(
-        //   'About',
-        //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        // ),
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(ref.watch(themeNotifierProvider) == ThemeMode.light
-        //         ? Icons.dark_mode
-        //         : Icons.light_mode),
-        //     onPressed: themeNotifier.toggleTheme,
-        //   ),
-        // ],
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share, color: Colors.white),
-            onPressed: () async {
-              final image = imagePath;
-              if (image != null) {
-                await shareImageFromMemory(image);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Image path not found!'),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Hero(
-          tag: 'profile-image',
-          child: PhotoView(
-            imageProvider: AssetImage(imagePath),
-            backgroundDecoration: const BoxDecoration(
-              color: Colors.black,
-            ),
-            minScale: PhotoViewComputedScale.contained,
-            maxScale: PhotoViewComputedScale.covered * 2.0,
-            errorBuilder: (context, error, stackTrace) => const Center(
-              child: Icon(Icons.error, color: Colors.red),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       appBar: AppBar(
+//         systemOverlayStyle: const SystemUiOverlayStyle(
+//           systemNavigationBarColor: Colors.black,
+//           // Theme.of(context).colorScheme.surfaceContainerHighest,
+//           systemNavigationBarDividerColor: Colors.black,
+//           // Theme.of(context).colorScheme.surfaceContainerHighest,
+//           statusBarColor: Colors.black,
+//           // Theme.of(context).colorScheme.surfaceContainerHighest,
+//           systemNavigationBarIconBrightness: Brightness.light,
+//           statusBarBrightness: Brightness.light,
+//           statusBarIconBrightness: Brightness.light,
+//         ),
+//         backgroundColor: Colors.black,
+//         // Theme.of(context).colorScheme.surfaceContainerHighest,
+//         // title: const Text(
+//         //   'About',
+//         //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//         // ),
+//         // actions: [
+//         //   IconButton(
+//         //     icon: Icon(ref.watch(themeNotifierProvider) == ThemeMode.light
+//         //         ? Icons.dark_mode
+//         //         : Icons.light_mode),
+//         //     onPressed: themeNotifier.toggleTheme,
+//         //   ),
+//         // ],
+//         actions: [
+//           IconButton(
+//             icon: const Icon(Icons.share, color: Colors.white),
+//             onPressed: () async {
+//               final image = imagePath;
+//               if (image != null) {
+//                 await shareImageFromMemory(image);
+//               } else {
+//                 ScaffoldMessenger.of(context).showSnackBar(
+//                   const SnackBar(
+//                     content: Text('Image path not found!'),
+//                   ),
+//                 );
+//               }
+//             },
+//           ),
+//         ],
+//       ),
+//       body: Center(
+//         child: Hero(
+//           tag: 'profile-image',
+//           child: PhotoView(
+//             imageProvider: AssetImage(imagePath),
+//             backgroundDecoration: const BoxDecoration(
+//               color: Colors.black,
+//             ),
+//             minScale: PhotoViewComputedScale.contained,
+//             maxScale: PhotoViewComputedScale.covered * 2.0,
+//             errorBuilder: (context, error, stackTrace) => const Center(
+//               child: Icon(Icons.error, color: Colors.red),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
