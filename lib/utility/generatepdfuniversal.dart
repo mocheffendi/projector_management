@@ -939,19 +939,19 @@ Future<pw.Widget> _buildDeviceCardpw(
   final String deviceStatus = device['status'] ?? 'Unknown Status';
   final String deviceRemarks = device['remark'] ?? '';
 
-  final String statusLabel;
+  // final String statusLabel;
   final PdfColor statusColor;
 
   if (notOccupiedStatuses.contains(deviceStatus)) {
-    statusLabel = 'Not Occupied @$deviceStatus';
+    // statusLabel = 'Not Occupied @$deviceStatus';
     statusColor = PdfColors.green;
     cardColor = PdfColors.green;
   } else if (serviceVendor.contains(deviceStatus)) {
-    statusLabel = 'Service @$deviceStatus';
+    // statusLabel = 'Service @$deviceStatus';
     statusColor = PdfColors.blue;
     cardColor = PdfColors.blue;
   } else {
-    statusLabel = 'Occupied @$deviceStatus';
+    // statusLabel = 'Occupied @$deviceStatus';
     statusColor = PdfColors.red;
   }
 
