@@ -453,6 +453,8 @@
 
 // import 'dart:developer';
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:projector_management/screen/about.dart';
@@ -643,237 +645,296 @@ class _SettingsPageState extends State<SettingsPage> {
       ..sort((a, b) => a.key.compareTo(b.key));
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Button row to switch categories (square buttons)
-            Wrap(
-              spacing: 4,
-              runSpacing: 2,
-              children: sortedCategories.map((entry) {
-                final category = entry.key;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedCategory = category;
-                    });
-                  },
-                  child: Container(
-                    width: (screenWidth - 48) / 4, // Adjust for spacing
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: selectedCategory == category
-                          ? Colors.blue
-                          : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      category,
-                      style: TextStyle(
-                        color: selectedCategory == category
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16),
-
-            // TextField for adding a new item
-            TextField(
-              controller: newItemController,
-              decoration: InputDecoration(
-                labelText: 'New Item for $selectedCategory',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: _addItem,
+      body: Stack(
+        children: [
+          // Background image
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Image.asset(
+                constraints.maxWidth > 800
+                    ? 'assets/bg_large.jpg' // Replace with your large background image path
+                    : 'assets/bg.jpg', // Replace with your default background image path
+                fit: BoxFit.fill,
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+              );
+            },
+          ),
+          Center(
+              child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // ListView for displaying items of the selected category
-            // Expanded(
-            //   child: ListView.builder(
-            //     padding: const EdgeInsets.all(0),
-            //     itemCount: categorizedOptions[selectedCategory]!.length,
-            //     itemBuilder: (context, index) {
-            //       final item = categorizedOptions[selectedCategory]![index];
-            //       return ListTile(
-            //         contentPadding: const EdgeInsets.symmetric(
-            //             vertical: 0,
-            //             horizontal: 16.0), // Mengurangi padding vertikal
-            //         title: Text(item),
-            //         trailing: IconButton(
-            //           icon: const Icon(Icons.delete, color: Colors.red),
-            //           onPressed: () {
-            //             setState(() {
-            //               categorizedOptions[selectedCategory]!.removeAt(index);
-            //             });
-            //           },
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(0),
-                itemCount: categorizedOptions[selectedCategory]!.length,
-                itemBuilder: (context, index) {
-                  // Ambil dan urutkan daftar item
-                  final sortedItems = categorizedOptions[selectedCategory]!
-                    ..sort();
-
-                  // Akses item yang sudah diurutkan
-                  final item = sortedItems[index];
-                  // final item = categorizedOptions[selectedCategory]![index];
-                  // final itemInitials = item.isNotEmpty
-                  //     ? item.substring(0, 2).toUpperCase()
-                  //     : ''; // Mengambil 2 huruf pertama item
-
-                  return Dismissible(
-                    key: Key(item), // Kunci unik untuk widget Dismissible
-                    background: Container(
-                      color: Colors.blue, // Warna untuk tombol Edit
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: const Icon(Icons.edit, color: Colors.white),
-                    ),
-                    secondaryBackground: Container(
-                      color: Colors.red, // Warna untuk tombol Remove
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: const Icon(Icons.delete, color: Colors.white),
-                    ),
-                    confirmDismiss: (direction) async {
-                      if (direction == DismissDirection.startToEnd) {
-                        // Tindakan untuk Edit
-                        _showEditDialog(item, index);
-                        return false; // Jangan hapus item saat mengedit
-                      } else if (direction == DismissDirection.endToStart) {
-                        // Tindakan untuk Remove
-                        final confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Confirm Delete'),
-                              content: const Text(
-                                  'Are you sure you want to remove this item?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: const Text('Remove'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                        return confirm ?? false; // Hapus item jika dikonfirmasi
-                      }
-                      return false;
-                    },
-                    onDismissed: (direction) {
-                      if (direction == DismissDirection.endToStart) {
-                        // Menghapus item dari kategori jika dihapus
-                        setState(() {
-                          categorizedOptions[selectedCategory]!.removeAt(index);
-                        });
-                      }
-                    },
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 0,
-                        horizontal: 16.0, // Mengurangi padding vertikal
-                      ),
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            Colors.blue, // Warna latar belakang avatar
-                        child: Text(
-                          getInitials(
-                              item), // Fungsi untuk mendapatkan inisial dari item
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ), // Menyesuaikan warna teks
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.2),
                         ),
                       ),
-                      title: Text(item),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Button row to switch categories (square buttons)
+                          Wrap(
+                            spacing: 4,
+                            runSpacing: 2,
+                            children: sortedCategories.map((entry) {
+                              final category = entry.key;
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedCategory = category;
+                                  });
+                                },
+                                child: Container(
+                                  width: (450 - 50) / 4, // Adjust for spacing
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: selectedCategory == category
+                                        ? Colors.blue
+                                        : Colors.grey.shade300,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    category,
+                                    style: TextStyle(
+                                      color: selectedCategory == category
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 16),
+
+                          // TextField for adding a new item
+                          TextField(
+                            controller: newItemController,
+                            decoration: InputDecoration(
+                              labelText: 'New Item for $selectedCategory',
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: _addItem,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+
+                          // ListView for displaying items of the selected category
+                          // Expanded(
+                          //   child: ListView.builder(
+                          //     padding: const EdgeInsets.all(0),
+                          //     itemCount: categorizedOptions[selectedCategory]!.length,
+                          //     itemBuilder: (context, index) {
+                          //       final item = categorizedOptions[selectedCategory]![index];
+                          //       return ListTile(
+                          //         contentPadding: const EdgeInsets.symmetric(
+                          //             vertical: 0,
+                          //             horizontal: 16.0), // Mengurangi padding vertikal
+                          //         title: Text(item),
+                          //         trailing: IconButton(
+                          //           icon: const Icon(Icons.delete, color: Colors.red),
+                          //           onPressed: () {
+                          //             setState(() {
+                          //               categorizedOptions[selectedCategory]!.removeAt(index);
+                          //             });
+                          //           },
+                          //         ),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
+                          Expanded(
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(0),
+                              itemCount:
+                                  categorizedOptions[selectedCategory]!.length,
+                              itemBuilder: (context, index) {
+                                // Ambil dan urutkan daftar item
+                                final sortedItems =
+                                    categorizedOptions[selectedCategory]!
+                                      ..sort();
+
+                                // Akses item yang sudah diurutkan
+                                final item = sortedItems[index];
+                                // final item = categorizedOptions[selectedCategory]![index];
+                                // final itemInitials = item.isNotEmpty
+                                //     ? item.substring(0, 2).toUpperCase()
+                                //     : ''; // Mengambil 2 huruf pertama item
+
+                                return Dismissible(
+                                  key: Key(
+                                      item), // Kunci unik untuk widget Dismissible
+                                  background: Container(
+                                    color:
+                                        Colors.blue, // Warna untuk tombol Edit
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: const Icon(Icons.edit,
+                                        color: Colors.white),
+                                  ),
+                                  secondaryBackground: Container(
+                                    color:
+                                        Colors.red, // Warna untuk tombol Remove
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.only(right: 20.0),
+                                    child: const Icon(Icons.delete,
+                                        color: Colors.white),
+                                  ),
+                                  confirmDismiss: (direction) async {
+                                    if (direction ==
+                                        DismissDirection.startToEnd) {
+                                      // Tindakan untuk Edit
+                                      _showEditDialog(item, index);
+                                      return false; // Jangan hapus item saat mengedit
+                                    } else if (direction ==
+                                        DismissDirection.endToStart) {
+                                      // Tindakan untuk Remove
+                                      final confirm = await showDialog<bool>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Confirm Delete'),
+                                            content: const Text(
+                                                'Are you sure you want to remove this item?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(false),
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(true),
+                                                child: const Text('Remove'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      return confirm ??
+                                          false; // Hapus item jika dikonfirmasi
+                                    }
+                                    return false;
+                                  },
+                                  onDismissed: (direction) {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      // Menghapus item dari kategori jika dihapus
+                                      setState(() {
+                                        categorizedOptions[selectedCategory]!
+                                            .removeAt(index);
+                                      });
+                                    }
+                                  },
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 0,
+                                      horizontal:
+                                          16.0, // Mengurangi padding vertikal
+                                    ),
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors
+                                          .blue, // Warna latar belakang avatar
+                                      child: Text(
+                                        getInitials(
+                                            item), // Fungsi untuk mendapatkan inisial dari item
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ), // Menyesuaikan warna teks
+                                      ),
+                                    ),
+                                    title: Text(item),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+
+                          // Expanded(
+                          //   child: GridView.builder(
+                          //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          //       crossAxisCount: 3, // Jumlah kolom
+                          //       crossAxisSpacing: 8.0, // Spasi horizontal antar item
+                          //       mainAxisSpacing: 4.0, // Spasi vertikal antar item
+                          //     ),
+                          //     itemCount: categorizedOptions[selectedCategory]!.length,
+                          //     itemBuilder: (context, index) {
+                          //       final item = categorizedOptions[selectedCategory]![index];
+                          //       return Card(
+                          //         margin: const EdgeInsets.all(
+                          //             4.0), // Mengurangi margin sekitar item
+                          //         child: ListTile(
+                          //           title: Text(item),
+                          //           trailing: IconButton(
+                          //             icon: const Icon(Icons.delete, color: Colors.red),
+                          //             onPressed: () {
+                          //               setState(() {
+                          //                 categorizedOptions[selectedCategory]!
+                          //                     .removeAt(index);
+                          //               });
+                          //             },
+                          //           ),
+                          //         ),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
+                          // Save settings button
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ElevatedButton.icon(
+                                icon: const Icon(Icons.cloud_upload_outlined),
+                                onPressed: _saveSettings,
+                                label: const Text("Save Settings"),
+                              ),
+                              ElevatedButton.icon(
+                                icon: const Icon(Icons.adobe_rounded),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AboutPage()));
+                                },
+                                label: const Text("About"),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
             ),
-
-            // Expanded(
-            //   child: GridView.builder(
-            //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //       crossAxisCount: 3, // Jumlah kolom
-            //       crossAxisSpacing: 8.0, // Spasi horizontal antar item
-            //       mainAxisSpacing: 4.0, // Spasi vertikal antar item
-            //     ),
-            //     itemCount: categorizedOptions[selectedCategory]!.length,
-            //     itemBuilder: (context, index) {
-            //       final item = categorizedOptions[selectedCategory]![index];
-            //       return Card(
-            //         margin: const EdgeInsets.all(
-            //             4.0), // Mengurangi margin sekitar item
-            //         child: ListTile(
-            //           title: Text(item),
-            //           trailing: IconButton(
-            //             icon: const Icon(Icons.delete, color: Colors.red),
-            //             onPressed: () {
-            //               setState(() {
-            //                 categorizedOptions[selectedCategory]!
-            //                     .removeAt(index);
-            //               });
-            //             },
-            //           ),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
-            // Save settings button
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.cloud_upload_outlined),
-                  onPressed: _saveSettings,
-                  label: const Text("Save Settings"),
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.adobe_rounded),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AboutPage()));
-                  },
-                  label: const Text("About"),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ))
+        ],
       ),
     );
   }

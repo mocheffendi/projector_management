@@ -906,11 +906,12 @@ Future<List<pw.Widget>> _buildAllDeviceCards(
     Uint8List time,
     Uint8List status,
     Uint8List calendar,
-    pw.Font fontbold) async {
+    pw.Font font,
+    pw.Font fontBold) async {
   List<pw.Widget> deviceCards = [];
   for (var device in devices) {
     final card = await _buildDeviceCardpw(
-        device, info, condition, time, status, calendar, fontbold);
+        device, info, condition, time, status, calendar, font, fontBold);
     deviceCards.add(card);
   }
   return deviceCards;
@@ -923,7 +924,8 @@ Future<pw.Widget> _buildDeviceCardpw(
     Uint8List time,
     Uint8List status,
     Uint8List calendar,
-    pw.Font font) async {
+    pw.Font font,
+    pw.Font fontBold) async {
   final lastUpdated = device['lastUpdated']?.toDate();
   final formattedDate = lastUpdated != null
       ? DateFormat('dd-MM-yyyy HH:mm').format(lastUpdated)
@@ -977,7 +979,7 @@ Future<pw.Widget> _buildDeviceCardpw(
             pw.Expanded(
               child: pw.Text(deviceModel,
                   style: pw.TextStyle(
-                      font: font,
+                      font: fontBold,
                       fontSize: 16,
                       fontWeight: pw.FontWeight.bold)),
             ),
@@ -994,7 +996,7 @@ Future<pw.Widget> _buildDeviceCardpw(
               child: pw.Text(
                 deviceStatus,
                 style: pw.TextStyle(
-                  font: font,
+                  font: fontBold,
                   color: PdfColors.white,
                   fontSize: 12,
                   fontWeight: pw.FontWeight.bold,
@@ -1031,19 +1033,19 @@ Future<pw.Widget> _buildDeviceCardpw(
                   pw.Text(
                     'SN: $deviceSN',
                     style: pw.TextStyle(
-                        font: font, fontSize: 12, color: PdfColors.black),
+                        font: fontBold, fontSize: 9, color: PdfColors.black),
                   ),
                   pw.SizedBox(height: 4),
                   pw.Text(
                     'Condition: $deviceCondition',
                     style: pw.TextStyle(
-                        font: font, fontSize: 12, color: PdfColors.black),
+                        font: fontBold, fontSize: 9, color: PdfColors.black),
                   ),
                   pw.SizedBox(height: 4),
                   pw.Text(
                     'Remarks: $deviceRemarks',
                     style: pw.TextStyle(
-                        font: font, fontSize: 12, color: PdfColors.black),
+                        font: fontBold, fontSize: 9, color: PdfColors.black),
                     maxLines: 2,
                     // overflow: pw.TextOverflow.ellipsis,
                   ),
@@ -1135,12 +1137,12 @@ Future<Uint8List> generatePdfandShareSupportWeb(String device) async {
     ..sort((a, b) => a['status'].compareTo(b['status']));
 
   // Build device cards asynchronously
-  final occupiedDeviceCards = await _buildAllDeviceCards(
-      occupieddevices, info, condition, time, hotel, calendar, regularFont);
-  final notOccupiedDeviceCards = await _buildAllDeviceCards(
-      notOccupieddevices, info, condition, time, store, calendar, regularFont);
-  final serviceDeviceCards = await _buildAllDeviceCards(
-      servicedevices, info, condition, time, service, calendar, regularFont);
+  final occupiedDeviceCards = await _buildAllDeviceCards(occupieddevices, info,
+      condition, time, hotel, calendar, regularFont, boldFont);
+  final notOccupiedDeviceCards = await _buildAllDeviceCards(notOccupieddevices,
+      info, condition, time, store, calendar, regularFont, boldFont);
+  final serviceDeviceCards = await _buildAllDeviceCards(servicedevices, info,
+      condition, time, service, calendar, regularFont, boldFont);
 
   // Add data to PDF
   if ((occupieddevices.isNotEmpty) ||

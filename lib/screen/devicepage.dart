@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -1705,117 +1705,124 @@ class _DevicePageState extends State<DevicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection(widget.collectionName)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No devices found.'));
-          } else {
-            final devices = snapshot.data!.docs.map((doc) {
-              final data = doc.data() as Map<String, dynamic>;
-              return {
-                'id': doc.id,
-                ...data,
-              };
-            }).toList();
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection(widget.collectionName)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(child: Text('No devices found.'));
+              } else {
+                final devices = snapshot.data!.docs.map((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  return {
+                    'id': doc.id,
+                    ...data,
+                  };
+                }).toList();
 
-            // Categorize and sort devices
-            final occupiedDevices = devices
-                .where((device) =>
-                    !notOccupiedStatuses.contains(device['status']) &&
-                    !serviceVendor.contains(device['status']))
-                .toList()
-              ..sort((a, b) => a['status'].compareTo(b['status']));
-            final notOccupiedDevices = devices
-                .where(
-                    (device) => notOccupiedStatuses.contains(device['status']))
-                .toList()
-              ..sort((a, b) => a['status'].compareTo(b['status']));
-            final serviceDevices = devices
-                .where((device) => serviceVendor.contains(device['status']))
-                .toList()
-              ..sort((a, b) => a['status'].compareTo(b['status']));
+                // Categorize and sort devices
+                final occupiedDevices = devices
+                    .where((device) =>
+                        !notOccupiedStatuses.contains(device['status']) &&
+                        !serviceVendor.contains(device['status']))
+                    .toList()
+                  ..sort((a, b) => a['status'].compareTo(b['status']));
+                final notOccupiedDevices = devices
+                    .where((device) =>
+                        notOccupiedStatuses.contains(device['status']))
+                    .toList()
+                  ..sort((a, b) => a['status'].compareTo(b['status']));
+                final serviceDevices = devices
+                    .where((device) => serviceVendor.contains(device['status']))
+                    .toList()
+                  ..sort((a, b) => a['status'].compareTo(b['status']));
 
-            // final categorizedDevices = [
-            //   ...occupiedDevices,
-            //   ...notOccupiedDevices,
-            //   ...serviceDevices,
-            // ];
+                // final categorizedDevices = [
+                //   ...occupiedDevices,
+                //   ...notOccupiedDevices,
+                //   ...serviceDevices,
+                // ];
 
-            return ListView(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              children: [
-                if (occupiedDevices.isNotEmpty) ...[
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Occupied',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    ),
-                  ),
-                  ...occupiedDevices.map((device) => _buildDeviceCard(device)),
-                ],
-                if (notOccupiedDevices.isNotEmpty) ...[
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Not Occupied ',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green),
-                    ),
-                  ),
-                  ...notOccupiedDevices
-                      .map((device) => _buildDeviceCard(device)),
-                ],
-                if (serviceDevices.isNotEmpty) ...[
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'On Service',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue),
-                    ),
-                  ),
-                  ...serviceDevices.map((device) => _buildDeviceCard(device)),
-                ],
-              ],
-            );
-            // return ListView.builder(
-            //   shrinkWrap: true,
-            //   physics: const BouncingScrollPhysics(),
-            //   itemCount: categorizedDevices.length,
-            //   itemBuilder: (context, index) {
-            //     return _buildDeviceCard(categorizedDevices[index]);
-            //   },
-            // );
-            // return GridView.builder(
-            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 2,
-            //     crossAxisSpacing: 8,
-            //     mainAxisSpacing: 8,
-            //     childAspectRatio: 0.8,
-            //   ),
-            //   itemCount: devices.length,
-            //   itemBuilder: (context, index) {
-            //     return _buildDeviceCard(devices[index]);
-            //   },
-            // );
-          }
-        },
+                return ListView(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    if (occupiedDevices.isNotEmpty) ...[
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Occupied',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
+                        ),
+                      ),
+                      ...occupiedDevices
+                          .map((device) => _buildDeviceCard(device)),
+                    ],
+                    if (notOccupiedDevices.isNotEmpty) ...[
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Not Occupied ',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green),
+                        ),
+                      ),
+                      ...notOccupiedDevices
+                          .map((device) => _buildDeviceCard(device)),
+                    ],
+                    if (serviceDevices.isNotEmpty) ...[
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'On Service',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue),
+                        ),
+                      ),
+                      ...serviceDevices
+                          .map((device) => _buildDeviceCard(device)),
+                    ],
+                  ],
+                );
+                // return ListView.builder(
+                //   shrinkWrap: true,
+                //   physics: const BouncingScrollPhysics(),
+                //   itemCount: categorizedDevices.length,
+                //   itemBuilder: (context, index) {
+                //     return _buildDeviceCard(categorizedDevices[index]);
+                //   },
+                // );
+                // return GridView.builder(
+                //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                //     crossAxisCount: 2,
+                //     crossAxisSpacing: 8,
+                //     mainAxisSpacing: 8,
+                //     childAspectRatio: 0.8,
+                //   ),
+                //   itemCount: devices.length,
+                //   itemBuilder: (context, index) {
+                //     return _buildDeviceCard(devices[index]);
+                //   },
+                // );
+              }
+            },
+          ),
+        ),
       ),
       floatingActionButton: Stack(
         fit: StackFit.expand,

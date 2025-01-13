@@ -3093,11 +3093,11 @@ class AVSpecificationPage extends StatelessWidget {
   String _getGreeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) {
-      return 'Hi Good Morning Heartist';
+      return 'Hi Good Morning Heartists';
     } else if (hour < 18) {
-      return 'Hi Good Afternoon Heartist';
+      return 'Hi Good Afternoon Heartists';
     } else {
-      return 'Hi Good Evening Heartist';
+      return 'Hi Good Evening Heartists';
     }
   }
 
@@ -3124,16 +3124,22 @@ class AVSpecificationPage extends StatelessWidget {
       body: Stack(
         children: [
           // Background image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/bg.jpg', // Replace with your background image path
-              fit: BoxFit.cover,
-            ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Image.asset(
+                constraints.maxWidth > 800
+                    ? 'assets/bg_large.jpg' // Replace with your large background image path
+                    : 'assets/bg.jpg', // Replace with your default background image path
+                fit: BoxFit.fill,
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+              );
+            },
           ),
           // Page content
           Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
+              constraints: const BoxConstraints(maxWidth: 500),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -3235,13 +3241,11 @@ class AVSpecificationPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Audio Video',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall
-                                        ?.copyWith(color: Colors.white),
-                                  ),
+                                  Text('Audio Video',
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall
+                                      // ?.copyWith(color: Colors.white),
+                                      ),
                                   const SizedBox(
                                     height: 8.0,
                                   ),
@@ -3387,13 +3391,11 @@ class AVSpecificationPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Panduan Ukuran Banner',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall
-                                        ?.copyWith(color: Colors.white),
-                                  ),
+                                  Text('Panduan Ukuran Banner',
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall
+                                      // ?.copyWith(color: Colors.white),
+                                      ),
                                   const SizedBox(
                                     height: 8.0,
                                   ),
