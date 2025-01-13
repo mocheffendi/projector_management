@@ -702,7 +702,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   });
                                 },
                                 child: Container(
-                                  width: (screenWidth - 50) /
+                                  width: (screenWidth - 80) /
                                       4, // Adjust for spacing
                                   height: 50,
                                   alignment: Alignment.center,
