@@ -639,7 +639,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    var screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth > 450) {
+      screenWidth = 450;
+    }
 
     final sortedCategories = categorizedOptions.entries.toList()
       ..sort((a, b) => a.key.compareTo(b.key));
@@ -699,7 +702,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   });
                                 },
                                 child: Container(
-                                  width: (450 - 50) / 4, // Adjust for spacing
+                                  width: (screenWidth - 50) /
+                                      4, // Adjust for spacing
                                   height: 50,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
